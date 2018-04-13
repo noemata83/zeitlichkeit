@@ -1,3 +1,3 @@
-# Django-React Starter
+# Zeitlichkeit
 
-This is my personal 'seed' repository for quickly building React apps on top of a Django REST framework-based backend. The inspiration and direction came from (this blog post)[http://v1k45.com/blog/modern-django-part-1-setting-up-django-and-react/]. The plan is to add some custom configuration so that I can begin building Django apps with even more batteries included. I will detail those customizations when complete, so that anyone who wants to can fork their way to a (hopefully) faster development cycle.
+A simple, lightweight time tracker app built using Django + React.
