@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'tasks',
+    'rest_framework',
     'webpack_loader',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'django_react.urls'
+ROOT_URLCONF = 'zeitlichkeit.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_react.wsgi.application'
+WSGI_APPLICATION = 'zeitlichkeit.wsgi.application'
 
 
 # Database
@@ -76,8 +78,12 @@ WSGI_APPLICATION = 'django_react.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'zeitlichdb',
+        'USER': 'postgres',
+        'PASSWORD': 'haugeland',
+        'HOST': 'localhost',
+        'PORT': 5432
     }
 }
 
@@ -114,6 +120,11 @@ USE_L10N = True
 
 USE_TZ = True
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
