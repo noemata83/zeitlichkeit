@@ -66,7 +66,7 @@ class Sprint(models.Model):
     A sprint is a basic unit of timed work. Each sprint belongs to exactly one task, and a task
     may comprise an array of sprints. A sprint has a start time and an end time.
     """
-    owner = models.ForeignKey('auth.User', related_name='tasks', default=1,
+    owner = models.ForeignKey('auth.User', related_name='sprints', default=1,
                               on_delete=models.CASCADE)
     start_time = models.DateTimeField(default=timezone.now)
     end_time = models.DateTimeField(blank=True)

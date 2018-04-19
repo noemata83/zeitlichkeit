@@ -2,8 +2,38 @@
 This module defines the serializers for the tasks api.
 """
 from rest_framework import serializers
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from tasks.models import Workspace, Task, Sprint
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(validated_data['username'],
+                                        None,
+                                        validated_data['password'])
+        return user
+
+class LoginUserSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        user = authenticate(**data)
+        if user and user.is_active:
+            return user
+        raise serializers.ValidationError("Unable to log in with provided credentials.")
+
+class UserSerializer(serializers.ModelSerializer):
+    workspace_set = serializers.StringRelatedField(many=True)
+    sprints = serializers.StringRelatedField(many=True)
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'workspace_set', 'sprints')
 
 class WorkspaceSerializer(serializers.ModelSerializer):
     """ Serializer for Workspaces"""
@@ -27,10 +57,3 @@ class SprintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sprint
         fields = ('id', 'owner', 'task', 'starttime', 'endtime')
-
-class UserSerializer(serializers.ModelSerializer):
-    workspace_set = serializers.StringRelatedField(many=True)
-    tasks = serializers.StringRelatedField(many=True)
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'workspace_set', 'tasks')

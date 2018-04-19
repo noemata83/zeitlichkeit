@@ -6,6 +6,8 @@ from django.conf.urls import url
 from tasks import views
 
 urlpatterns = [
+    url(r'^register$', views.RegistrationAPI.as_view()),
+    url(r'^login$', views.LoginAPI.as_view()),
     url(r'^tasks/$', views.TaskList.as_view()),
     url(r'^tasks/(?P<pk>[0-9]+)/$', views.TaskDetail.as_view()),
     url(r'^workspaces/$', views.WorkspaceList.as_view()),
