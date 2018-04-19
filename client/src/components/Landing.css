@@ -1,0 +1,79 @@
+.Landing {
+    height: 100vh;
+    width: 100%;
+    background-size: cover;
+    position: relative;
+}
+
+.TextBox {
+    position: absolute;
+    top: 68%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: black;
+    padding: 2.5rem;
+    text-align: right;
+    width: 50rem;
+    transition: all 1s;
+}
+
+.HeaderText {
+    font-size: 2.5rem;
+    text-transform: lowercase;
+    margin: 0 0 1.5rem 0;
+}
+
+.HeaderText__brand {
+    font-size: 10rem;
+    /* font-family: 'Clicker Script', cursive; */
+    font-style: italic;
+    color: #fff;
+    line-height: 1;
+    margin: 1rem 1rem;
+    text-shadow: 0 1rem 3rem rgba(255, 255, 255, 0.5);
+    display: block;
+    text-transform: none;
+}
+
+.Tagline {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 1rem 3rem rgba(255, 255, 255, 0.5);
+    color: #fff;
+}
+
+.Link,
+.Link:visited {
+    display: block;
+    font-size: 2rem;
+    padding: 0;
+    margin: .5rem 0;
+    text-decoration: none;
+    color: #fff;
+}
+
+@media(max-width: 600px) {
+
+    .HeaderText {
+        font-size: 1.8rem;
+    }
+    .HeaderText__brand {
+        font-size: 3rem;
+    }
+    
+    .TextBox {
+        width: 60%;
+        padding: 1.5rem;
+    }
+}
+
+.Footer {
+    height: 5vh;
+    text-align: right;
+    color: white;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background-color: #000;
+}

@@ -1,0 +1,24 @@
+.Header {
+    background-color: #4F4F4F;
+    height: 4.5rem;
+    display: flex;
+}
+
+.Brand {
+    font-size: 2.5rem;
+    color: #fff;
+    padding: 1rem 3rem;
+    display: inline-block;
+    margin-right: auto;
+}
+
+.NavMenu {
+    display: flex;
+}
+
+.NavMenuItem {
+    font-Size: 2rem;
+    color: #fff;
+    padding: 1rem;
+    margin: .2rem 2rem;
+}
