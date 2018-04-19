@@ -1,5 +1,8 @@
+"""
+This module defines the url patterns for the tasks api.
+"""
 from django.conf.urls import url
-from rest_framework.urlpatterns import format_suffix_patterns
+# from rest_framework.urlpatterns import format_suffix_patterns
 from tasks import views
 
 urlpatterns = [

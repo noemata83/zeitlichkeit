@@ -1,9 +1,12 @@
+"""
+This module defines the views for the tasks api.
+"""
 from rest_framework import generics
-from tasks.models import Task, Workspace
-from tasks.serializers import TaskSerializer, WorkspaceSerializer
-from django.contrib.auth.models import User
-from tasks.serializers import UserSerializer
 from rest_framework import permissions
+from django.contrib.auth.models import User
+from tasks.models import Task, Workspace, Sprint
+from tasks.serializers import TaskSerializer, WorkspaceSerializer, SprintSerializer
+from tasks.serializers import UserSerializer
 from tasks.permissions import IsOwnerOrReadOnly
 
 class WorkspaceList(generics.ListCreateAPIView):
@@ -36,3 +39,11 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class SprintList(generics.ListAPIView):
+    queryset = Sprint.objects.all()
+    serializer_class = SprintSerializer
+
+class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Sprint.objects.all()
+    serializer_class = SprintSerializer

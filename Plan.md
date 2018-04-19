@@ -13,13 +13,17 @@ User:
 
 Task:
 * User (owner)
-* Starttime
-* Endtime
 * Workspace
 * Project
 * Categories
 * Paid/Unpaid (?)
 * Rate (if any) (?)
+
+Sprint:
+* Start time
+* End time
+* Project
+* Workspace
 
 Workspace?
 * Users
@@ -28,3 +32,5 @@ Workspace?
 A user can have many workspaces. A workspace can have many users. (many-many)
 A task can have many users; but just one user per task? (one - many to start)
 A task is usually part of just one project. Do we need a database record for projects? Or can they simply be tags (like categories) attached to the projects themselves?
+
+A task may need to be distinguished from a sprint: a sprint represents a discrete contribution to a task.
