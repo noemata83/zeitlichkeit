@@ -8,6 +8,14 @@ class Dashboard extends Component {
         return (
             <div className={classes.Dashboard}>
                 <Header />
+                <main className={classes.Main}>
+                    <div className={classes.SideBar}>
+                        Sidebar
+                    </div>
+                    <div className={classes.Workspace}>
+                        Workspace
+                    </div>
+                </main>
             </div>
         )
     }

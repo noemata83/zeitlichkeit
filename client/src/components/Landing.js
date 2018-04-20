@@ -8,8 +8,8 @@ const landing = props => (
     <div className={classes.Landing}>
         <Background />
         <div className={classes.TextBox}>
-            <h1 className={classes.HeaderText__brand}>Zeitlichkeit</h1>
-            <h2 className={classes.Tagline}>Be Timely</h2>
+            <h1 className={classes.HeaderText__brand}>Zeitlichkeit.</h1>
+            <h2 className={classes.Tagline}>Be Timely.</h2>
             <Link className={classes.Link} to="/dashboard">Register</Link><br />
             <Link className={classes.Link} to="/dashboard">Login</Link>
         </div>
