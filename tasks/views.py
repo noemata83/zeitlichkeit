@@ -40,6 +40,7 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
 class SprintList(generics.ListAPIView):
     queryset = Sprint.objects.all()
