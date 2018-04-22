@@ -57,6 +57,7 @@ class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
     categories = models.ManyToManyField(Category, blank=True)
     workspace = models.ForeignKey(Workspace, default=Workspace.DEFAULT_PK, on_delete=models.CASCADE)
+    completed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

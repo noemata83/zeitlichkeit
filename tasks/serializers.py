@@ -48,7 +48,7 @@ class TaskSerializer(serializers.ModelSerializer):
     categories = serializers.StringRelatedField(many=True)
     class Meta:
         model = Task
-        fields = ('id', 'name', 'workspace', 'project', 'categories')
+        fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed')
 
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
