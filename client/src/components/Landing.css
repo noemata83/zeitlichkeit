@@ -18,11 +18,11 @@
     transition: all 1s;
 }
 
-.HeaderText {
+/* .HeaderText {
     font-size: 2.5rem;
     text-transform: lowercase;
     margin: 0 0 1.5rem 0;
-}
+} */
 
 .HeaderText__brand {
     font-size: 8rem;
@@ -37,21 +37,26 @@
     display: inline-block;
     width: auto;
     margin: 1rem 1rem;
-    margin-right: 0;
-    margin-left: auto;
+    margin-right: auto;
     display: block;
     text-transform: none;
+    text-align: left;
 }
 
 .Tagline {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    font-weight: normal;
+    text-transform: uppercase;
     margin-bottom: 2rem;
-    color: #fff;
+    color: #000;
+    margin-top: 1rem;
+    display: block;
 }
 
 .Link,
 .Link:visited {
-    display: inline-block;
+    display: block;
+    cursor: pointer;
     font-size: 2rem;
     padding: 0;
     margin: .5rem 0;

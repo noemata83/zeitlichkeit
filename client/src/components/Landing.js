@@ -1,17 +1,47 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classes from './Landing.css';
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Background from './UI/Background/Background';
+import LoginForm from './Auth/LoginForm';
 
-const landing = props => (
+class Landing extends Component {
+    state = {
+        display: 'GREETING',
+    }
+    
+    handleLogin = (values) => {
+        console.log(values);
+    }
+
+    switchMode = (mode) => {
+        this.setState({
+            display: mode
+        });
+    }
+
+    renderContent() {
+        switch(this.state.display) {
+            case('LOGIN'):
+                return(<div>
+                        <LoginForm handleLogin={this.handleLogin} switchMode={this.switchMode} />
+                    </div>);
+            default:
+                return (<div>
+                    <h1 className={classes.HeaderText__brand}>Zeitlichkeit.<span className={classes.Tagline}>Time management for humans</span></h1>
+                    <a className={classes.Link}>Register</a><br />
+                    <a className={classes.Link} onClick={() => this.switchMode('LOGIN')}>Login</a>
+                </div>
+                );
+        }
+    }
+
+    render() {
+        return (
     <div className={classes.Landing}>
         <Background />
         <div className={classes.TextBox}>
-            <h1 className={classes.HeaderText__brand}>Zeitlichkeit.</h1>
-            <h2 className={classes.Tagline}>Be Timely.</h2>
-            <Link className={classes.Link} to="/dashboard">Register</Link><br />
-            <Link className={classes.Link} to="/dashboard">Login</Link>
+            {this.renderContent()}
         </div>
         <div className={classes.Footer}>
             <div style={{textAlign: 'left', width: '50%', display: 'inline-block'}}>
@@ -22,6 +52,8 @@ const landing = props => (
             </div>
         </div>
     </div>
-)
+        ); 
+    }
+}
 
-export default landing;
+export default Landing;
