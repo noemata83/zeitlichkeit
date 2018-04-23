@@ -1,37 +1,43 @@
 """
 This module defines the views for the tasks api.
 """
-from rest_framework import permissions, generics
+from rest_framework import permissions, generics, viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from knox.models import AuthToken
+import logging
 from tasks.models import Task, Workspace, Sprint
-from tasks.permissions import IsOwnerOrReadOnly
+from tasks.permissions import IsMember
 from .serializers import (TaskSerializer, WorkspaceSerializer, SprintSerializer, 
                           UserSerializer, CreateUserSerializer, LoginUserSerializer)
 
-class WorkspaceList(generics.ListCreateAPIView):
-    queryset = Workspace.objects.all()
+logger = logging.getLogger(__name__)
+
+class WorkspaceViewSet(viewsets.ModelViewSet):
     serializer_class = WorkspaceSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated, IsMember,)
+
+    def get_queryset(self):
+        return self.request.user.workspace_set.all()
 
     def perform_create(self, serializer):
-        serializer.save(users=self.request.user)
+        users = [self.request.user,]
+        serializer.save(users = users)
 
 class WorkspaceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Workspace.objects.all()
     serializer_class = WorkspaceSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticated, IsMember,)
 
 class TaskList(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticated,)
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticated,)
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()

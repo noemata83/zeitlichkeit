@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class WorkspaceSerializer(serializers.ModelSerializer):
     """ Serializer for Workspaces"""
-    users = serializers.StringRelatedField(many=True)
+    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), default=[serializers.CurrentUserDefault(),])
     class Meta:
         model = Workspace
         fields = ('id', 'name', 'users')

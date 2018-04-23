@@ -1,15 +1,11 @@
 from rest_framework import permissions
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsMember(permissions.BasePermission):
     """
-    Custom permission to only allow owners of an item to edit it.
+    Custom permission to only allow users of a Workspace to view or edit it.
     """
 
     def has_object_permission(self, request, view, obj):
-        # Read permissions are allowed to any request
-        # so we'll allow GET, HEAD, or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS:
+        if request.user in obj.users.all():
             return True
-
-        # Write permissions are only allowed to the owner of the snippet.
-        return obj.owner == request. user
+        return False
