@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import classes from './Landing.css';
+import { connect } from 'react-redux';
+
+import { Redirect } from 'react-router-dom';
 
 // import { Link } from 'react-router-dom';
+import classes from './Landing.css';
 import Background from './UI/Background/Background';
 import LoginForm from './Auth/LoginForm';
+import * as actions from '../store/actions';
 
 class Landing extends Component {
     state = {
@@ -11,7 +15,7 @@ class Landing extends Component {
     }
     
     handleLogin = (values) => {
-        console.log(values);
+        this.props.login(values.username, values.password);
     }
 
     switchMode = (mode) => {
@@ -21,6 +25,9 @@ class Landing extends Component {
     }
 
     renderContent() {
+        if (this.props.isAuthenticated) {
+            return <Redirect to="/dashboard" />
+        }
         switch(this.state.display) {
             case('LOGIN'):
                 return(<div>
@@ -56,4 +63,14 @@ class Landing extends Component {
     }
 }
 
-export default Landing;
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.isAuthenticated
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        login: (username, password) => dispatch(actions.login(username, password)),
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);

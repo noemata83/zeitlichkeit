@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^tasks/(?P<pk>[0-9]+)/$', views.TaskDetail.as_view()),
     url(r'^workspaces/$', workspace_list, name='workspace-list'),
     url(r'^workspaces/(?P<pk>[0-9]+)/$', workspace_detail, name="workspace-detail"),
-    url(r'^users/$', views.UserList.as_view()),
+    url(r'^user/$', views.UserAPI.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
 ]
