@@ -35,7 +35,7 @@ class Landing extends Component {
                     </div>);
             default:
                 return (<div>
-                    <h1 className={classes.HeaderText__brand}>Zeitlichkeit.<span className={classes.Tagline}>Time management for humans</span></h1>
+                    <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
                     <a className={classes.Link}>Register</a><br />
                     <a className={classes.Link} onClick={() => this.switchMode('LOGIN')}>Login</a>
                 </div>
