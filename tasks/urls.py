@@ -20,6 +20,8 @@ workspace_detail = views.WorkspaceViewSet.as_view({
 urlpatterns = [
     url(r'^register$', views.RegistrationAPI.as_view()),
     url(r'^login$', views.LoginAPI.as_view()),
+    url(r'^sprints/$', views.SprintList.as_view()),
+    url(r'^sprints/(?P<pk>[0-9]+)/$', views.SprintDetail.as_view()),
     url(r'^tasks/$', views.TaskList.as_view()),
     url(r'^tasks/(?P<pk>[0-9]+)/$', views.TaskDetail.as_view()),
     url(r'^workspaces/$', workspace_list, name='workspace-list'),

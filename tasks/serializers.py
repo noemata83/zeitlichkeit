@@ -37,18 +37,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class WorkspaceSerializer(serializers.ModelSerializer):
     """ Serializer for Workspaces"""
-    users = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), default=[serializers.CurrentUserDefault(),])
+    users = UserSerializer(many=True, default=[serializers.CurrentUserDefault(),])
     class Meta:
         model = Workspace
         fields = ('id', 'name', 'users')
-
-class TaskSerializer(serializers.ModelSerializer):
-    """ Serializer for tasks"""
-    project = serializers.StringRelatedField()
-    categories = serializers.StringRelatedField(many=True)
-    class Meta:
-        model = Task
-        fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed')
 
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
@@ -56,4 +48,14 @@ class SprintSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField()
     class Meta:
         model = Sprint
-        fields = ('id', 'owner', 'task', 'starttime', 'endtime')
+        fields = ('id', 'owner', 'task', 'start_time', 'end_time')
+
+class TaskSerializer(serializers.ModelSerializer):
+    """ Serializer for tasks"""
+    project = serializers.StringRelatedField()
+    categories = serializers.StringRelatedField(many=True)
+    sprint_set = SprintSerializer(many=True)
+    workspace = serializers.StringRelatedField()
+    class Meta:
+        model = Task
+        fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed', 'sprint_set')

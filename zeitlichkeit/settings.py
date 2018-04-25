@@ -178,3 +178,8 @@ if DEBUG:
     # make all loggers use the console.
     for logger in LOGGING['loggers']:
         LOGGING['loggers'][logger]['handlers'] = ['console']
+
+DATETIME_INPUT_FORMATS = [
+    '%m %d %Y %H:%M',
+    '%m %d %Y %H:%M:%S'
+]
