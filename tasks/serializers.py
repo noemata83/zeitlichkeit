@@ -28,19 +28,29 @@ class LoginUserSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
 
+class UserLimitedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields=('id', 'username')
+
+class WorkspaceSerializer(serializers.ModelSerializer):
+    """ Serializer for Workspaces"""
+    users = UserLimitedSerializer(many=True, default=[serializers.CurrentUserDefault(),])
+    class Meta:
+        model = Workspace
+        fields = ('id', 'name', 'users')
+
+class WorkspaceLimitedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Workspace
+        fields = ('id', 'name')
+
 class UserSerializer(serializers.ModelSerializer):
-    workspace_set = serializers.StringRelatedField(many=True)
+    workspace_set = WorkspaceLimitedSerializer(many=True)
     sprints = serializers.StringRelatedField(many=True)
     class Meta:
         model = User
         fields = ('id', 'username', 'workspace_set', 'sprints')
-
-class WorkspaceSerializer(serializers.ModelSerializer):
-    """ Serializer for Workspaces"""
-    users = UserSerializer(many=True, default=[serializers.CurrentUserDefault(),])
-    class Meta:
-        model = Workspace
-        fields = ('id', 'name', 'users')
 
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
