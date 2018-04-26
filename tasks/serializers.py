@@ -33,13 +33,6 @@ class UserLimitedSerializer(serializers.ModelSerializer):
         model = User
         fields=('id', 'username')
 
-class WorkspaceSerializer(serializers.ModelSerializer):
-    """ Serializer for Workspaces"""
-    users = UserLimitedSerializer(many=True, default=[serializers.CurrentUserDefault(),])
-    class Meta:
-        model = Workspace
-        fields = ('id', 'name', 'users')
-
 class WorkspaceLimitedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workspace
@@ -69,3 +62,13 @@ class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed', 'sprint_set')
+
+class WorkspaceSerializer(serializers.ModelSerializer):
+    """ Serializer for Workspaces"""
+    users = UserLimitedSerializer(many=True, default=[serializers.CurrentUserDefault(),])
+    project_set = serializers.StringRelatedField(many=True)
+    category_set = serializers.StringRelatedField(many=True)
+    task_set = TaskSerializer(many=True)
+    class Meta:
+        model = Workspace
+        fields = ('id', 'name', 'users', 'project_set', 'task_set', 'category_set')

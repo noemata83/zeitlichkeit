@@ -40,6 +40,7 @@ class Category(models.Model):
         name: A string description of the category (e.g., "Chores", "Leisure")
     """
     name = models.CharField(max_length=128)
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, default=Workspace.DEFAULT_PK)
 
     def __str__(self):
         return self.name
