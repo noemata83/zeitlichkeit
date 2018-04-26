@@ -4,6 +4,7 @@ This module defines the views for the tasks api.
 from rest_framework import permissions, generics, viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from knox.models import AuthToken
 import logging
 from tasks.models import Task, Workspace, Sprint
@@ -30,14 +31,32 @@ class WorkspaceDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticated, IsMember,)
 
 class TaskList(generics.ListCreateAPIView):
-    queryset = Task.objects.all()
     serializer_class = TaskSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Task.objects.all()
+    def get_queryset(self):
+        return Task.objects.filter(workspace=self.kwargs['pk'])
+
+
+class TaskDetail(generics.RetrieveUpdateDestroyAPIView):    
     serializer_class = TaskSerializer
     permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        filter['pk'] = self.kwargs['task_id']
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+        """
+        This view should return details for a task in a specific workspace.
+        """
+        workspace_id = self.kwargs['pk']
+        logger.debug("WORKSPACE_ID IS {}\n\n\n\n".format(workspace_id))
+        return Task.objects.filter(workspace=workspace_id)
 
 class UserAPI(generics.RetrieveAPIView):
     serializer_class = UserSerializer

@@ -22,10 +22,10 @@ urlpatterns = [
     url(r'^login$', views.LoginAPI.as_view()),
     url(r'^sprints/$', views.SprintList.as_view()),
     url(r'^sprints/(?P<pk>[0-9]+)/$', views.SprintDetail.as_view()),
-    url(r'^tasks/$', views.TaskList.as_view()),
-    url(r'^tasks/(?P<pk>[0-9]+)/$', views.TaskDetail.as_view()),
     url(r'^workspaces/$', workspace_list, name='workspace-list'),
     url(r'^workspaces/(?P<pk>[0-9]+)/$', workspace_detail, name="workspace-detail"),
+    url(r'^workspaces/(?P<pk>[0-9]+)/tasks/$', views.TaskList.as_view()),
+    url(r'^workspaces/(?P<pk>[0-9]+)/tasks/(?P<task_id>[0-9]+)/$', views.TaskDetail.as_view()),
     url(r'^user/$', views.UserAPI.as_view()),
     url(r'^users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
 ]
