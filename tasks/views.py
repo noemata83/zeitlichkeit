@@ -7,10 +7,11 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from knox.models import AuthToken
 import logging
-from tasks.models import Task, Workspace, Sprint
+from tasks.models import Task, Workspace, Sprint, Project, Category
 from tasks.permissions import IsMember
 from .serializers import (TaskSerializer, WorkspaceSerializer, SprintSerializer, 
-                          UserSerializer, CreateUserSerializer, LoginUserSerializer)
+                          UserSerializer, CreateUserSerializer, LoginUserSerializer,
+                          ProjectSerializer, CategorySerializer)
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +78,22 @@ class SprintList(generics.ListAPIView):
 class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
+
+class ProjectList(generics.ListAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+class CategoryList(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
 class RegistrationAPI(generics.GenericAPIView):
     queryset = User.objects.all()

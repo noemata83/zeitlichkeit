@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import classes from './Dashboard.css';
 
 import Header from './UI/Header/Header';
+import Workspace from './Workspace/Workspace';
 
 class Dashboard extends Component {
     render() {
@@ -13,7 +14,7 @@ class Dashboard extends Component {
                         Sidebar
                     </div>
                     <div className={classes.Workspace}>
-                        Workspace
+                        <Workspace />
                     </div>
                 </main>
             </div>

@@ -35,6 +35,7 @@ class UserLimitedSerializer(serializers.ModelSerializer):
         fields=('id', 'username')
 
 class WorkspaceLimitedSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     class Meta:
         model = Workspace
         fields = ('id', 'name')
@@ -74,6 +75,40 @@ class TaskSerializer(WritableNestedModelSerializer):
     class Meta:
         model = Task
         fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed', 'sprint_set')
+
+    def validate(self, data):
+        # manually get the Category instance from the input data
+        categories = []
+        for category in data['categories']:
+            categories.append(Category.objects.get(name=category['name']))
+        data['categories'] = categories
+        data['project'] = Project.objects.get(name=data['project']['name'])
+        data['workspace'] = Workspace.objects.get(id=data['workspace']['id'])
+        return data
+    
+    def create(self, validated_data):
+        task = Task(name=validated_data['name'],
+                    project=validated_data['project'],
+                    workspace=validated_data['workspace'],
+                    completed=validated_data['completed'])    
+        task.save()
+
+        for category in validated_data['categories']:
+            task.categories.add(category)    
+    
+        return task
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data['name']
+        instance.project = validated_data['project']
+        instance.workspace = validated_data['workspace']
+        instance.completed = validated_data['completed']
+        categories = []
+        for category in validated_data['categories']:
+            categories.append(category)
+        instance.categories.set(categories)
+        instance.save()
+        return instance
 
 
 class WorkspaceSerializer(serializers.ModelSerializer):
