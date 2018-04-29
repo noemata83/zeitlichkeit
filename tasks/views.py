@@ -56,7 +56,6 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
         This view should return details for a task in a specific workspace.
         """
         workspace_id = self.kwargs['pk']
-        logger.debug("WORKSPACE_ID IS {}\n\n\n\n".format(workspace_id))
         return Task.objects.filter(workspace=workspace_id)
 
 class UserAPI(generics.RetrieveAPIView):
@@ -71,7 +70,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-class SprintList(generics.ListAPIView):
+class SprintList(generics.ListCreateAPIView):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
 
@@ -79,17 +78,36 @@ class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
 
-class ProjectList(generics.ListAPIView):
-    queryset = Project.objects.all()
+class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
+
+    def get_queryset(self):
+        return Project.objects.filter(workspace=self.kwargs['pk'])
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
-class CategoryList(generics.ListAPIView):
-    queryset = Category.objects.all()
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        filter['pk'] = self.kwargs['project_id']
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj
+    
+    def get_queryset(self):
+        """
+        This view should return details for a project in a specific workspace.
+        """
+        workspace_id = self.kwargs['pk']
+        return Project.objects.filter(workspace=workspace_id)
+
+class CategoryList(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
+     
+    def get_queryset(self):
+        return Category.objects.filter(workspace=self.kwargs['pk'])
 
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()

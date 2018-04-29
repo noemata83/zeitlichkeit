@@ -44,12 +44,12 @@ class ProjectSerializer(serializers.ModelSerializer):
     workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all())
     class Meta:
         model = Project
-        fields = ('name', 'workspace')
+        fields = ('name', 'workspace', 'id')
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('name',)
+        fields = ('name', 'id')
 
 class UserSerializer(serializers.ModelSerializer):
     workspace_set = WorkspaceLimitedSerializer(many=True)
