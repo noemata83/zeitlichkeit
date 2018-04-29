@@ -73,10 +73,28 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 class SprintList(generics.ListCreateAPIView):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
+    
+    def get_queryset(self):
+        return Sprint.objects.filter(task=self.kwargs['task_id'])
 
 class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        filter['pk'] = self.kwargs['sprint_id']
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+        """
+        This view should return details for a sprint for a specific task.
+        """
+        return Sprint.objects.filter(task=self.kwargs['task_id'])
+
 
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
@@ -109,9 +127,26 @@ class CategoryList(generics.ListCreateAPIView):
     def get_queryset(self):
         return Category.objects.filter(workspace=self.kwargs['pk'])
 
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk']}
+
 class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return Category.objects.filter(workspace=self.kwargs['pk'])
+
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk']}
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        filter['pk'] = self.kwargs['category_id']
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj
 
 class RegistrationAPI(generics.GenericAPIView):
     queryset = User.objects.all()

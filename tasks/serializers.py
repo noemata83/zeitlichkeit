@@ -51,6 +51,10 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ('name', 'id')
 
+    def validate(self, data):
+        data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
+        return data
+
 class UserSerializer(serializers.ModelSerializer):
     workspace_set = WorkspaceLimitedSerializer(many=True)
     sprints = serializers.StringRelatedField(many=True)
@@ -65,6 +69,11 @@ class SprintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sprint
         fields = ('id', 'owner', 'task', 'start_time', 'end_time')
+
+    def validate(self, data):
+        data['owner'] = User.objects.get(username=data['owner'])
+        data['task'] = Task.objects.get(name=data['task'])
+        return data
 
 class TaskSerializer(WritableNestedModelSerializer):
     """ Serializer for tasks"""
