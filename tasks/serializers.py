@@ -4,7 +4,7 @@ This module defines the serializers for the tasks api.
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from tasks.models import Workspace, Task, Sprint, Project, Category
+from tasks.models import Workspace, Task, Sprint, Project, Category, Account
 from drf_writable_nested import WritableNestedModelSerializer
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -40,6 +40,12 @@ class WorkspaceLimitedSerializer(serializers.ModelSerializer):
         model = Workspace
         fields = ('id', 'name')
 
+class AccountSerializer(serializers.ModelSerializer):
+    default_workspace = WorkspaceLimitedSerializer()
+    class Meta:
+        model = Account
+        fields = ('default_workspace',)
+
 class ProjectSerializer(serializers.ModelSerializer):
     workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all())
     class Meta:
@@ -58,9 +64,10 @@ class CategorySerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     workspace_set = WorkspaceLimitedSerializer(many=True)
     sprints = serializers.StringRelatedField(many=True)
+    account = AccountSerializer()
     class Meta:
         model = User
-        fields = ('id', 'username', 'workspace_set', 'sprints')
+        fields = ('id', 'username', 'workspace_set', 'sprints', 'account')
 
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
