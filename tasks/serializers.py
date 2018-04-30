@@ -82,6 +82,16 @@ class SprintSerializer(serializers.ModelSerializer):
         data['task'] = Task.objects.get(name=data['task'])
         return data
 
+class TaskListSerializer(serializers.ModelSerializer):
+    project = serializers.StringRelatedField()
+    categories = serializers.StringRelatedField(many=True)
+    completed = serializers.BooleanField
+    sprint_set = SprintSerializer(many=True)
+    class Meta:
+        model = Task
+        fields = ('name', 'id', 'project', 'categories', 'completed', 'sprint_set')
+
+
 class TaskSerializer(WritableNestedModelSerializer):
     """ Serializer for tasks"""
     project = ProjectSerializer()
@@ -132,7 +142,7 @@ class WorkspaceSerializer(serializers.ModelSerializer):
     users = UserLimitedSerializer(many=True, default=[serializers.CurrentUserDefault(),])
     project_set = serializers.StringRelatedField(many=True)
     category_set = serializers.StringRelatedField(many=True)
-    task_set = TaskSerializer(many=True)
+    task_set = TaskListSerializer(many=True)
     class Meta:
         model = Workspace
         fields = ('id', 'name', 'users', 'project_set', 'task_set', 'category_set')
