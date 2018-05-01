@@ -1,15 +1,15 @@
 """
 This module defines the views for the tasks api.
 """
+import logging
 from rest_framework import permissions, generics, viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from knox.models import AuthToken
-import logging
 from tasks.models import Task, Workspace, Sprint, Project, Category
 from tasks.permissions import IsMember
-from .serializers import (TaskSerializer, WorkspaceSerializer, SprintSerializer, 
+from .serializers import (TaskSerializer, WorkspaceSerializer, SprintSerializer,
                           UserSerializer, CreateUserSerializer, LoginUserSerializer,
                           ProjectSerializer, CategorySerializer)
 
@@ -24,7 +24,7 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         users = [self.request.user,]
-        serializer.save(users = users)
+        serializer.save(users=users)
 
 class WorkspaceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Workspace.objects.all()
@@ -39,7 +39,7 @@ class TaskList(generics.ListCreateAPIView):
         return Task.objects.filter(workspace=self.kwargs['pk'])
 
 
-class TaskDetail(generics.RetrieveUpdateDestroyAPIView):    
+class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
@@ -70,12 +70,23 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
 
-class SprintList(generics.ListCreateAPIView):
-    queryset = Sprint.objects.all()
+class SprintListByWorkspace(generics.ListCreateAPIView):
     serializer_class = SprintSerializer
-    
+
+    def get_queryset(self):
+        return Sprint.objects.filter(task__workspace=self.kwargs['pk'])
+
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk'], "user": self.request.user}
+
+class SprintListByTask(generics.ListCreateAPIView):
+    serializer_class = SprintSerializer
+
     def get_queryset(self):
         return Sprint.objects.filter(task=self.kwargs['task_id'])
+
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk'], "user": self.request.user}
 
 class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sprint.objects.all()
@@ -88,12 +99,6 @@ class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
         obj = get_object_or_404(queryset, **filter)
         self.check_object_permissions(self.request, obj)
         return obj
-
-    def get_queryset(self):
-        """
-        This view should return details for a sprint for a specific task.
-        """
-        return Sprint.objects.filter(task=self.kwargs['task_id'])
 
 
 class ProjectList(generics.ListCreateAPIView):
@@ -113,7 +118,7 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
         obj = get_object_or_404(queryset, **filter)
         self.check_object_permissions(self.request, obj)
         return obj
-    
+
     def get_queryset(self):
         """
         This view should return details for a project in a specific workspace.
@@ -123,7 +128,7 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CategoryList(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
-     
+
     def get_queryset(self):
         return Category.objects.filter(workspace=self.kwargs['pk'])
 

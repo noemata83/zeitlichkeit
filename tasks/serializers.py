@@ -4,8 +4,8 @@ This module defines the serializers for the tasks api.
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from tasks.models import Workspace, Task, Sprint, Project, Category, Account
 from drf_writable_nested import WritableNestedModelSerializer
+from tasks.models import Workspace, Task, Sprint, Project, Category, Account
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -32,7 +32,7 @@ class LoginUserSerializer(serializers.Serializer):
 class UserLimitedSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields=('id', 'username')
+        fields = ('id', 'username')
 
 class WorkspaceLimitedSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -71,32 +71,41 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
-    task = serializers.StringRelatedField()
+    task = serializers.SlugRelatedField(slug_field='name', queryset=Task.objects.all())
     owner = serializers.StringRelatedField()
     class Meta:
         model = Sprint
         fields = ('id', 'owner', 'task', 'start_time', 'end_time')
 
     def validate(self, data):
+        data['owner'] = self.context['user']
+        return data
+
+class LimitedSprintSerializer(serializers.ModelSerializer):
+    """ Serializer for Embedded sprint data"""
+    owner = serializers.StringRelatedField()
+    class Meta:
+        model = Sprint
+        fields = ('id', 'owner', 'start_time', 'end_time')
+
+    def validate(self, data):
         data['owner'] = User.objects.get(username=data['owner'])
-        data['task'] = Task.objects.get(name=data['task'])
         return data
 
 class TaskListSerializer(serializers.ModelSerializer):
     project = serializers.StringRelatedField()
     categories = serializers.StringRelatedField(many=True)
     completed = serializers.BooleanField
-    sprint_set = SprintSerializer(many=True)
     class Meta:
         model = Task
-        fields = ('name', 'id', 'project', 'categories', 'completed', 'sprint_set')
+        fields = ('name', 'id', 'project', 'categories', 'completed')
 
 
 class TaskSerializer(WritableNestedModelSerializer):
     """ Serializer for tasks"""
     project = ProjectSerializer()
     categories = CategorySerializer(many=True)
-    sprint_set = SprintSerializer(many=True)
+    sprint_set = LimitedSprintSerializer(many=True)
     workspace = WorkspaceLimitedSerializer()
     class Meta:
         model = Task
@@ -111,17 +120,16 @@ class TaskSerializer(WritableNestedModelSerializer):
         data['project'] = Project.objects.get(name=data['project']['name'])
         data['workspace'] = Workspace.objects.get(id=data['workspace']['id'])
         return data
-    
+
     def create(self, validated_data):
         task = Task(name=validated_data['name'],
                     project=validated_data['project'],
                     workspace=validated_data['workspace'],
-                    completed=validated_data['completed'])    
+                    completed=validated_data['completed'])
+        for category in validated_data['categories']:
+            task.categories.add(category)
         task.save()
 
-        for category in validated_data['categories']:
-            task.categories.add(category)    
-    
         return task
 
     def update(self, instance, validated_data):
