@@ -1,0 +1,14 @@
+.Day {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.Date {
+    flex-basis: 75%;
+    font-size: 2rem;
+}
+
+.Duration {
+    flex-basis: 25%;
+    font-size: 1.5rem;
+}
