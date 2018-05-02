@@ -10,9 +10,7 @@ MomentDurationFormatSetup(moment);
 
 export default props => {
     const sprintList = props.sprints.map((sprint, index) => (
-        <div key={index}>
-            <Sprint sprint={sprint} />
-        </div>
+        <Sprint key={index} sprint={sprint} />
     ));
     const duration = props.sprints.reduce((total, sprint) => moment.duration(total).add(sprint.duration), moment.duration(0));
     return (

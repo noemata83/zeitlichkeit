@@ -1,6 +1,7 @@
 .Day {
     display: flex;
     flex-wrap: wrap;
+    margin: 2rem 0;
 }
 
 .Date {
@@ -11,4 +12,5 @@
 .Duration {
     flex-basis: 25%;
     font-size: 1.5rem;
+    text-align: right;
 }
