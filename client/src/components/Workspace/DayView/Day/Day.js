@@ -1,12 +1,8 @@
 import React from 'react';
-import parse from 'date-fns/parse';
-import * as moment from 'moment'; 
-import MomentDurationFormatSetup from 'moment-duration-format';
+import moment from '../../../../services/moment';
 import classes from './Day.css';
 
 import Sprint from './Sprint';
-
-MomentDurationFormatSetup(moment);
 
 export default props => {
     const sprintList = props.sprints.map((sprint, index) => (

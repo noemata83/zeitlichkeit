@@ -3,6 +3,7 @@ import classes from './Dashboard.css';
 
 import Header from './UI/Header/Header';
 import Workspace from './Workspace/Workspace';
+import ManualSprintWidget from './Sidebar/ManualSprintWidget';
 
 class Dashboard extends Component {
     render() {
@@ -12,6 +13,7 @@ class Dashboard extends Component {
                 <main className={classes.Main}>
                     <div className={classes.SideBar}>
                         Sidebar
+                        <ManualSprintWidget />
                     </div>
                     <div className={classes.Workspace}>
                         <Workspace />
