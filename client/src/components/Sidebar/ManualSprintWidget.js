@@ -5,6 +5,9 @@ import Paper from 'material-ui/Paper';
 import { MenuItem } from 'material-ui/Menu';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
+import Select from 'material-ui/Select';
+import { InputLabel } from 'material-ui/Input';
+import { FormControl } from 'material-ui/Form';
 
 function toDatetimeLocal(date) {
     const ten = i => (i < 10 ? '0' : '' ) + i,
@@ -67,6 +70,10 @@ function renderSuggestionsContainer(options) {
       padding: 0,
       listStyleType: 'none',
     },
+    formControl: {
+      margin: theme.spacing.unit,
+      minWidth: 120
+    },
   });
   
 
@@ -75,6 +82,7 @@ class ManualSprintWidget extends Component {
         start_time: new Date(),
         end_time: new Date(),
         task: '',
+        project: '',
         suggestions: []
     }
 
@@ -99,12 +107,18 @@ class ManualSprintWidget extends Component {
           suggestions: [],
         });
       };
+    
+    handleChange = event => {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
 
     getSuggestions = (value) => {
         
         const regex = new RegExp('^' + value, 'i');
       
-        return this.props.tasks.filter(task => regex.test(task.name));
+        return this.props.tasks.filter(task => regex.test(task.name)).map(task => task.name);
       }
     
     handleSuggestionsFetchRequested = ({ value }) => {
@@ -119,8 +133,7 @@ class ManualSprintWidget extends Component {
 
     render() {
         const { tasks, projects, classes } = this.props;
-        const tasklist = tasks.map(task => task.name);
-        const projectlist = projects.map(project => <option>{project.name}</option>)
+        const projectlist = projects.map((project, index) => <MenuItem key={index} value={project}>{project}</MenuItem>)
         const inputProps = {
             placeholder: "What are you up to?",
             value: this.state.task,
@@ -128,17 +141,30 @@ class ManualSprintWidget extends Component {
           };      
         return(
             <div>
-                <Autosuggest 
-                    theme={{
-                        container: classes.container,
-                        suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                        suggestionsList: classes.suggestionsList,
-                        suggestion: classes.suggestion,
-                    }}
-                    renderInputComponent={renderInput} suggestions={tasklist} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
-                <TextField name="start_time" label="Start Time:" type="datetime-local" fullWidth onChange={this.changeStartHandler} value={toDatetimeLocal(this.state.start_time)}/>
-                <TextField name="end_time" label="End Time:" type="datetime-local" fullWidth onChange={this.changeEndHandler} value={toDatetimeLocal(this.state.end_time)}/>
-                <button onClick={() => console.log(`${this.state.task}: \n${this.state.start_time.toISOString()}\n${this.state.end_time.toISOString()}`)}>Submit</button>
+                <FormControl className={classes.formControl}>
+                    <Autosuggest 
+                        theme={{
+                            container: classes.container,
+                            suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                            suggestionsList: classes.suggestionsList,
+                            suggestion: classes.suggestion,
+                        }}
+                        renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
+                    <InputLabel htmlFor='project_select'>Project</InputLabel>
+                    <Select
+                        value={this.state.project}
+                        onChange={this.handleChange}
+                        inputProps={{
+                        name: 'project',
+                        id: 'project_select'
+                        }}
+                    >
+                    {projectlist}
+                    </Select>
+                    <TextField name="start_time" label="Start Time:" type="datetime-local" fullWidth onChange={this.changeStartHandler} value={toDatetimeLocal(this.state.start_time)}/>
+                    <TextField name="end_time" label="End Time:" type="datetime-local" fullWidth onChange={this.changeEndHandler} value={toDatetimeLocal(this.state.end_time)}/>
+                    <button onClick={() => console.log(`${this.state.task}: \n${this.state.start_time.toISOString()}\n${this.state.end_time.toISOString()}`)}>Submit</button>
+                </FormControl>
             </div>
         );
     }
