@@ -41,8 +41,10 @@ class DayView extends Component {
 
     render() {
         return (
-            <div>
-            {this.renderDayView(this.state.sprints)}
+            <div style={{padding:'2rem'}}>
+                <h1>Day View</h1>
+                <h3 onClick={() => this.props.changeMode('TASK_VIEW')}>Switch to Task View</h3>
+                {this.renderDayView(this.state.sprints)}
             </div>
         )
     }

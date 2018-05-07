@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import DayView from './DayView/DayView';
-
+import TaskView from './TaskView/TaskView';
 
 class Workspace extends Component {
     state = {
@@ -15,22 +14,9 @@ class Workspace extends Component {
     }
 
     render() {
-        
-        return(
-            <div style={{padding:'2rem'}}>
-                <h1>Day View</h1>
-                <h3 onClick={() => this.modeChangeHandler('TASK_VIEW')}>Switch to Task View</h3>
-                <DayView />
-            </div>
-        )
+        const view = this.state.mode === 'DAY_VIEW' ? <DayView changeMode={this.modeChangeHandler} /> : <TaskView changeMode={this.modeChangeHandler} />;
+        return view;
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        tasks: state.workspace.tasks,
-        sprints: state.workspace.sprints,
-    }
-}
-
-export default connect(mapStateToProps)(Workspace);
+export default Workspace;
