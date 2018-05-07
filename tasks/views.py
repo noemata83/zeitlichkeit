@@ -83,7 +83,7 @@ class SprintListByWorkspace(generics.ListCreateAPIView):
         return Sprint.objects.filter(task__workspace=self.kwargs['pk'])
 
     def get_serializer_context(self):
-        return {"workspace": self.kwargs['pk'], "user": self.request.user}       
+        return {"workspace": self.kwargs['pk'], "user": self.request.user}
 
 class SprintListByTask(generics.ListCreateAPIView):
     serializer_class = SprintSerializer
@@ -112,7 +112,7 @@ class ProjectList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Project.objects.filter(workspace=self.kwargs['pk'])
-    
+
     def get_serializer_context(self):
         return {"workspace": self.kwargs['pk'], "user": self.request.user}
 

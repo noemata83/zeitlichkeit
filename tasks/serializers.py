@@ -52,7 +52,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = ('name', 'workspace', 'id')
-    
+
     def validate(self, data):
         data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
         return data
@@ -129,7 +129,8 @@ class TaskSerializer(WritableNestedModelSerializer):
         try:
             data['project'] = Project.objects.get(name=data['project']['name'])
         except ObjectDoesNotExist:
-            data['project'] = Project.objects.create(workspace=data['workspace'], name=data['project']['name'])
+            data['project'] = Project.objects.create(workspace=data['workspace'],
+                                                     name=data['project']['name'])
         return data
 
     def create(self, validated_data):

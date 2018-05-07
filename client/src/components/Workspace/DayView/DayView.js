@@ -35,7 +35,7 @@ class DayView extends Component {
     }
 
     renderDayView = (sprints) => {
-        const sortedDates = Object.keys(sprints).sort((a,b) => new Date(a) - new Date(b));
+        const sortedDates = Object.keys(sprints).sort((a,b) => new Date(b) - new Date(a));
         return sortedDates.map(date => <Day key={date.toString()} date={date} sprints={sprints[date]} />);
     }
 
