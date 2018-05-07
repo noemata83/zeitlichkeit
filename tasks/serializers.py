@@ -4,6 +4,7 @@ This module defines the serializers for the tasks api.
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.db.models.base import ObjectDoesNotExist
 from drf_writable_nested import WritableNestedModelSerializer
 from tasks.models import Workspace, Task, Sprint, Project, Category, Account
 
@@ -47,10 +48,14 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = ('default_workspace',)
 
 class ProjectSerializer(serializers.ModelSerializer):
-    workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all())
+    workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all(), required=False)
     class Meta:
         model = Project
         fields = ('name', 'workspace', 'id')
+    
+    def validate(self, data):
+        data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
+        return data
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -106,7 +111,7 @@ class TaskSerializer(WritableNestedModelSerializer):
     project = ProjectSerializer()
     categories = CategorySerializer(many=True)
     sprint_set = LimitedSprintSerializer(many=True)
-    workspace = WorkspaceLimitedSerializer()
+    workspace = WorkspaceLimitedSerializer(required=False)
     class Meta:
         model = Task
         fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed', 'sprint_set')
@@ -115,10 +120,16 @@ class TaskSerializer(WritableNestedModelSerializer):
         # manually get the Category instance from the input data
         categories = []
         for category in data['categories']:
-            categories.append(Category.objects.get(name=category['name']))
+            try:
+                categories.append(Category.objects.get(name=category['name']))
+            except ObjectDoesNotExist:
+                categories.append(Category.objects.create(name=category['name']))
         data['categories'] = categories
-        data['project'] = Project.objects.get(name=data['project']['name'])
-        data['workspace'] = Workspace.objects.get(id=data['workspace']['id'])
+        data['workspace'] = Workspace.objects.get(id=self.context['workspace'])
+        try:
+            data['project'] = Project.objects.get(name=data['project']['name'])
+        except ObjectDoesNotExist:
+            data['project'] = Project.objects.create(workspace=data['workspace'], name=data['project']['name'])
         return data
 
     def create(self, validated_data):
@@ -126,9 +137,9 @@ class TaskSerializer(WritableNestedModelSerializer):
                     project=validated_data['project'],
                     workspace=validated_data['workspace'],
                     completed=validated_data['completed'])
+        task.save()
         for category in validated_data['categories']:
             task.categories.add(category)
-        task.save()
 
         return task
 

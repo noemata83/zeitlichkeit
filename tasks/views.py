@@ -38,6 +38,9 @@ class TaskList(generics.ListCreateAPIView):
     def get_queryset(self):
         return Task.objects.filter(workspace=self.kwargs['pk'])
 
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk'], "user": self.request.user}
+
 
 class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
@@ -57,6 +60,9 @@ class TaskDetail(generics.RetrieveUpdateDestroyAPIView):
         """
         workspace_id = self.kwargs['pk']
         return Task.objects.filter(workspace=workspace_id)
+
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk'], "user": self.request.user}
 
 class UserAPI(generics.RetrieveAPIView):
     serializer_class = UserSerializer
@@ -106,6 +112,9 @@ class ProjectList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Project.objects.filter(workspace=self.kwargs['pk'])
+    
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk'], "user": self.request.user}
 
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()

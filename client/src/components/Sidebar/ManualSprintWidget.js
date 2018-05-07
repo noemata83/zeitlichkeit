@@ -130,27 +130,26 @@ class ManualSprintWidget extends Component {
     getSuggestionValue = (suggestion) => {
         return suggestion;
     }
+    
+    /*
+    checkIfTaskExists = (event) => {
+        if (!this.props.tasks.map(task => task.name).includes(event.target.value)) {
+            alert("I didn't find that task");
+        }
+    }
+    */
 
     render() {
-        const { tasks, projects, classes } = this.props;
-        const projectlist = projects.map((project, index) => <MenuItem key={index} value={project}>{project}</MenuItem>)
+        const { projects, classes } = this.props;
+        const projectlist = ['None', ...projects].map((project, index) => <MenuItem key={index} value={project}>{project}</MenuItem>);
         const inputProps = {
             placeholder: "What are you up to?",
             value: this.state.task,
-            onChange: this.updateTaskInput
-          };      
+            onChange: this.updateTaskInput,
+        };      
         return(
             <div>
                 <FormControl className={classes.formControl}>
-                    <Autosuggest 
-                        theme={{
-                            container: classes.container,
-                            suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                            suggestionsList: classes.suggestionsList,
-                            suggestion: classes.suggestion,
-                        }}
-                        renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
-                    <InputLabel htmlFor='project_select'>Project</InputLabel>
                     <Select
                         value={this.state.project}
                         onChange={this.handleChange}
@@ -161,6 +160,15 @@ class ManualSprintWidget extends Component {
                     >
                     {projectlist}
                     </Select>
+                    <Autosuggest 
+                        theme={{
+                            container: classes.container,
+                            suggestionsContainerOpen: classes.suggestionsContainerOpen,
+                            suggestionsList: classes.suggestionsList,
+                            suggestion: classes.suggestion,
+                        }}
+                        renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
+                    <InputLabel htmlFor='project_select'>Project</InputLabel>
                     <TextField name="start_time" label="Start Time:" type="datetime-local" fullWidth onChange={this.changeStartHandler} value={toDatetimeLocal(this.state.start_time)}/>
                     <TextField name="end_time" label="End Time:" type="datetime-local" fullWidth onChange={this.changeEndHandler} value={toDatetimeLocal(this.state.end_time)}/>
                     <button onClick={() => console.log(`${this.state.task}: \n${this.state.start_time.toISOString()}\n${this.state.end_time.toISOString()}`)}>Submit</button>
