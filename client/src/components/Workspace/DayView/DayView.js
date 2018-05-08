@@ -17,6 +17,7 @@ const groupByDates = sprints => sprints.reduce((sprintsByDate, sprint) => {
 class DayView extends Component {
     state = {
         sprints: [],
+        loading: true,
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -24,14 +25,17 @@ class DayView extends Component {
             retrieveDates,
             groupByDates
         );
-        const sprints = processSprints(nextProps.sprints.map(sprint => ({
-            ...sprint,
-            duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time)).toISOString().substr(11,8)
-        })));
-        return {
-            ...prevState,
-            sprints
+        if (!nextProps.loading) {
+            const sprints = processSprints(nextProps.sprints.map(sprint => ({
+                ...sprint,
+                duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time)).toISOString().substr(11,8)
+            })));
+            return {
+                ...prevState,
+                sprints
+            }
         }
+        return {...prevState};
     }
 
     renderDayView = (sprints) => {
@@ -52,7 +56,8 @@ class DayView extends Component {
 
 const mapStateToProps = state => {
     return {
-        sprints: state.workspace.sprints
+        sprints: state.workspace.sprints,
+        loading: state.workspace.sprint_loading,
     }
 }
 

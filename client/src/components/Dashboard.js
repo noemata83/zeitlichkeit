@@ -1,11 +1,36 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import classes from './Dashboard.css';
+import { loadWorkspace, loadUser } from '../store/actions/';
+
 
 import Header from './UI/Header/Header';
 import Workspace from './Workspace/Workspace';
 import ManualSprintWidget from './Sidebar/ManualSprintWidget';
 
 class Dashboard extends Component {
+
+    state = {
+        loading: true,
+        user: null,
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.user) {
+            nextProps.loadWorkspace();
+        }
+        return {...prevState, user: nextProps.user}
+    }
+
+    componentDidMount() {
+        if (this.state.loading) {
+            this.props.loadUser();
+            this.setState({
+                loading: false
+            });
+        }
+    }
+
     render() {
         return (
             <div className={classes.Dashboard}>
@@ -24,4 +49,17 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+const mapStateToProps = state => {
+    return {
+        user: state.auth.user,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loadWorkspace: () => dispatch(loadWorkspace()),
+        loadUser: () => dispatch(loadUser())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

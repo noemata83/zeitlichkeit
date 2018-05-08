@@ -68,11 +68,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     workspace_set = WorkspaceLimitedSerializer(many=True)
-    sprints = serializers.StringRelatedField(many=True)
     account = AccountSerializer()
     class Meta:
         model = User
-        fields = ('id', 'username', 'workspace_set', 'sprints', 'account')
+        fields = ('id', 'username', 'workspace_set', 'account')
 
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
