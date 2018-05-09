@@ -30,8 +30,10 @@ const theme = createMuiTheme({
       '@media (min-width:600px)': {
         minHeight: '45px'
       }
-
     }
+  },
+  spacing: {
+    unit: 10,
   }
 });
 
