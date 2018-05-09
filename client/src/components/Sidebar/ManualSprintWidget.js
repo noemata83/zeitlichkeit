@@ -8,6 +8,7 @@ import { withStyles } from 'material-ui/styles';
 import Select from 'material-ui/Select';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
+import Button from 'material-ui/Button';
 
 function toDatetimeLocal(date) {
     const ten = i => (i < 10 ? '0' : '' ) + i,
@@ -76,6 +77,9 @@ function renderSuggestionsContainer(options) {
       display: 'flex',
       flexDirection: 'column',
     },
+    button: {
+        margin: theme.spacing.unit,
+    }
   });
   
 
@@ -173,7 +177,7 @@ class ManualSprintWidget extends Component {
                         renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
                     <TextField name="start_time" label="Start Time:" type="datetime-local" fullWidth onChange={this.changeStartHandler} value={toDatetimeLocal(this.state.start_time)}/>
                     <TextField name="end_time" label="End Time:" type="datetime-local" fullWidth onChange={this.changeEndHandler} value={toDatetimeLocal(this.state.end_time)}/>
-                    <button onClick={() => console.log(`${this.state.task}: \n${this.state.start_time.toISOString()}\n${this.state.end_time.toISOString()}`)}>Submit</button>
+                    <Button variant="raised" color="secondary" onClick={() => console.log(`${this.state.task}: \n${this.state.start_time.toISOString()}\n${this.state.end_time.toISOString()}`)} className={classes.button}>Submit</Button>
                 </FormControl>
             </div>
         );

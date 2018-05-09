@@ -6,7 +6,7 @@ import { loadWorkspace, loadUser } from '../store/actions/';
 
 import Header from './UI/Header/Header';
 import Workspace from './Workspace/Workspace';
-import ManualSprintWidget from './Sidebar/ManualSprintWidget';
+import SideBar from './Sidebar/SideBar';
 
 class Dashboard extends Component {
 
@@ -36,10 +36,7 @@ class Dashboard extends Component {
             <div className={classes.Dashboard}>
                 <Header />
                 <main className={classes.Main}>
-                    <div className={classes.SideBar}>
-                        Sidebar
-                        <ManualSprintWidget />
-                    </div>
+                    <SideBar />
                     <div className={classes.Workspace}>
                         <Workspace />
                     </div>
