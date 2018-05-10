@@ -1,2 +1,2 @@
 export { loadUser, login } from './auth';
-export { loadWorkspace, loadSprints } from './workspace';
+export { loadWorkspace, loadSprints, addTaskandSprint, addSprint } from './workspace';

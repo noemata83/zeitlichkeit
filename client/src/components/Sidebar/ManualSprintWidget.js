@@ -9,6 +9,8 @@ import Select from 'material-ui/Select';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 import Button from 'material-ui/Button';
+import { addTaskandSprint, addSprint } from '../../store/actions';
+
 
 function toDatetimeLocal(date) {
     const ten = i => (i < 10 ? '0' : '' ) + i,
@@ -124,7 +126,7 @@ class ManualSprintWidget extends Component {
         
         const regex = new RegExp('^' + value, 'i');
       
-        return this.props.tasks.filter(task => regex.test(task.name)).map(task => task.name);
+        return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.state.project))).map(task => task.name);
       }
     
     handleSuggestionsFetchRequested = ({ value }) => {
@@ -137,13 +139,36 @@ class ManualSprintWidget extends Component {
         return suggestion;
     }
     
-    /*
-    checkIfTaskExists = (event) => {
-        if (!this.props.tasks.map(task => task.name).includes(event.target.value)) {
-            alert("I didn't find that task");
+    checkIfTaskExists = (task, project) => {
+        if (!this.props.tasks.filter(existingtask => existingtask.project === project).map(existingtask => existingtask.name).includes(task)) {
+            console.log("Task not found.");
+            return true;
         }
+        console.log(`I found ${task} under ${project}`);
+        return false;
     }
-    */
+
+    handleSubmit = (project, task, start_time, end_time) => {
+        const isNew = this.checkIfTaskExists(task, project);
+        const sprint_data = {
+            "task": task,
+            "start_time": start_time.toISOString(),
+            "end_time": end_time.toISOString()
+        }
+        if (isNew) {
+            const task_data = {
+                "name": task,
+                "project": {
+                    "name": project
+                },
+                "categories": [],
+                "completed": false,
+                "sprint_set": []
+            }
+            return this.props.addTaskAndSprint(task_data, sprint_data);
+        }
+        return this.props.addSprint(sprint_data);
+    }
 
     render() {
         const { projects, classes } = this.props;
@@ -177,7 +202,7 @@ class ManualSprintWidget extends Component {
                         renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
                     <TextField name="start_time" label="Start Time:" type="datetime-local" fullWidth onChange={this.changeStartHandler} value={toDatetimeLocal(this.state.start_time)}/>
                     <TextField name="end_time" label="End Time:" type="datetime-local" fullWidth onChange={this.changeEndHandler} value={toDatetimeLocal(this.state.end_time)}/>
-                    <Button variant="raised" color="secondary" onClick={() => console.log(`${this.state.task}: \n${this.state.start_time.toISOString()}\n${this.state.end_time.toISOString()}`)} className={classes.button}>Submit</Button>
+                    <Button variant="raised" color="secondary" onClick={() => this.handleSubmit(this.state.project, this.state.task, this.state.start_time, this.state.end_time)} className={classes.button}>Submit</Button>
                 </FormControl>
             </div>
         );
@@ -191,4 +216,11 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(ManualSprintWidget));
+const mapDispatchToProps = dispatch => {
+    return {
+        addTaskAndSprint: (task_data, sprint_data) => dispatch(addTaskandSprint(task_data, sprint_data)),
+        addSprint: (sprint_data) => dispatch(addSprint(sprint_data))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ManualSprintWidget));

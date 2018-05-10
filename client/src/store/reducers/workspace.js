@@ -15,15 +15,12 @@ const initialState = {
 export default (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.WORKSPACE_LOADING: {
-            console.log("Loading workspace.");
             return {...state, loading: true}
         }
         case actionTypes.WORKSPACE_LOADED: {
-            console.log("Workspace loaded.");
             return {...state, ...action.workspace, loading: false, error: null}
         }
         case actionTypes.SPRINT_LOADING: {
-            console.log("Loading Sprints.");
             return {...state, sprint_loading: true}
         }
         case actionTypes.SPRINT_LOADED: {
