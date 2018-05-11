@@ -4,7 +4,7 @@ import clockIcon from '../../../assets/img/clock-icon.svg';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
-import { withStyles, withTheme } from 'material-ui/styles';
+import { withTheme } from 'material-ui/styles';
 import IconButton from 'material-ui/IconButton';
 
 const header = props => {

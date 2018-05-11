@@ -11,7 +11,8 @@ export const renderTimeField = ({
     <TextField 
     label={label} 
     type="time"
-    fullWidth 
+    fullWidth
+    InputLabelProps={{shrink:true}}
     {...input}
     {...custom} />
 );
@@ -26,6 +27,7 @@ export const renderDateField = ({
     label={label} 
     type="date"
     fullWidth 
+    InputLabelProps={{shrink:true}}
     {...input}
     {...custom} />
 );
@@ -42,7 +44,7 @@ export const renderSelectField = ({
         {...input}
         inputProps={{...inputProps}}
         {...custom}
-    >{children}</Select>
+     >{children}</Select>
     );
 }
 
@@ -55,6 +57,7 @@ export const renderTextField = ({
         label={label}
         type="text"
         inputProps={{...inputProps}}
+        InputLabelProps={{shrink:true}}
         {...custom}
     />
 );

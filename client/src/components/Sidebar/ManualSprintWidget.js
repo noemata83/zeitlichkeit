@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm, Field, reset, formValueSelector } from 'redux-form';
 import { renderTimeField, renderDateField, renderSelectField } from '../UI/Forms/renderFields';
 import Autosuggest from 'react-autosuggest';
 import TextField from 'material-ui/TextField';
@@ -7,7 +7,6 @@ import Paper from 'material-ui/Paper';
 import { MenuItem } from 'material-ui/Menu';
 import { connect } from 'react-redux';
 import { withStyles } from 'material-ui/styles';
-import Select from 'material-ui/Select';
 import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 import Button from 'material-ui/Button';
@@ -129,7 +128,7 @@ class ManualSprintWidget extends Component {
         
         const regex = new RegExp('^' + value, 'i');
       
-        return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.state.project))).map(task => task.name);
+        return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.props.project))).map(task => task.name);
       }
     
     handleSuggestionsFetchRequested = ({ value }) => {
@@ -144,34 +143,35 @@ class ManualSprintWidget extends Component {
     
     checkIfTaskExists = (task, project) => {
         if (!this.props.tasks.filter(existingtask => existingtask.project === project).map(existingtask => existingtask.name).includes(task)) {
-            console.log("Task not found.");
             return true;
         }
-        console.log(`I found ${task} under ${project}`);
         return false;
     }
 
     onSubmit = (values) => {
-        console.log(values);
-        // const isNew = this.checkIfTaskExists(task, project);
-        // const sprint_data = {
-        //     "task": task,
-        //     "start_time": start_time.toISOString(),
-        //     "end_time": end_time.toISOString()
-        // }
-        // if (isNew) {
-        //     const task_data = {
-        //         "name": task,
-        //         "project": {
-        //             "name": project
-        //         },
-        //         "categories": [],
-        //         "completed": false,
-        //         "sprint_set": []
-        //     }
-        //     return this.props.addTaskAndSprint(task_data, sprint_data);
-        // }
-        // return this.props.addSprint(sprint_data);
+        const { task } = this.state;
+        const { project, date, start_time, end_time } = values;
+        const isNew = this.checkIfTaskExists(task, project);
+        const sprint_data = {
+            task: task,
+            start_time: new Date(`${date}T${start_time}:00`).toISOString(),
+            end_time: new Date(`${date}T${end_time}`).toISOString()
+        }
+        if (isNew) {
+            const task_data = {
+                "name": task,
+                "project": {
+                    "name": project
+                },
+                "categories": [],
+                "completed": false,
+                "sprint_set": []
+            }
+            this.props.addTaskAndSprint(task_data, sprint_data);
+            return this.props.resetForm();
+        }
+        this.props.addSprint(sprint_data);
+        return this.props.resetForm();
     }
 
     render() {
@@ -181,7 +181,7 @@ class ManualSprintWidget extends Component {
             placeholder: "What are you up to?",
             value: this.state.task,
             onChange: this.updateTaskInput,
-        };      
+        };    
         return(
             <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
                 <FormControl className={classes.formControl}>
@@ -193,7 +193,8 @@ class ManualSprintWidget extends Component {
                             name: 'project',
                             id: 'project_select'
                         }}
-                    >{projectlist}</Field>
+                        children={projectlist}
+                    />
                     {/* For the time being, I am simply going to omit the Autosuggest field from 
                         my redux-form. I don't need to do any validation, and the state-based logic
                         I have already set up seems perfectly fine. It will make for a slightly
@@ -218,8 +219,11 @@ class ManualSprintWidget extends Component {
     }
 }
 
+const selector = formValueSelector('manualSprintForm'); // <-- same as form name
+
 const mapStateToProps = state => {
     return {
+        project: selector(state, 'project'),
         projects: state.workspace.project_set,
         tasks: state.workspace.task_set,
     }
@@ -228,7 +232,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         addTaskAndSprint: (task_data, sprint_data) => dispatch(addTaskandSprint(task_data, sprint_data)),
-        addSprint: (sprint_data) => dispatch(addSprint(sprint_data))
+        addSprint: (sprint_data) => dispatch(addSprint(sprint_data)),
+        resetForm: () => dispatch(reset('manualSprintForm'))
     }
 }
 

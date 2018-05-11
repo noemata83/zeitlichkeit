@@ -1,4 +1,5 @@
 import actionTypes from '../actions/actionTypes';
+import moment from '../../services/moment';
 
 const initialState = {
     id: null,
@@ -25,7 +26,21 @@ export default (state=initialState, action) => {
         }
         case actionTypes.SPRINT_LOADED: {
             const { count, results } = action.data;
-            return { ...state, sprint_count: count, sprints: results, sprint_loading: false}
+            /* Here we need to localize the times we take in from the backend, which stores its times
+             * in UTC. */
+            const currTz = localStorage.getItem('timezone');
+            const sprints = results.map(sprint => {
+                const sprint_start = moment(sprint.start_time);
+                const sprint_end = moment(sprint.end_time);
+                const start_time = sprint_start.tz(currTz).toISOString();
+                const end_time = sprint_end.tz(currTz).toISOString();
+                return {
+                    ...sprint,
+                    start_time,
+                    end_time
+                }
+            })
+            return { ...state, sprint_count: count, sprints, sprint_loading: false}
         }
         case actionTypes.ADD_TASK: {
             const task = action.task;

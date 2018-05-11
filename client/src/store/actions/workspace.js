@@ -1,5 +1,6 @@
 import actionTypes from './actionTypes';
 import axios from 'axios';
+import jstz from 'jstz';
 
 export const loadWorkspace = () => {
     return (dispatch, getState) => {
@@ -40,6 +41,11 @@ export const loadWorkspace = () => {
 export const loadSprints = () => {
     return (dispatch, getState) => {
         dispatch({type: actionTypes.SPRINT_LOADING});
+
+        if (!localStorage.getItem('timezone')) {
+            const tz = jstz.determine() || 'UTC';
+            localStorage.setItem('timezone', tz.name());
+        }
 
         const token = getState().auth.token;
 
