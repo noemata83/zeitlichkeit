@@ -130,7 +130,8 @@ export const addTaskandSprint = (task_data, sprint_data) => {
                 }
             })
             .then(res => {
-                if (res.status == 201) {
+                if (res.status === 201) {
+                    dispatch({type: actionTypes.ADD_TASK, task: res.data});
                     dispatch(addSprint(sprint_data));
                 } else if (res.status >= 400 && res.status < 500) {
                     dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})

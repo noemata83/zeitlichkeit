@@ -27,6 +27,11 @@ export default (state=initialState, action) => {
             const { count, results } = action.data;
             return { ...state, sprint_count: count, sprints: results, sprint_loading: false}
         }
+        case actionTypes.ADD_TASK: {
+            const task = action.task;
+            const task_set = [...state.task_set, task];
+            return { ...state, task_set};
+        }
         default:
             return state;
     }
