@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { reduxForm, Field } from 'redux-form';
+import { renderTimeField, renderDateField, renderSelectField } from '../UI/Forms/renderFields';
 import Autosuggest from 'react-autosuggest';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
@@ -12,16 +14,17 @@ import Button from 'material-ui/Button';
 import { addTaskandSprint, addSprint } from '../../store/actions';
 
 
-function toDatetimeLocal(date) {
-    const ten = i => (i < 10 ? '0' : '' ) + i,
-    YYYY = date.getFullYear(),
-    MM = ten(date.getMonth() + 1),
-    DD = ten(date.getDate()),
-    HH = ten(date.getHours()),
-    II = ten(date.getMinutes()),
-    SS = ten(date.getSeconds());
-    return `${YYYY}-${MM}-${DD}T${HH}:${II}:${SS}`;
-}
+// function toDatetimeLocal(date) {
+//     const ten = i => (i < 10 ? '0' : '' ) + i,
+//     YYYY = date.getFullYear(),
+//     MM = ten(date.getMonth() + 1),
+//     DD = ten(date.getDate()),
+//     HH = ten(date.getHours()),
+//     II = ten(date.getMinutes()),
+//     SS = ten(date.getSeconds());
+//     return `${YYYY}-${MM}-${DD}T${HH}:${II}:${SS}`;
+// }
+
 
 const renderInput = (inputProps) => {
     const {classes, ref, ...other} = inputProps;
@@ -148,26 +151,27 @@ class ManualSprintWidget extends Component {
         return false;
     }
 
-    handleSubmit = (project, task, start_time, end_time) => {
-        const isNew = this.checkIfTaskExists(task, project);
-        const sprint_data = {
-            "task": task,
-            "start_time": start_time.toISOString(),
-            "end_time": end_time.toISOString()
-        }
-        if (isNew) {
-            const task_data = {
-                "name": task,
-                "project": {
-                    "name": project
-                },
-                "categories": [],
-                "completed": false,
-                "sprint_set": []
-            }
-            return this.props.addTaskAndSprint(task_data, sprint_data);
-        }
-        return this.props.addSprint(sprint_data);
+    onSubmit = (values) => {
+        console.log(values);
+        // const isNew = this.checkIfTaskExists(task, project);
+        // const sprint_data = {
+        //     "task": task,
+        //     "start_time": start_time.toISOString(),
+        //     "end_time": end_time.toISOString()
+        // }
+        // if (isNew) {
+        //     const task_data = {
+        //         "name": task,
+        //         "project": {
+        //             "name": project
+        //         },
+        //         "categories": [],
+        //         "completed": false,
+        //         "sprint_set": []
+        //     }
+        //     return this.props.addTaskAndSprint(task_data, sprint_data);
+        // }
+        // return this.props.addSprint(sprint_data);
     }
 
     render() {
@@ -179,20 +183,24 @@ class ManualSprintWidget extends Component {
             onChange: this.updateTaskInput,
         };      
         return(
-            <div>
+            <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
                 <FormControl className={classes.formControl}>
                     <InputLabel htmlFor='project_select'>Project</InputLabel>
-                    <Select
-                        value={this.state.project}
-                        onChange={this.handleChange}
+                    <Field
+                        name="project"
+                        component={renderSelectField}
                         inputProps={{
-                        name: 'project',
-                        id: 'project_select'
+                            name: 'project',
+                            id: 'project_select'
                         }}
-                    >
-                    {projectlist}
-                    </Select>
-                    <Autosuggest 
+                    >{projectlist}</Field>
+                    {/* For the time being, I am simply going to omit the Autosuggest field from 
+                        my redux-form. I don't need to do any validation, and the state-based logic
+                        I have already set up seems perfectly fine. It will make for a slightly
+                        disjointed submit process (pulling both from props and state, rather
+                        than treating all values in a unified way), but the setup cost just seems too
+                        high to justify at the moment. */}
+                    <Autosuggest  
                         theme={{
                             container: classes.container,
                             suggestionsContainerOpen: classes.suggestionsContainerOpen,
@@ -200,11 +208,12 @@ class ManualSprintWidget extends Component {
                             suggestion: classes.suggestion,
                         }}
                         renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
-                    <TextField name="start_time" label="Start Time:" type="datetime-local" fullWidth onChange={this.changeStartHandler} value={toDatetimeLocal(this.state.start_time)}/>
-                    <TextField name="end_time" label="End Time:" type="datetime-local" fullWidth onChange={this.changeEndHandler} value={toDatetimeLocal(this.state.end_time)}/>
-                    <Button variant="raised" color="secondary" onClick={() => this.handleSubmit(this.state.project, this.state.task, this.state.start_time, this.state.end_time)} className={classes.button}>Submit</Button>
+                    <Field component={renderDateField} name="date" label="Date:" type="date" />
+                    <Field component={renderTimeField} name="start_time" label="Start Time:" type="time" />
+                    <Field component={renderTimeField} name="end_time" label="End Time:" type="time" fullWidth/>
+                    <Button variant="raised" color="secondary" type="submit">Submit</Button>
                 </FormControl>
-            </div>
+            </form>
         );
     }
 }
@@ -212,7 +221,7 @@ class ManualSprintWidget extends Component {
 const mapStateToProps = state => {
     return {
         projects: state.workspace.project_set,
-        tasks: state.workspace.task_set
+        tasks: state.workspace.task_set,
     }
 }
 
@@ -223,4 +232,6 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ManualSprintWidget));
+export default reduxForm({
+    form: 'manualSprintForm',
+})(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ManualSprintWidget)));
