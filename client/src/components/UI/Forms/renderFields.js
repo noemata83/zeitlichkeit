@@ -11,7 +11,6 @@ export const renderTimeField = ({
     <TextField 
     label={label} 
     type="time"
-    fullWidth
     InputLabelProps={{shrink:true}}
     {...input}
     {...custom} />

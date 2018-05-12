@@ -57,7 +57,6 @@ function renderSuggestionsContainer(options) {
 
   const styles = theme => ({
     container: {
-      flexGrow: 1,
       position: 'relative',
     },
     suggestionsContainerOpen: {
@@ -77,9 +76,11 @@ function renderSuggestionsContainer(options) {
     },
     formControl: {
       margin: theme.spacing.unit,
+      marginTop: 0,
       minWidth: 120,
       display: 'flex',
       flexDirection: 'column',
+      height: '300px'
     },
     button: {
         margin: theme.spacing.unit,
@@ -210,8 +211,10 @@ class ManualSprintWidget extends Component {
                         }}
                         renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
                     <Field component={renderDateField} name="date" label="Date:" type="date" />
-                    <Field component={renderTimeField} name="start_time" label="Start Time:" type="time" />
-                    <Field component={renderTimeField} name="end_time" label="End Time:" type="time" fullWidth/>
+                    <div style={{display:'flex', justifyContent:'space-between', marginBottom: '2rem'}}>
+                        <Field component={renderTimeField} name="start_time" label="Start Time:" type="time" />
+                        <Field component={renderTimeField} name="end_time" label="End Time:" type="time"/>
+                    </div>
                     <Button variant="raised" color="secondary" type="submit">Submit</Button>
                 </FormControl>
             </form>
