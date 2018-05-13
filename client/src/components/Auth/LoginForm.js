@@ -8,7 +8,7 @@ const LoginForm = props => {
     return (
     <div>
         <form onSubmit={props.handleSubmit(handleLogin)}>
-            <div>
+            <div style={{display:'inline-block', width: '50%'}}>
                 <Field 
                     className={classes.Input}
                     name="username"
@@ -16,7 +16,7 @@ const LoginForm = props => {
                     type="text" 
                     placeholder="Username" />
             </div>
-            <div>
+            <div style={{display:'inline-block', width:'50%'}}>
                 <Field
                     className={classes.Input}
                     name="password"
@@ -25,8 +25,8 @@ const LoginForm = props => {
                     placeholder="Password" />
             </div>
             <button className={classes.Link} type="submit">Login</button>
+            <button className={classes.Back} onClick={() => props.switchMode('GREETING')}>Back</button>
         </form>
-        <button className={classes.Link} onClick={() => props.switchMode('GREETING')}>Back</button>
     </div>
     );
 }

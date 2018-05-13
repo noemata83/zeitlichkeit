@@ -7,6 +7,7 @@ import { Redirect } from 'react-router-dom';
 import classes from './Landing.css';
 import Background from './UI/Background/Background';
 import LoginForm from './Auth/LoginForm';
+import RegistrationForm from './Auth/RegisterForm';
 import * as actions from '../store/actions';
 
 class Landing extends Component {
@@ -16,6 +17,10 @@ class Landing extends Component {
     
     handleLogin = (values) => {
         this.props.login(values.username, values.password);
+    }
+
+    handleRegistration = values => {
+        console.log(values);
     }
 
     switchMode = (mode) => {
@@ -31,12 +36,18 @@ class Landing extends Component {
         switch(this.state.display) {
             case('LOGIN'):
                 return(<div>
+                        <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
                         <LoginForm handleLogin={this.handleLogin} switchMode={this.switchMode} />
                     </div>);
+            case('REGISTER'):
+                return(<div>
+                        <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
+                        <RegistrationForm handleRegistration={this.handleRegistration} switchMode={this.switchMode} />
+                        </div>);
             default:
                 return (<div>
                     <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
-                    <a className={classes.Link}>Register</a><br />
+                    <a className={classes.Link} onClick={() => this.switchMode('REGISTER')}>Register</a><br />
                     <a className={classes.Link} onClick={() => this.switchMode('LOGIN')}>Login</a>
                 </div>
                 );

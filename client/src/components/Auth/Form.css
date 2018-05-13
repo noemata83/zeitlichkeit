@@ -3,8 +3,9 @@
     border: 0;
     border-bottom: 1px solid white;
     outline: none;
+    display: inline-block;
     font-size: 2rem;
-    margin: 3rem 0;
+    margin: 0 .5rem;
     padding-bottom: 1rem;
     color: #fff;
 }
@@ -12,7 +13,7 @@
 .Link,
 .Link:visited {
     display: inline-block;
-    width: 100%;
+    width: 50%;
     cursor: pointer;
     text-align: right;
     font-size: 2rem;
@@ -26,7 +27,24 @@
     border: none;
 }
 
-.Link:hover {
+.Back {
+    display: inline-block;
+    cursor: pointer;
+    text-align: right;
+    font-size: 2rem;
+    padding: 0;
+    margin: 1rem 0;
+    margin-left: 1rem;
+    text-decoration: none;
+    color: #fff;
+    background-color: transparent;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+}
+
+.Link:hover,
+.Back:hover {
     text-decoration: underline;
     font-weight: bold;
 }
