@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import classes from './Dashboard.css';
 import { loadWorkspace, loadUser } from '../store/actions/';
 
@@ -32,7 +33,8 @@ class Dashboard extends Component {
     }
 
     render() {
-        return (
+        const { user, loading } = this.state;
+        return (!user && !loading) ? <Redirect to="/" /> : (
             <div className={classes.Dashboard}>
                 <Header />
                 <main className={classes.Main}>

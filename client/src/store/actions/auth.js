@@ -89,3 +89,34 @@ export const register = (username, password) => {
         })
     }
 }
+
+export const logout = () => {
+    return (dispatch, getState) => {
+        const headers = {"Content-Type": "application/json"};
+
+        let {token} = getState().auth;
+
+        if (token) {
+        headers["Authorization"] = `Token ${token}`;
+        }
+        return axios.post('/api/auth/logout/', "", {headers,}).then(res => {
+            if (res.status === 204) {
+                return {status: res.status, data: {}};
+            } else if (res.status < 500) {
+                return {status: res.status, data: res.data};
+            }
+            else {
+                console.log("Server Error!");
+                throw res;
+            }
+        }).then(res => {
+            if (res.status === 204) {
+                dispatch({type: actionTypes.LOGOUT});
+                return res.data;
+            } else if (res.status === 403 || res.status === 401) {
+                dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data});
+                throw res.data;
+            }
+        }) 
+    }
+}

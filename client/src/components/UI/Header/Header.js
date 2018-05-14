@@ -1,4 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions';
+
 import classes from './Header.css';
 import clockIcon from '../../../assets/img/clock-icon.svg';
 import AppBar from 'material-ui/AppBar';
@@ -38,7 +41,7 @@ const header = props => {
                 <div className={classes.NavMenuItem}>
                     Team
                 </div>
-                <div className={classes.NavMenuItem}>
+                <div className={classes.NavMenuItem} onClick={() => props.logout()}>
                     Logout
                 </div>
             </div>
@@ -47,4 +50,11 @@ const header = props => {
     </AppBar>
     );
 }
-export default withTheme()(header);
+
+const mapDispatchToProps = dispatch => {
+    return {
+        logout: () => dispatch(actions.logout())
+    }
+}
+
+export default connect(null, mapDispatchToProps)(withTheme()(header));
