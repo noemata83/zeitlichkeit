@@ -18,6 +18,12 @@ class CreateUserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(validated_data['username'],
                                         None,
                                         validated_data['password'])
+        default_workspace_name = "{}'s Workspace".format(validated_data['username'])
+        default_workspace = Workspace.objects.create(name=default_workspace_name)
+        default_workspace.save()
+        default_workspace.users.add(user)
+        user_account = Account.objects.create(user=user, default_workspace=default_workspace)
+        user_account.save()
         return user
 
 class LoginUserSerializer(serializers.Serializer):

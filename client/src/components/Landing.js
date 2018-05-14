@@ -10,6 +10,7 @@ import LoginForm from './Auth/LoginForm';
 import RegistrationForm from './Auth/RegisterForm';
 import * as actions from '../store/actions';
 
+
 class Landing extends Component {
     state = {
         display: 'GREETING',
@@ -20,7 +21,7 @@ class Landing extends Component {
     }
 
     handleRegistration = values => {
-        console.log(values);
+        this.props.register(values.username, values.password);
     }
 
     switchMode = (mode) => {
@@ -82,6 +83,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         login: (username, password) => dispatch(actions.login(username, password)),
+        register: (username, password) => dispatch(actions.register(username, password))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Landing);
