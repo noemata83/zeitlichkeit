@@ -3,6 +3,7 @@ import axios from 'axios';
 import jstz from 'jstz';
 
 export const loadWorkspace = () => {
+    console.log("loadWorkspace was just called.");
     return (dispatch, getState) => {
         dispatch({type: actionTypes.WORKSPACE_LOADING});
 

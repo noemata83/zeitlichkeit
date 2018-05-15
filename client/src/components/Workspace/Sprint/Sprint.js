@@ -1,14 +1,14 @@
 import React from 'react';
 
 import classes from './Sprint.css';
+import { TableRow, TableCell } from 'material-ui';
 
 export default props => (
-    <div className={classes.Sprint}>
-        <div className={classes.name}>{props.label}</div>
-        <div className={classes.detail}>
-            <div className={classes.start}>{props.sprint.start_time.toLocaleTimeString()}</div>
-            <div className={classes.end}>{props.sprint.end_time.toLocaleTimeString()}</div>
-            <div className={classes.duration}>{props.sprint.duration}</div>
-        </div>
-    </div>
+    <TableRow className={classes.Sprint}>
+        <TableCell className={classes.name}>{props.label}</TableCell>
+        <TableCell className={classes.start}>{props.sprint.start_time.toLocaleTimeString()}</TableCell>
+        <TableCell className={classes.end}>{props.sprint.end_time.toLocaleTimeString()}</TableCell>
+        <TableCell className={classes.duration}>{props.sprint.duration}</TableCell>
+        <TableCell>&times;</TableCell>
+    </TableRow>
 );

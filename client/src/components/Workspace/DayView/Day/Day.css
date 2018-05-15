@@ -1,6 +1,4 @@
 .Day {
-    display: flex;
-    flex-wrap: wrap;
     margin: 2rem 0;
 }
 
@@ -13,4 +11,8 @@
     flex-basis: 25%;
     font-size: 1.5rem;
     text-align: right;
+}
+
+.ToolBar {
+    padding-right: 2rem;
 }

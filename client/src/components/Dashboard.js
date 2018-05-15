@@ -17,7 +17,7 @@ class Dashboard extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.user) {
+        if (nextProps.user && prevState.loading) {
             nextProps.loadWorkspace();
         }
         return {...prevState, user: nextProps.user}
