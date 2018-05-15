@@ -79,6 +79,12 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'workspace_set', 'account')
 
+    @staticmethod
+    def setup_eager_loading(queryset):
+        queryset = queryset.select_related('account')
+        queryset = queryset.prefetch_related('workspace_set')
+        return queryset
+
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
     task = serializers.SlugRelatedField(slug_field='name', queryset=Task.objects.all())
