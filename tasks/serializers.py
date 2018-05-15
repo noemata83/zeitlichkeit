@@ -91,6 +91,11 @@ class SprintSerializer(serializers.ModelSerializer):
         data['owner'] = self.context['user']
         return data
 
+    @staticmethod
+    def setup_eager_loading(queryset):
+        queryset = queryset.select_related('task', 'owner')
+        return queryset
+
 class LimitedSprintSerializer(serializers.ModelSerializer):
     """ Serializer for Embedded sprint data"""
     owner = serializers.StringRelatedField()
@@ -171,3 +176,15 @@ class WorkspaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Workspace
         fields = ('id', 'name', 'users', 'project_set', 'task_set', 'category_set')
+
+    @staticmethod
+    def setup_eager_loading(queryset):
+        queryset = queryset.prefetch_related(
+            'users',
+            'project_set',
+            'category_set',
+            'task_set',
+            'task_set__categories',
+            'task_set__project'
+        )
+        return queryset

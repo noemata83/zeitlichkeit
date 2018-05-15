@@ -20,7 +20,9 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated, IsMember,)
 
     def get_queryset(self):
-        return self.request.user.workspace_set.all()
+        queryset = self.request.user.workspace_set.all()
+        queryset = self.get_serializer_class().setup_eager_loading(queryset)
+        return queryset
 
     def perform_create(self, serializer):
         users = [self.request.user,]
@@ -71,6 +73,12 @@ class UserAPI(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+    def get_queryset(self):
+        queryset = User.objects.all()
+        queryset = queryset.get_serializer_class().setup_eager_loading(queryset)
+        return queryset
+
+
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -80,10 +88,13 @@ class SprintListByWorkspace(generics.ListCreateAPIView):
     serializer_class = SprintSerializer
 
     def get_queryset(self):
-        return Sprint.objects.filter(task__workspace=self.kwargs['pk'])
+        queryset = Sprint.objects.filter(task__workspace=self.kwargs['pk'])
+        queryset = self.get_serializer_class().setup_eager_loading(queryset)
+        return queryset
 
     def get_serializer_context(self):
         return {"workspace": self.kwargs['pk'], "user": self.request.user}
+    
 
 class SprintListByTask(generics.ListCreateAPIView):
     serializer_class = SprintSerializer
