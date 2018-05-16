@@ -3,7 +3,6 @@ import axios from 'axios';
 import jstz from 'jstz';
 
 export const loadWorkspace = () => {
-    console.log("loadWorkspace was just called.");
     return (dispatch, getState) => {
         dispatch({type: actionTypes.WORKSPACE_LOADING});
 
@@ -83,7 +82,6 @@ export const loadSprints = () => {
 
 export const addSprint = (sprint_data) => {
     return (dispatch, getState) => {
-        console.log("hello from sprint add function.");
         dispatch({type: actionTypes.SPRINT_LOADING});
         const token = getState().auth.token;
 
@@ -145,5 +143,35 @@ export const addTaskandSprint = (task_data, sprint_data) => {
                     throw res.data;
                 }
             }); 
+    }
+}
+
+export const deleteSprint = (sprint_id) => {
+    return (dispatch, getState) => {
+        const token = getState().auth.token;
+
+        let headers = {
+            "Content-Type": "application/json",
+        };
+
+        if (token) {
+            headers["Authorization"]= `Token ${token}`;
+        }
+        const workspace = getState().workspace.id;
+        return axios.delete(`/api/workspaces/${workspace}/sprints/${sprint_id}/`, {headers, }).then(res => {
+                if (res.status < 500) {
+                    return {status: res.status, data: res.data};
+                } else {
+                    throw res;
+                }
+            })
+            .then(res => {
+                if (res.status === 204) {
+                    return dispatch(loadSprints());
+                }  else if (res.status >= 400 && res.status < 500) {
+                    dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})
+                    throw res.data;
+                }
+            });
     }
 }
