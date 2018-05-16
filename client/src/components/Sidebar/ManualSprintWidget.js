@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, reset, formValueSelector } from 'redux-form';
 import { renderTimeField, renderDateField, renderSelectField } from '../UI/Forms/renderFields';
-import Autosuggest from 'react-autosuggest';
 import TextField from 'material-ui/TextField';
 import Paper from 'material-ui/Paper';
 import { MenuItem } from 'material-ui/Menu';
@@ -11,6 +10,7 @@ import { InputLabel } from 'material-ui/Input';
 import { FormControl } from 'material-ui/Form';
 import Button from 'material-ui/Button';
 import { addTaskandSprint, addSprint } from '../../store/actions';
+import TaskAutosuggest from '../UI/Forms/Autosuggest/TaskAutosuggest';
 
 
 // function toDatetimeLocal(date) {
@@ -25,35 +25,35 @@ import { addTaskandSprint, addSprint } from '../../store/actions';
 // }
 
 
-const renderInput = (inputProps) => {
-    const {classes, ref, ...other} = inputProps;
+// const renderInput = (inputProps) => {
+//     const {classes, ref, ...other} = inputProps;
 
-    return (
-        <TextField
-            fullWidth
-            InputProps={{
-                inputRef: ref,
-                ...other,
-            }}
-        />
-    );
-}
+//     return (
+//         <TextField
+//             fullWidth
+//             InputProps={{
+//                 inputRef: ref,
+//                 ...other,
+//             }}
+//         />
+//     );
+// }
 
-function renderSuggestionsContainer(options) {
-    const { containerProps, children } = options;
+// function renderSuggestionsContainer(options) {
+//     const { containerProps, children } = options;
   
-    return (
-      <Paper {...containerProps} square>
-        {children}
-      </Paper>
-    );
-  }
+//     return (
+//       <Paper {...containerProps} square>
+//         {children}
+//       </Paper>
+//     );
+//   }
 
-  function renderSuggestion(suggestion, { query, isHighlighted}) {
-    return (
-      <MenuItem component="div"><div><span>{suggestion}</span></div></MenuItem>
-    );
-  }
+//   function renderSuggestion(suggestion, { query, isHighlighted}) {
+//     return (
+//       <MenuItem component="div"><div><span>{suggestion}</span></div></MenuItem>
+//     );
+//   }
 
   const styles = theme => ({
     container: {
@@ -94,7 +94,6 @@ class ManualSprintWidget extends Component {
         end_time: new Date(),
         task: '',
         project: '',
-        suggestions: []
     }
 
     updateTaskInput = (event, { newValue, method }) => {
@@ -113,11 +112,11 @@ class ManualSprintWidget extends Component {
         });
     }
     
-    handleSuggestionsClearRequested = () => {
-        this.setState({
-          suggestions: [],
-        });
-      };
+    // handleSuggestionsClearRequested = () => {
+    //     this.setState({
+    //       suggestions: [],
+    //     });
+    //   };
     
     handleChange = event => {
         this.setState({
@@ -125,22 +124,22 @@ class ManualSprintWidget extends Component {
         })
     }
 
-    getSuggestions = (value) => {
+    // getSuggestions = (value) => {
         
-        const regex = new RegExp('^' + value, 'i');
+    //     const regex = new RegExp('^' + value, 'i');
       
-        return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.props.project))).map(task => task.name);
-      }
+    //     return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.props.project))).map(task => task.name);
+    //   }
     
-    handleSuggestionsFetchRequested = ({ value }) => {
-        this.setState({
-          suggestions: this.getSuggestions(value),
-        });
-      };
+    // handleSuggestionsFetchRequested = ({ value }) => {
+    //     this.setState({
+    //       suggestions: this.getSuggestions(value),
+    //     });
+    //   };
 
-    getSuggestionValue = (suggestion) => {
-        return suggestion;
-    }
+    // getSuggestionValue = (suggestion) => {
+    //     return suggestion;
+    // }
     
     checkIfTaskExists = (task, project) => {
         if (!this.props.tasks.filter(existingtask => existingtask.project === project).map(existingtask => existingtask.name).includes(task)) {
@@ -178,11 +177,11 @@ class ManualSprintWidget extends Component {
     render() {
         const { projects, classes } = this.props;
         const projectlist = ['None', ...projects].map((project, index) => <MenuItem key={index} value={project}>{project}</MenuItem>);
-        const inputProps = {
-            placeholder: "What are you up to?",
-            value: this.state.task,
-            onChange: this.updateTaskInput,
-        };    
+        // const inputProps = {
+        //     placeholder: "What are you up to?",
+        //     value: this.state.task,
+        //     onChange: this.updateTaskInput,
+        // };    
         return(
             <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
                 <FormControl className={classes.formControl}>
@@ -202,14 +201,7 @@ class ManualSprintWidget extends Component {
                         disjointed submit process (pulling both from props and state, rather
                         than treating all values in a unified way), but the setup cost just seems too
                         high to justify at the moment. */}
-                    <Autosuggest  
-                        theme={{
-                            container: classes.container,
-                            suggestionsContainerOpen: classes.suggestionsContainerOpen,
-                            suggestionsList: classes.suggestionsList,
-                            suggestion: classes.suggestion,
-                        }}
-                        renderInputComponent={renderInput} suggestions={this.state.suggestions} renderSuggestionsContainer={renderSuggestionsContainer} onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested} onSuggestionsClearRequested={this.handleSuggestionsClearRequested} getSuggestionValue={this.getSuggestionValue} renderSuggestion={renderSuggestion} inputProps={inputProps}/>
+                    <TaskAutosuggest updateTaskInput={this.updateTaskInput} task={this.state.task} project={this.props.project || ''} />
                     <Field component={renderDateField} name="date" label="Date:" type="date" />
                     <div style={{display:'flex', justifyContent:'space-between', marginBottom: '2rem'}}>
                         <Field component={renderTimeField} name="start_time" label="Start Time:" type="time" />
