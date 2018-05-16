@@ -47,6 +47,17 @@ export default (state=initialState, action) => {
             const task_set = [...state.task_set, task];
             return { ...state, task_set};
         }
+        case actionTypes.ADD_SPRINT: {
+            const sprint = action.sprint;
+            const sprints = [...state.sprints, sprint];
+            return {...state, sprints};
+        }
+        case actionTypes.DELETE_SPRINT: {
+            const id = action.sprint_id;
+            const sprints = state.sprints.filter(sprint => sprint.id !== id);
+            console.log(sprints);
+            return {...state, sprints};
+        }
         default:
             return state;
     }

@@ -82,7 +82,6 @@ export const loadSprints = () => {
 
 export const addSprint = (sprint_data) => {
     return (dispatch, getState) => {
-        dispatch({type: actionTypes.SPRINT_LOADING});
         const token = getState().auth.token;
 
         let headers = {
@@ -107,7 +106,7 @@ export const addSprint = (sprint_data) => {
                     dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data});
                     throw res.data;
                 }
-                dispatch(loadSprints());
+                dispatch({type: actionTypes.ADD_SPRINT, sprint: res.data});
                 return res.data;
             }); 
     }
@@ -167,7 +166,7 @@ export const deleteSprint = (sprint_id) => {
             })
             .then(res => {
                 if (res.status === 204) {
-                    return dispatch(loadSprints());
+                    return dispatch({type: actionTypes.DELETE_SPRINT, sprint_id});
                 }  else if (res.status >= 400 && res.status < 500) {
                     dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})
                     throw res.data;

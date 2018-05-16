@@ -156,7 +156,7 @@ class ManualSprintWidget extends Component {
         const sprint_data = {
             task: task,
             start_time: new Date(`${date}T${start_time}:00`).toISOString(),
-            end_time: new Date(`${date}T${end_time}`).toISOString()
+            end_time: new Date(`${date}T${end_time}:00`).toISOString()
         }
         if (isNew) {
             const task_data = {
