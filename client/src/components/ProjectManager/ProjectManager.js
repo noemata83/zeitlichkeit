@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { Button, TextField } from '@material-ui/core';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
+import { addProject } from '../../store/actions';
 
 import Project from './Project/Project';
 
@@ -32,10 +33,9 @@ class ProjectManager extends Component {
     }
 
     renderProjects = (projects, task_set) => {
-        console.log(projects);
         return (projects.length > 0) ? projects.map(project => {
             const tasks = this.getProjectTasks(task_set, project);
-            return <Project key={project.name} tasks={tasks} />;
+            return <Project key={project} tasks={tasks} project={project}/>;
         }) : <div>No projects to display</div>;
     }
 
@@ -61,7 +61,7 @@ class ProjectManager extends Component {
         this.setState({
             open: false
         });
-        console.log(this.state.newProject);
+        this.props.addProject(this.state.newProject);
     }
 
     render() {
@@ -111,6 +111,12 @@ const mapStateToProps = state => {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+        addProject: (project) => dispatch(addProject(project))
+    }
+}
+
 ProjectManager = withStyles(styles)(ProjectManager);
 
-export default connect(mapStateToProps)(ProjectManager);
+export default connect(mapStateToProps, mapDispatchToProps)(ProjectManager);

@@ -2,6 +2,20 @@ import actionTypes from './actionTypes';
 import axios from 'axios';
 import jstz from 'jstz';
 
+const setHeaders = (getState) => {
+    const token = getState().auth.token;
+
+    let headers = {
+        "Content-type": "application/json",
+    }
+
+    if (token) {
+        headers["Authorization"]= `Token ${token}`;
+    }
+
+    return headers;
+}
+
 export const loadWorkspace = () => {
     return (dispatch, getState) => {
         dispatch({type: actionTypes.WORKSPACE_LOADING});
@@ -172,5 +186,30 @@ export const deleteSprint = (sprint_id) => {
                     throw res.data;
                 }
             });
+    }
+}
+
+export const addProject = (project) => {
+    return (dispatch, getState) => {
+        const headers = setHeaders(getState);
+
+        const workspace = getState().workspace.id;
+        const request = {
+            name: project
+        };
+        return axios.post(`/api/workspaces/${workspace}/projects/`, request, {headers,}).then(res => {
+            if (res.status < 500) {
+                return {status: res.status, data: res.data};
+            } else {
+                throw res;
+            }
+        }).then(res => {
+            if (res.status===201) {
+                return dispatch({type: actionTypes.ADD_PROJECT, project: res.data.name});
+            } else if (res.status >= 400 && res.status < 500) {
+                dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})
+                throw res.data;
+            }
+        });
     }
 }

@@ -120,6 +120,7 @@ class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ProjectList(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return Project.objects.filter(workspace=self.kwargs['pk'])

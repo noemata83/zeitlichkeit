@@ -55,8 +55,12 @@ export default (state=initialState, action) => {
         case actionTypes.DELETE_SPRINT: {
             const id = action.sprint_id;
             const sprints = state.sprints.filter(sprint => sprint.id !== id);
-            console.log(sprints);
             return {...state, sprints};
+        }
+        case actionTypes.ADD_PROJECT: {
+            const project = action.project;
+            const project_set = [...state.project_set, project];
+            return {...state, project_set};
         }
         default:
             return state;

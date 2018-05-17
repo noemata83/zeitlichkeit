@@ -28,7 +28,7 @@ const header = props => {
     <AppBar color="primary" style={styles.root} position='static'>
         <Toolbar disableGutters>
             <IconButton>
-                {/* <img src={clockIcon} className={classes.Logo} alt="TemporaLite" /> */}
+                <img src={clockIcon} className={classes.Logo} alt="TemporaLite" />
             </IconButton>
             <Typography variant="title" style={styles.title}>    
                 Temporalite
