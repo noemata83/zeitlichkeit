@@ -13,7 +13,7 @@ const styles = theme => ({
     }
 });
 
-class Workspace extends Component {
+class SprintWorkspace extends Component {
     state = {
         mode: 'DAY_VIEW',
     }
@@ -50,4 +50,4 @@ const mapDispatchToProps = dispatch => {
         loadSprints: () => dispatch(loadSprints()),
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Workspace));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SprintWorkspace));

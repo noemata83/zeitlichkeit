@@ -10,6 +10,7 @@ import AddCircle from '@material-ui/icons/AddCircle';
 
 import ManualSprintWidget from './ManualSprintWidget';
 import TimerWidget from './TimerWidget';
+import MODES from '../displayModes';
 
 const styles = theme => ({
     drawerPaper: {
@@ -34,7 +35,7 @@ class SideBar extends Component {
         this.setState({ value });
     }
     render() {
-        const { classes } = this.props;
+        const { classes, setMode } = this.props;
         const { value } = this.state;
         return (
             <Drawer variant="permanent" classes={{paper: classes.drawerPaper}}>
@@ -56,7 +57,10 @@ class SideBar extends Component {
                 {value === 2 && <div>I'll be a Pomodoro!</div>}
                 </Card>
                 <List component="nav">
-                    <ListItem button>
+                    <ListItem button onClick={() => setMode(MODES.SPRINT)}>
+                        <ListItemText primary="Sprints" />
+                    </ListItem>
+                    <ListItem button onClick={() => setMode(MODES.PROJECT)}>
                         <ListItemText primary="Projects" />
                     </ListItem>
                     <ListItem button>

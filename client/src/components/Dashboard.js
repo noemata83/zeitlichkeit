@@ -4,9 +4,10 @@ import { Redirect } from 'react-router-dom';
 import classes from './Dashboard.css';
 import { loadWorkspace, loadUser } from '../store/actions/';
 
-
+import MODES from './displayModes';
 import Header from './UI/Header/Header';
-import Workspace from './Workspace/Workspace';
+import SprintWorkspace from './SprintWorkspace/SprintWorkspace';
+import ProjectManager from './ProjectManager/ProjectManager';
 import SideBar from './Sidebar/SideBar';
 
 class Dashboard extends Component {
@@ -14,6 +15,7 @@ class Dashboard extends Component {
     state = {
         loading: true,
         user: null,
+        mode: MODES.SPRINT
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -32,15 +34,32 @@ class Dashboard extends Component {
         }
     }
 
+    setMode = (mode) => {
+        this.setState({
+            mode
+        });
+    }
+
+    renderWorkspace = (mode) => {
+        switch(mode) {
+            case MODES.SPRINT:
+                return <SprintWorkspace />;
+            case MODES.PROJECT:
+                return <ProjectManager />;
+            default:
+                return <SprintWorkspace />;
+        }
+    }
+
     render() {
-        const { user, loading } = this.state;
+        const { user, loading, mode } = this.state;
         return (!user && !loading) ? <Redirect to="/" /> : (
             <div className={classes.Dashboard}>
                 <Header />
                 <main className={classes.Main}>
-                    <SideBar />
+                    <SideBar setMode={this.setMode} />
                     <div className={classes.Workspace}>
-                        <Workspace />
+                        {this.renderWorkspace(mode)}
                     </div>
                 </main>
             </div>
