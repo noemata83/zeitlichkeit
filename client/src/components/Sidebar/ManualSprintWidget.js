@@ -12,67 +12,9 @@ import Button from 'material-ui/Button';
 import { addTaskandSprint, addSprint } from '../../store/actions';
 import TaskAutosuggest from '../UI/Forms/Autosuggest/TaskAutosuggest';
 
-
-// function toDatetimeLocal(date) {
-//     const ten = i => (i < 10 ? '0' : '' ) + i,
-//     YYYY = date.getFullYear(),
-//     MM = ten(date.getMonth() + 1),
-//     DD = ten(date.getDate()),
-//     HH = ten(date.getHours()),
-//     II = ten(date.getMinutes()),
-//     SS = ten(date.getSeconds());
-//     return `${YYYY}-${MM}-${DD}T${HH}:${II}:${SS}`;
-// }
-
-
-// const renderInput = (inputProps) => {
-//     const {classes, ref, ...other} = inputProps;
-
-//     return (
-//         <TextField
-//             fullWidth
-//             InputProps={{
-//                 inputRef: ref,
-//                 ...other,
-//             }}
-//         />
-//     );
-// }
-
-// function renderSuggestionsContainer(options) {
-//     const { containerProps, children } = options;
-  
-//     return (
-//       <Paper {...containerProps} square>
-//         {children}
-//       </Paper>
-//     );
-//   }
-
-//   function renderSuggestion(suggestion, { query, isHighlighted}) {
-//     return (
-//       <MenuItem component="div"><div><span>{suggestion}</span></div></MenuItem>
-//     );
-//   }
-
   const styles = theme => ({
     container: {
       position: 'relative',
-    },
-    suggestionsContainerOpen: {
-      position: 'absolute',
-      zIndex: 1,
-      marginTop: theme.spacing.unit,
-      left: 0,
-      right: 0,
-    },
-    suggestion: {
-      display: 'block',
-    },
-    suggestionsList: {
-      margin: 0,
-      padding: 0,
-      listStyleType: 'none',
     },
     formControl: {
       margin: theme.spacing.unit,
@@ -112,34 +54,11 @@ class ManualSprintWidget extends Component {
         });
     }
     
-    // handleSuggestionsClearRequested = () => {
-    //     this.setState({
-    //       suggestions: [],
-    //     });
-    //   };
-    
     handleChange = event => {
         this.setState({
             [event.target.name]: event.target.value
         })
     }
-
-    // getSuggestions = (value) => {
-        
-    //     const regex = new RegExp('^' + value, 'i');
-      
-    //     return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.props.project))).map(task => task.name);
-    //   }
-    
-    // handleSuggestionsFetchRequested = ({ value }) => {
-    //     this.setState({
-    //       suggestions: this.getSuggestions(value),
-    //     });
-    //   };
-
-    // getSuggestionValue = (suggestion) => {
-    //     return suggestion;
-    // }
     
     checkIfTaskExists = (task, project) => {
         if (!this.props.tasks.filter(existingtask => existingtask.project === project).map(existingtask => existingtask.name).includes(task)) {
@@ -176,12 +95,7 @@ class ManualSprintWidget extends Component {
 
     render() {
         const { projects, classes } = this.props;
-        const projectlist = ['None', ...projects].map((project, index) => <MenuItem key={index} value={project}>{project}</MenuItem>);
-        // const inputProps = {
-        //     placeholder: "What are you up to?",
-        //     value: this.state.task,
-        //     onChange: this.updateTaskInput,
-        // };    
+        const projectlist = ['None', ...projects].map((project, index) => <MenuItem key={index} value={project}>{project}</MenuItem>);   
         return(
             <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
                 <FormControl className={classes.formControl}>

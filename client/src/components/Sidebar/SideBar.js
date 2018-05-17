@@ -9,6 +9,7 @@ import Timer from '@material-ui/icons/Timer';
 import AddCircle from '@material-ui/icons/AddCircle';
 
 import ManualSprintWidget from './ManualSprintWidget';
+import TimerWidget from './TimerWidget';
 
 const styles = theme => ({
     drawerPaper: {
@@ -50,7 +51,7 @@ class SideBar extends Component {
                     <Tab className={classes.tabRoot} icon={<Watch />} />
 
                 </Tabs>
-                {value === 0 && <div>I'll be a Timer!</div>}
+                {value === 0 && <TimerWidget/>}
                 {value === 1 && <ManualSprintWidget /> }
                 {value === 2 && <div>I'll be a Pomodoro!</div>}
                 </Card>
