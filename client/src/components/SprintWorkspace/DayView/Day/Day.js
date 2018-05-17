@@ -7,9 +7,9 @@ import Table, {
     TableCell,
     TableHead,
     TableRow,
-  } from 'material-ui/Table';
+  } from '@material-ui/core/Table';
 import Sprint from '../../Sprint/Sprint';
-import { Toolbar } from 'material-ui';
+import Toolbar from '@material-ui/core/Toolbar';
 
 export default props => {
     const sprintList = props.sprints.map((sprint, index) => (

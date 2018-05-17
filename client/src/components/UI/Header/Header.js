@@ -4,11 +4,11 @@ import * as actions from '../../../store/actions';
 
 import classes from './Header.css';
 import clockIcon from '../../../assets/img/clock-icon.svg';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import { withTheme } from 'material-ui/styles';
-import IconButton from 'material-ui/IconButton';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { withTheme } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
 
 const header = props => {
     const styles = {
@@ -28,7 +28,7 @@ const header = props => {
     <AppBar color="primary" style={styles.root} position='static'>
         <Toolbar disableGutters>
             <IconButton>
-                <img src={clockIcon} className={classes.Logo} alt="TemporaLite" />
+                {/* <img src={clockIcon} className={classes.Logo} alt="TemporaLite" /> */}
             </IconButton>
             <Typography variant="title" style={styles.title}>    
                 Temporalite

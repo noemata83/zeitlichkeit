@@ -3,7 +3,7 @@ import moment from '../../../../services/moment';
 import classes from './Task.css';
 
 import Sprint from '../../Sprint/Sprint';
-import { TableBody, Toolbar, Table, TableHead, TableRow, TableCell } from 'material-ui';
+import { TableBody, Toolbar, Table, TableHead, TableRow, TableCell } from '@material-ui/core';
 
 export default props => {
     const sprintList = [...props.sprints].sort((a, b) => b.start_time - a.start_time).map((sprint, index) => (

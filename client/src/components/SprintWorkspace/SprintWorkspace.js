@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { loadSprints } from '../../store/actions/';
-import { CircularProgress } from 'material-ui/Progress';
-import { withStyles } from 'material-ui/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { withStyles } from '@material-ui/core/styles';
 
 import DayView from './DayView/DayView';
 import TaskView from './TaskView/TaskView';

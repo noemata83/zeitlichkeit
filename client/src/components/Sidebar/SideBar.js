@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { withStyles } from 'material-ui/styles';
-import Drawer from 'material-ui/Drawer';
-import Card from 'material-ui/Card';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import Tabs, { Tab } from 'material-ui/Tabs';
+import { withStyles } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import Card from '@material-ui/core/Card';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Watch from '@material-ui/icons/Watch';
 import Timer from '@material-ui/icons/Timer';
 import AddCircle from '@material-ui/icons/AddCircle';

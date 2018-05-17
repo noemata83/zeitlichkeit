@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Autosuggest from 'react-autosuggest/dist/Autosuggest';
-import { TextField, Paper, MenuItem } from 'material-ui';
+import { TextField, Paper, MenuItem } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({

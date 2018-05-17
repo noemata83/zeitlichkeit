@@ -1,9 +1,13 @@
 import React, { Component }  from 'react';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import PlayArrow from '@material-ui/icons/PlayArrow';
 import Stop from '@material-ui/icons/Stop';
-import { MenuItem, FormControl, InputLabel, Select, Button } from 'material-ui';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import TaskAutosuggest from '../UI/Forms/Autosuggest/TaskAutosuggest';
 import { addSprint, addTaskandSprint } from '../../store/actions';
 

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, reset, formValueSelector } from 'redux-form';
 import { renderTimeField, renderDateField, renderSelectField } from '../UI/Forms/renderFields';
-import TextField from 'material-ui/TextField';
-import Paper from 'material-ui/Paper';
-import { MenuItem } from 'material-ui/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
-import { withStyles } from 'material-ui/styles';
-import { InputLabel } from 'material-ui/Input';
-import { FormControl } from 'material-ui/Form';
-import Button from 'material-ui/Button';
+import { withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
 import { addTaskandSprint, addSprint } from '../../store/actions';
 import TaskAutosuggest from '../UI/Forms/Autosuggest/TaskAutosuggest';
 

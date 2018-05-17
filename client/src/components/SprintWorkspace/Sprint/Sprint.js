@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import classes from './Sprint.css';
-import { TableRow, TableCell, Button } from 'material-ui';
+import { TableRow, TableCell, Button } from '@material-ui/core';
 import { deleteSprint } from '../../../store/actions';
 
 const mapDispatchToProps = dispatch => {

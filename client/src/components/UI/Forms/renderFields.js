@@ -1,6 +1,6 @@
 import React from 'react';
-import TextField from 'material-ui/TextField';
-import Select from 'material-ui/Select';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
 
 export const renderTimeField = ({
     input,
