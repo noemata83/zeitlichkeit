@@ -42,3 +42,16 @@ A task may need to be distinguished from a sprint: a sprint represents a discret
 The plan is to allow users to add sprints using a set of three widgets. The first that I'll create is the simplest: a manual entry widget. This widget will allow a user to enter a project, task name, start and end time. When they click submit, the sprint will (in theory) be added to the database. A second widget will be a timer: a user can start tracking a task, and the task will complete tracking (and submit) when the user hits the "stop" button. Finally, a third widget will be a pomodoro timer: a user can set an arbitrary interval, and a rest period, and the widget will count down from that interval, give a rest, and then start again.  
 
 I want to think through a sensible flow for a user to manually enter a task in the Manual Entry widget (or, really, any widget). In doing so, I want to acknowledge a few possibilities: at the moment, without any configuration, the user could add a sprint to a new task, to a task under a different project from the project that contains that task, or to no task at all. So let's consider some todos that follow from this and add them to our Workflowy chart.
+
+---
+
+### Brainstorming New Features
+
+Some additional features it would be useful to clone:
+
+* First, the ability to designate projects as *active* or *archived*. 
+
+* Second, the ability to add/track clients, and attach projects to clients (optionally).
+
+But it is hard for me to tell how useful or well-implemented the reports feature is. Honestly I don't get very much out of it. I think it would be OK for this part of the app to be more opinionated: to direct the user toward certain common, helpful views (e.g. by category, by project, broken down by user)
+

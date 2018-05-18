@@ -96,6 +96,7 @@ class ManualSprintWidget extends Component {
 
     render() {
         const { projects, classes } = this.props;
+        console.log(this.props.initialValues);
         const projectlist = ['None', ...projects].map((project, index) => <MenuItem key={index} value={project}>{project}</MenuItem>);   
         return(
             <form onSubmit={this.props.handleSubmit(this.onSubmit)}>
@@ -149,4 +150,10 @@ const mapDispatchToProps = dispatch => {
 
 export default reduxForm({
     form: 'manualSprintForm',
+    initialValues: {
+        task: "hmmm",
+        date: `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}-${new Date().getDate().toString().padStart(2, '0')}`,
+        start_time: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`,
+        end_time: `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`
+    }
 })(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ManualSprintWidget)));

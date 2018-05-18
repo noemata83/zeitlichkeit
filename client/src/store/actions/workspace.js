@@ -153,9 +153,7 @@ export const addProject = (project) => {
         };
         return axios.post(`/api/workspaces/${workspace}/projects/`, request, {headers,})
             .then(res => handleServerError(res))
-            .then(res => {
-                dispatch(handleResponse(res, actionTypes.ADD_PROJECT, res.data))
-            });
+            .then(res => dispatch(handleResponse(res, actionTypes.ADD_PROJECT, res.data)));
     }
 }
 
