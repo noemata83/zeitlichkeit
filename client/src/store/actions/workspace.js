@@ -120,7 +120,7 @@ export const addTaskandSprint = (task_data, sprint_data) => {
         const workspace = getState().workspace.id;
 
         return axios.post(`/api/workspaces/${workspace}/tasks/`, task_data, {headers, })
-            .then(res => handleServerError)
+            .then(res => handleServerError(res))
             .then(res => {
                 if (res.status === 201) {
                     dispatch({type: actionTypes.ADD_TASK, task: res.data});
@@ -161,7 +161,6 @@ export const addProject = (project) => {
 
 export const deleteProject = (id, name) => {
     return (dispatch, getState) => {
-        console.log(name);
         const headers = setHeaders(getState);
         const workspace = getState().workspace.id;
         return axios.delete(`/api/workspaces/${workspace}/projects/${id}/`, {headers, })
