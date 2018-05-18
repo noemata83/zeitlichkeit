@@ -86,6 +86,7 @@ class UserDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class SprintListByWorkspace(generics.ListCreateAPIView):
     serializer_class = SprintSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         queryset = Sprint.objects.filter(task__workspace=self.kwargs['pk'])
@@ -98,6 +99,7 @@ class SprintListByWorkspace(generics.ListCreateAPIView):
 
 class SprintListByTask(generics.ListCreateAPIView):
     serializer_class = SprintSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         return Sprint.objects.filter(task=self.kwargs['task_id'])
@@ -108,6 +110,7 @@ class SprintListByTask(generics.ListCreateAPIView):
 class SprintDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sprint.objects.all()
     serializer_class = SprintSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):
         queryset = self.get_queryset()
@@ -131,6 +134,7 @@ class ProjectList(generics.ListCreateAPIView):
 class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_object(self):
         queryset = self.get_queryset()

@@ -2,12 +2,12 @@ import React from 'react';
 import moment from '../../../../services/moment';
 import classes from './Day.css';
 
-import Table, {
+import { Table,
     TableBody,
     TableCell,
     TableHead,
     TableRow,
-  } from '@material-ui/core/Table';
+  } from '@material-ui/core';
 import Sprint from '../../Sprint/Sprint';
 import Toolbar from '@material-ui/core/Toolbar';
 
