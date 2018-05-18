@@ -15,7 +15,7 @@ const Project = props => {
         <Typography variant="title" className={classes.title}>{project}</Typography>
         <div>
             <List>
-                {tasks.map(task => (<ListItem key={task.name}>
+                {tasks.map(task => (<ListItem key={task.name} divider>
                     <Checkbox
                         checked={task.completed}
                         tabIndex={-1}

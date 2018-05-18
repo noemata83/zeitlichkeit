@@ -58,7 +58,8 @@ export default (state=initialState, action) => {
             return {...state, sprints};
         }
         case actionTypes.ADD_PROJECT: {
-            const project = action.project;
+            console.log("add project was dispatched.");
+            const project = action.data.name;
             const project_set = [...state.project_set, project];
             return {...state, project_set};
         }

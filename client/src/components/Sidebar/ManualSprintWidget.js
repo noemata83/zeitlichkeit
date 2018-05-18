@@ -85,6 +85,9 @@ class ManualSprintWidget extends Component {
                 "sprint_set": []
             }
             this.props.addTaskAndSprint(task_data, sprint_data);
+            this.setState({
+                task: '',
+            })
             return this.props.resetForm();
         }
         this.props.addSprint(sprint_data);

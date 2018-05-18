@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid'; 
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import { Button, TextField } from '@material-ui/core';
+import { Button, TextField, Paper } from '@material-ui/core';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import { addProject } from '../../store/actions';
 
@@ -19,6 +19,10 @@ const styles = theme => ({
         bottom: theme.spacing.unit * 2,
         right: theme.spacing.unit * 2,
     },
+    paper: {
+        padding: 16,
+        marginTop: theme.spacing.unit * 2,
+    }
 });
 
 class ProjectManager extends Component {
@@ -68,9 +72,11 @@ class ProjectManager extends Component {
         const {tasks, projects, classes} = this.props;
         return <div className={classes.main}>
             <h1>Project Manager</h1>
-            <Grid container spacing={24}>
-                {this.renderProjects(projects, tasks)}
-            </Grid>
+            <Paper className={classes.paper} elevation={3}>
+                <Grid container spacing={24}>
+                    {this.renderProjects(projects, tasks)}
+                </Grid>
+            </Paper>
             <Button variant="fab" color='secondary' className={classes.fab} onClick={this.handleClickOpen}><AddIcon /></Button>
             <Dialog
                 open={this.state.open}

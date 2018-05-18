@@ -16,6 +16,28 @@ const setHeaders = (getState) => {
     return headers;
 }
 
+const handleServerError = (res) => {
+    if (res.status < 500) {
+        return {status: res.status, data: res.data};
+    } else {
+        throw res;
+    }
+}
+
+const handleResponse = (res, action) => {
+    console.log("handle response got called.");
+    return (dispatch) => {
+        console.log("in the returned function.");
+        console.log(res.status);
+        if (res.status >= 200 && res.status <= 204) {
+            console.log("At the point when the dispatch should happen.");
+            return dispatch({type: action, data: res.data});
+        } else if (res.status >= 400 && res.status < 500) {
+            return dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data});
+        }
+    }
+}
+
 export const loadWorkspace = () => {
     return (dispatch, getState) => {
         dispatch({type: actionTypes.WORKSPACE_LOADING});
@@ -197,19 +219,9 @@ export const addProject = (project) => {
         const request = {
             name: project
         };
-        return axios.post(`/api/workspaces/${workspace}/projects/`, request, {headers,}).then(res => {
-            if (res.status < 500) {
-                return {status: res.status, data: res.data};
-            } else {
-                throw res;
-            }
-        }).then(res => {
-            if (res.status===201) {
-                return dispatch({type: actionTypes.ADD_PROJECT, project: res.data.name});
-            } else if (res.status >= 400 && res.status < 500) {
-                dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})
-                throw res.data;
-            }
-        });
+        return axios.post(`/api/workspaces/${workspace}/projects/`, request, {headers,})
+            .then(res => handleServerError(res))
+            .then(res => dispatch(handleResponse(res, actionTypes.ADD_PROJECT)));
     }
 }
+
