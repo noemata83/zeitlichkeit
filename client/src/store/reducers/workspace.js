@@ -8,9 +8,13 @@ const initialState = {
     project_set: [],
     task_set: [],
     sprints: [],
+    projects: [],
+    tasks: [],
     error: null,
     loading: true,
-    sprint_loading: true
+    sprint_loading: true,
+    task_loading: true,
+    project_loading: true
 }
 
 export default (state=initialState, action) => {
@@ -53,15 +57,30 @@ export default (state=initialState, action) => {
             return {...state, sprints};
         }
         case actionTypes.DELETE_SPRINT: {
-            const id = action.sprint_id;
+            const id = action.data;
             const sprints = state.sprints.filter(sprint => sprint.id !== id);
             return {...state, sprints};
         }
         case actionTypes.ADD_PROJECT: {
-            console.log("add project was dispatched.");
-            const project = action.data.name;
-            const project_set = [...state.project_set, project];
-            return {...state, project_set};
+            const project = action.data;
+            const project_set = [...state.project_set, project.name];
+            const projects = [...state.projects, project];
+            return {...state, project_set, projects};
+        }
+        case actionTypes.DELETE_PROJECT: {
+            console.log(action.data);
+            const { id, name } = action.data;
+            console.log(name);
+            const project_set = state.project_set.filter(project => project !== name);
+            const projects = state.projects.filter(project => project.id !== id);
+            return {...state, project_set, projects};
+        }
+        case actionTypes.PROJECTS_LOADING: {
+            return {...state, project_loading: true};
+        }
+        case actionTypes.PROJECTS_LOADED: {
+            const projects = action.data;
+            return {...state, project_loading: false, projects};
         }
         default:
             return state;

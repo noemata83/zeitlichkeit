@@ -26,7 +26,6 @@ class DayView extends Component {
             groupByDates
         );
         if (!nextProps.loading) {
-            console.log(nextProps.sprints);
             const sprints = processSprints(nextProps.sprints.map(sprint => ({
                 ...sprint,
                 duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time)).toISOString().substr(11,8)

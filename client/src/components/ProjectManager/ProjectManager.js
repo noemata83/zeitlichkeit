@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid'; 
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import { Button, TextField, Paper } from '@material-ui/core';
+import { Button, TextField, Paper, CircularProgress } from '@material-ui/core';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import { addProject } from '../../store/actions';
+import { addProject, loadProjects } from '../../store/actions';
 
 import Project from './Project/Project';
 
@@ -29,7 +29,14 @@ class ProjectManager extends Component {
 
     state = {
         open: false,
-        newProject: ''
+        newProject: '',
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.loading) {
+            nextProps.loadProjects();
+        }
+        return { ...prevState, loading: nextProps.loading}
     }
 
     getProjectTasks = (tasks, project) => {
@@ -38,8 +45,8 @@ class ProjectManager extends Component {
 
     renderProjects = (projects, task_set) => {
         return (projects.length > 0) ? projects.map(project => {
-            const tasks = this.getProjectTasks(task_set, project);
-            return <Project key={project} tasks={tasks} project={project}/>;
+            const tasks = this.getProjectTasks(task_set, project.name);
+            return <Project key={project.id} tasks={tasks} project={project}/>;
         }) : <div>No projects to display</div>;
     }
 
@@ -70,7 +77,8 @@ class ProjectManager extends Component {
 
     render() {
         const {tasks, projects, classes} = this.props;
-        return <div className={classes.main}>
+        return this.state.loading ? <CircularProgress color="secondary" className={classes.progress}/> : (
+        <div className={classes.main}>
             <h1>Project Manager</h1>
             <Paper className={classes.paper} elevation={3}>
                 <Grid container spacing={24}>
@@ -106,19 +114,21 @@ class ProjectManager extends Component {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>;
+        </div>);
     }
 }
 
 const mapStateToProps = state => {
     return {
         tasks: state.workspace.task_set,
-        projects: state.workspace.project_set
+        projects: state.workspace.projects,
+        loading: state.workspace.project_loading
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        loadProjects: () => dispatch(loadProjects()),
         addProject: (project) => dispatch(addProject(project))
     }
 }
