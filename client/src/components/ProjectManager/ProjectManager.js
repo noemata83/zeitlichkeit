@@ -68,7 +68,7 @@ class ProjectManager extends Component {
         const {tasks, projects, classes} = this.props;
         return <div className={classes.main}>
             <h1>Project Manager</h1>
-            <Grid container spacing={16}>
+            <Grid container spacing={24}>
                 {this.renderProjects(projects, tasks)}
             </Grid>
             <Button variant="fab" color='secondary' className={classes.fab} onClick={this.handleClickOpen}><AddIcon /></Button>
