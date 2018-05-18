@@ -176,7 +176,7 @@ class TaskSerializer(WritableNestedModelSerializer):
 class WorkspaceSerializer(serializers.ModelSerializer):
     """ Serializer for Workspaces"""
     users = UserLimitedSerializer(many=True, default=[serializers.CurrentUserDefault(),])
-    project_set = serializers.StringRelatedField(many=True)
+    project_set = ProjectSerializer(many=True)
     category_set = serializers.StringRelatedField(many=True)
     task_set = TaskListSerializer(many=True)
     class Meta:

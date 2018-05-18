@@ -32,13 +32,6 @@ class ProjectManager extends Component {
         newProject: '',
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.loading) {
-            nextProps.loadProjects();
-        }
-        return { ...prevState, loading: nextProps.loading}
-    }
-
     getProjectTasks = (tasks, project) => {
         return tasks.filter(task => task.project === project);
     }
@@ -121,14 +114,13 @@ class ProjectManager extends Component {
 const mapStateToProps = state => {
     return {
         tasks: state.workspace.task_set,
-        projects: state.workspace.projects,
+        projects: state.workspace.project_set,
         loading: state.workspace.project_loading
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadProjects: () => dispatch(loadProjects()),
         addProject: (project) => dispatch(addProject(project))
     }
 }

@@ -116,8 +116,8 @@ class ManualSprintWidget extends Component {
   render() {
     const { projects, classes } = this.props;
     const projectlist = ["None", ...projects].map((project, index) => (
-      <MenuItem key={index} value={project}>
-        {project}
+      <MenuItem key={index} value={project.name}>
+        {project.name}
       </MenuItem>
     ));
     console.log(this.state.task);
