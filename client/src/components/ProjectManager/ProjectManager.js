@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid'; 
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import { Button, TextField, Paper, CircularProgress } from '@material-ui/core';
+import { Button, TextField, Paper } from '@material-ui/core';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import { addProject, loadProjects } from '../../store/actions';
+import { addProject, deleteTask } from '../../store/actions';
 
 import Project from './Project/Project';
 
@@ -39,7 +39,7 @@ class ProjectManager extends Component {
     renderProjects = (projects, task_set) => {
         return (projects.length > 0) ? projects.map(project => {
             const tasks = this.getProjectTasks(task_set, project.name);
-            return <Project key={project.id} tasks={tasks} project={project}/>;
+            return <Project key={project.id} tasks={tasks} project={project} deleteTask={this.handleDeleteTask}/>;
         }) : <div>No projects to display</div>;
     }
 
@@ -47,6 +47,10 @@ class ProjectManager extends Component {
         this.setState({
             [event.target.name]: event.target.value
         });
+    }
+
+    handleDeleteTask = (taskId) => {
+        this.props.deleteTask(taskId);
     }
 
     handleClickOpen = () => {
@@ -70,7 +74,7 @@ class ProjectManager extends Component {
 
     render() {
         const {tasks, projects, classes} = this.props;
-        return this.state.loading ? <CircularProgress color="secondary" className={classes.progress}/> : (
+        return (
         <div className={classes.main}>
             <h1>Project Manager</h1>
             <Paper className={classes.paper} elevation={3}>
@@ -115,13 +119,13 @@ const mapStateToProps = state => {
     return {
         tasks: state.workspace.task_set,
         projects: state.workspace.project_set,
-        loading: state.workspace.project_loading
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        addProject: (project) => dispatch(addProject(project))
+        addProject: (project) => dispatch(addProject(project)),
+        deleteTask: (taskId) => dispatch(deleteTask(taskId))
     }
 }
 

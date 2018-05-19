@@ -1,2 +1,5 @@
 export { loadUser, login, register, logout } from './auth';
-export { loadWorkspace, loadSprints, loadProjects, addTaskandSprint, addSprint, deleteSprint, addProject, deleteProject } from './workspace';
+export { loadWorkspace } from './workspace';
+export { loadProjects, addProject, deleteProject } from './workspace/project';
+export { loadSprints, addSprint, deleteSprint, addTaskandSprint } from './workspace/sprint';
+export { addTask, deleteTask } from './workspace/task';

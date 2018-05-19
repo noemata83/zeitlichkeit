@@ -19,15 +19,9 @@ const initialState = {
 
 export default (state=initialState, action) => {
     switch (action.type) {
-        case actionTypes.WORKSPACE_LOADING: {
-            return {...state, loading: true}
-        }
-        case actionTypes.WORKSPACE_LOADED: {
-            return {...state, ...action.workspace, loading: false, error: null}
-        }
-        case actionTypes.SPRINT_LOADING: {
-            return {...state, sprint_loading: true}
-        }
+        case actionTypes.WORKSPACE_LOADING: { return {...state, loading: true} }
+        case actionTypes.WORKSPACE_LOADED: { return {...state, ...action.data, loading: false, error: null}}
+        case actionTypes.SPRINT_LOADING: { return {...state, sprint_loading: true} }
         case actionTypes.SPRINT_LOADED: {
             const { count, results } = action.data;
             /* Here we need to localize the times we take in from the backend, which stores its times
@@ -47,12 +41,17 @@ export default (state=initialState, action) => {
             return { ...state, sprint_count: count, sprints, sprint_loading: false}
         }
         case actionTypes.ADD_TASK: {
-            const task = action.task;
+            const task = action.data;
             const task_set = [...state.task_set, task];
             return { ...state, task_set};
         }
+        case actionTypes.DELETE_TASK: {
+            const taskId = action.data;
+            const task_set = state.task_set.filter(task => task.id !== taskId);
+            return {...state, task_set};
+        }
         case actionTypes.ADD_SPRINT: {
-            const sprint = action.sprint;
+            const sprint = action.data;
             const sprints = [...state.sprints, sprint];
             return {...state, sprints};
         }
@@ -63,17 +62,13 @@ export default (state=initialState, action) => {
         }
         case actionTypes.ADD_PROJECT: {
             const project = action.data;
-            const project_set = [...state.project_set, project.name];
-            const projects = [...state.projects, project];
-            return {...state, project_set, projects};
+            const project_set = [...state.project_set, project];
+            return {...state, project_set};
         }
         case actionTypes.DELETE_PROJECT: {
-            console.log(action.data);
-            const { id, name } = action.data;
-            console.log(name);
-            const project_set = state.project_set.filter(project => project !== name);
-            const projects = state.projects.filter(project => project.id !== id);
-            return {...state, project_set, projects};
+            const { id } = action.data;
+            const project_set = state.project_set.filter(project => project.id !== id);
+            return {...state, project_set};
         }
         case actionTypes.PROJECTS_LOADING: {
             return {...state, project_loading: true};
