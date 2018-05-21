@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { Button, TextField, Paper } from '@material-ui/core';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import { addProject, deleteTask } from '../../store/actions';
+import { addProject, deleteTask, addTask } from '../../store/actions';
 
 import Project from './Project/Project';
 
@@ -30,6 +30,7 @@ class ProjectManager extends Component {
     state = {
         open: false,
         newProject: '',
+        addTaskToProject: null,
     }
 
     getProjectTasks = (tasks, project) => {
@@ -39,7 +40,7 @@ class ProjectManager extends Component {
     renderProjects = (projects, task_set) => {
         return (projects.length > 0) ? projects.map(project => {
             const tasks = this.getProjectTasks(task_set, project.name);
-            return <Project key={project.id} tasks={tasks} project={project} deleteTask={this.handleDeleteTask}/>;
+            return <Project key={project.id} tasks={tasks} project={project} deleteTask={this.handleDeleteTask} addTaskToProject={this.handleAddTaskToProject} showInput={this.state.addTaskToProject === project.id} handleInput={this.handleInput} handleAddTask={this.handleAddTask} inputValue={this.state[`${project.name}__newTask`] || ''}/>;
         }) : <div>No projects to display</div>;
     }
 
@@ -70,6 +71,26 @@ class ProjectManager extends Component {
             open: false
         });
         this.props.addProject(this.state.newProject);
+    }
+
+    handleAddTaskToProject = (id, name) => {
+        this.setState({ addTaskToProject: id,
+                        [`${name}__newTask`]: ''});
+    }
+
+    handleAddTask = (project) => {
+        const name = this.state[`${project.name}__newTask`];
+        console.log(name);
+        console.log(project);
+        const task = {
+            name,
+            project,
+            categories: [],
+            completed: false,
+            sprint_set: []
+        }
+        this.props.addTask(task);
+        this.setState({ addTaskToProject: null });
     }
 
     render() {
@@ -125,7 +146,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         addProject: (project) => dispatch(addProject(project)),
-        deleteTask: (taskId) => dispatch(deleteTask(taskId))
+        deleteTask: (taskId) => dispatch(deleteTask(taskId)),
+        addTask: (task) => dispatch(addTask(task))
     }
 }
 

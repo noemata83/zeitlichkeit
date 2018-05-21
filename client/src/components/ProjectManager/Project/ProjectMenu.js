@@ -27,7 +27,7 @@ class ProjectMenu extends Component {
 
   render() {
     const { anchorEl } = this.state;
-    const { id, name, deleteProject, classes } = this.props;
+    const { id, name, deleteProject, addTaskToProject, classes } = this.props;
     return (
       <div className={classes.button}>
         <IconButton
@@ -43,6 +43,9 @@ class ProjectMenu extends Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
+          <MenuItem onClick={() => addTaskToProject(id, name)}>
+            Add Task
+          </MenuItem>
           <MenuItem onClick={() => deleteProject(id, name)}>
             Delete Project
           </MenuItem>

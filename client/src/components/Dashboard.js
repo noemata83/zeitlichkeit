@@ -37,7 +37,8 @@ class Dashboard extends Component {
 
     setMode = (mode) => {
         this.setState({
-            mode
+            mode,
+            mobileOpen: false
         });
     }
 

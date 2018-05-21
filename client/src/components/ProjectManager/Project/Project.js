@@ -6,7 +6,8 @@ import {
   ListItemText,
   Checkbox,
   IconButton,
-  withStyles
+  withStyles,
+  Input
 } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -26,18 +27,21 @@ const styles = theme => ({
     "&:hover $listItemSecondaryAction": {
       visibility: "inherit"
     }
+  },
+  hideInput: {
+    display: 'none',
   }
 });
 
 const project = props => {
-  const { project, tasks, classes, deleteTask } = props;
+  const { project, tasks, classes, deleteTask, addTaskToProject, showInput, handleInput, handleAddTask, inputValue } = props;
   return (
     <Grid item xs={12} md={6}>
       <Toolbar>
         <Typography variant="title" className={classes.title}>
           {project.name}
         </Typography>
-        <ProjectMenu id={project.id} name={project.name} />
+        <ProjectMenu id={project.id} name={project.name} addTaskToProject={addTaskToProject} />
       </Toolbar>
       <List>
         {tasks.map(task => (
@@ -65,6 +69,11 @@ const project = props => {
             </ListItemSecondaryAction>
           </ListItem>
         ))}
+          <ListItem className={!showInput ? classes.hideInput : null }>
+            <form onSubmit={(e) => {e.preventDefault(); handleAddTask(project)}}>
+              <Input type="text" name={`${project.name}__newTask`} onChange={handleInput} value={inputValue} fullWidth />
+            </form>
+          </ListItem>
       </List>
     </Grid>
   );

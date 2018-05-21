@@ -22,5 +22,6 @@
     height: 100%;
     background-color: #fff;
     align-self: flex-end;
-    overflow-y: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
