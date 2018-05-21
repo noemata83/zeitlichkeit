@@ -15,7 +15,8 @@ class Dashboard extends Component {
     state = {
         loading: true,
         user: null,
-        mode: MODES.SPRINT
+        mode: MODES.SPRINT,
+        mobileOpen: false,
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -40,6 +41,10 @@ class Dashboard extends Component {
         });
     }
 
+    handleDrawerToggle = () => {
+        this.setState({ mobileOpen: !this.state.mobileOpen});
+    }
+
     renderWorkspace = (mode) => {
         switch(mode) {
             case MODES.SPRINT:
@@ -55,9 +60,9 @@ class Dashboard extends Component {
         const { user, loading, mode } = this.state;
         return (!user && !loading) ? <Redirect to="/" /> : (
             <div className={classes.Dashboard}>
-                <Header />
+                <Header handleDrawerToggle={this.handleDrawerToggle} />
                 <main className={classes.Main}>
-                    <SideBar setMode={this.setMode} />
+                    <SideBar setMode={this.setMode} mobileOpen={this.state.mobileOpen} handleDrawerToggle={this.handleDrawerToggle} />
                     <div className={classes.Workspace}>
                         {this.renderWorkspace(mode)}
                     </div>
