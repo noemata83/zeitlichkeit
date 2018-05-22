@@ -23,6 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '5@we&&l_z&1kb9v83-$75^hhf3g4ss5pi26=48&#fpcq_dl20k'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -74,21 +75,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'zeitlichkeit.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'zeitlichdb',
-        'USER': 'postgres',
-        'PASSWORD': 'haugeland',
-        'HOST': 'localhost',
-        'PORT': 5432
-    }
-}
 
 
 # Password validation
@@ -185,3 +171,8 @@ DATETIME_INPUT_FORMATS = [
     '%m %d %Y %H:%M',
     '%m %d %Y %H:%M:%S'
 ]
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
