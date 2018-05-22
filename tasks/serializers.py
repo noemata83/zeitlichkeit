@@ -124,28 +124,31 @@ class TaskListSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(WritableNestedModelSerializer):
     """ Serializer for tasks"""
-    project = ProjectSerializer()
-    categories = CategorySerializer(many=True)
-    sprint_set = LimitedSprintSerializer(many=True)
+    project = ProjectSerializer(required=False)
+    categories = CategorySerializer(many=True, required=False)
+    sprint_set = LimitedSprintSerializer(many=True, required=False)
     workspace = WorkspaceLimitedSerializer(required=False)
+    completed = serializers.BooleanField(required=False)
     class Meta:
         model = Task
         fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed', 'sprint_set')
 
     def validate(self, data):
         # manually get the Category instance from the input data
-        categories = []
-        for category in data['categories']:
-            try:
-                categories.append(Category.objects.get(name=category['name']))
-            except ObjectDoesNotExist:
-                categories.append(Category.objects.create(name=category['name']))
-        data['categories'] = categories
+        if hasattr(data, 'categories'):
+            categories = []
+            for category in data['categories']:
+                try:
+                    categories.append(Category.objects.get(name=category['name']))
+                except ObjectDoesNotExist:
+                    categories.append(Category.objects.create(name=category['name']))
+            data['categories'] = categories
         data['workspace'] = Workspace.objects.get(id=self.context['workspace'])
-        try:
-            data['project'] = Project.objects.get(name=data['project']['name'])
-        except ObjectDoesNotExist:
-            data['project'] = Project.objects.create(workspace=data['workspace'],
+        if hasattr(data, 'project'):
+            try:
+                data['project'] = Project.objects.get(name=data['project']['name'])
+            except ObjectDoesNotExist:
+                data['project'] = Project.objects.create(workspace=data['workspace'],
                                                      name=data['project']['name'])
         return data
 
@@ -162,13 +165,15 @@ class TaskSerializer(WritableNestedModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data['name']
-        instance.project = validated_data['project']
+        if hasattr(validated_data, 'project'):
+            instance.project = validated_data['project']
         instance.workspace = validated_data['workspace']
         instance.completed = validated_data['completed']
-        categories = []
-        for category in validated_data['categories']:
-            categories.append(category)
-        instance.categories.set(categories)
+        if hasattr(validated_data, 'categories'):
+            categories = []
+            for category in validated_data['categories']:
+                categories.append(category)
+            instance.categories.set(categories)
         instance.save()
         return instance
 
