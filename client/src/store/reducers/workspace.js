@@ -50,6 +50,16 @@ export default (state=initialState, action) => {
             const task_set = state.task_set.filter(task => task.id !== taskId);
             return {...state, task_set};
         }
+        case actionTypes.UPDATE_TASK: {
+            const task = action.data;
+            const task_set = state.task_set.map(oldTask => {
+                if (oldTask.id === task.id) {
+                    return task;
+                }
+                return oldTask;
+            });
+            return {...state, task_set};
+        }
         case actionTypes.ADD_SPRINT: {
             const sprint = action.data;
             const sprints = [...state.sprints, sprint];

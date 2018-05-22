@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { Button, TextField, Paper } from '@material-ui/core';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import { addProject, deleteTask, addTask } from '../../store/actions';
+import { addProject, deleteTask, addTask, updateTask } from '../../store/actions';
 
 import Project from './Project/Project';
 
@@ -40,7 +40,7 @@ class ProjectManager extends Component {
     renderProjects = (projects, task_set) => {
         return (projects.length > 0) ? projects.map(project => {
             const tasks = this.getProjectTasks(task_set, project.name);
-            return <Project key={project.id} tasks={tasks} project={project} deleteTask={this.handleDeleteTask} addTaskToProject={this.handleAddTaskToProject} showInput={this.state.addTaskToProject === project.id} handleInput={this.handleInput} handleAddTask={this.handleAddTask} inputValue={this.state[`${project.name}__newTask`] || ''}/>;
+            return <Project key={project.id} tasks={tasks} project={project} deleteTask={this.handleDeleteTask} addTaskToProject={this.handleAddTaskToProject} showInput={this.state.addTaskToProject === project.id} handleInput={this.handleInput} handleUpdateTaskCompleted={this.handleUpdateTaskCompleted} handleAddTask={this.handleAddTask} inputValue={this.state[`${project.name}__newTask`] || ''}/>;
         }) : <div>No projects to display</div>;
     }
 
@@ -91,6 +91,11 @@ class ProjectManager extends Component {
         }
         this.props.addTask(task);
         this.setState({ addTaskToProject: null });
+    }
+
+    handleUpdateTaskCompleted = (task, completed) => {
+        const updatedTask = { name: task.name, completed};
+        this.props.updateTask(task.id, updatedTask);
     }
 
     render() {
@@ -147,7 +152,8 @@ const mapDispatchToProps = dispatch => {
     return {
         addProject: (project) => dispatch(addProject(project)),
         deleteTask: (taskId) => dispatch(deleteTask(taskId)),
-        addTask: (task) => dispatch(addTask(task))
+        addTask: (task) => dispatch(addTask(task)),
+        updateTask: (id, task) => dispatch(updateTask(id, task))
     }
 }
 

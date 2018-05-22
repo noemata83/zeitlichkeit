@@ -34,7 +34,7 @@ const styles = theme => ({
 });
 
 const project = props => {
-  const { project, tasks, classes, deleteTask, addTaskToProject, showInput, handleInput, handleAddTask, inputValue } = props;
+  const { project, tasks, classes, deleteTask, addTaskToProject, showInput, handleInput, handleAddTask, inputValue, handleUpdateTaskCompleted } = props;
   return (
     <Grid item xs={12} md={6}>
       <Toolbar>
@@ -53,7 +53,7 @@ const project = props => {
             }}
           >
             <Checkbox 
-              onChange={(event) => console.log(event.target.checked)}
+              onChange={(event) => handleUpdateTaskCompleted(task, event.target.checked)}
               checked={task.completed} 
               tabIndex={-1} />
             <ListItemText primary={task.name} />
