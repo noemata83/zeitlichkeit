@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
-import WeekChart from './WeekChart/WeekChart';
+// import WeekChart from './WeekChart/WeekChart';
+import BarChart from './WeekChart/BarChart';
 
 class Reports extends Component {
 
@@ -17,7 +18,7 @@ class Reports extends Component {
     }
 
     render() {
-        return <WeekChart data={this.weekData()} svgHeight={500} svgWidth={500} />
+        return <BarChart data={this.weekData()} yValue="duration" xValue="day" svgHeight={500} svgWidth={800} />
     }
 }
 
