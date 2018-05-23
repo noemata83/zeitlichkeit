@@ -80,8 +80,6 @@ class ProjectManager extends Component {
 
     handleAddTask = (project) => {
         const name = this.state[`${project.name}__newTask`];
-        console.log(name);
-        console.log(project);
         const task = {
             name,
             project,

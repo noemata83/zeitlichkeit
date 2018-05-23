@@ -7,7 +7,7 @@ import {
   Checkbox,
   IconButton,
   withStyles,
-  Input
+  TextField
 } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -30,6 +30,11 @@ const styles = theme => ({
   },
   hideInput: {
     display: 'none',
+  },
+  completed: {
+    textDecoration: 'line-through',
+    color: '#aaa',
+    fontStyle: 'italic'
   }
 });
 
@@ -56,7 +61,7 @@ const project = props => {
               onChange={(event) => handleUpdateTaskCompleted(task, event.target.checked)}
               checked={task.completed} 
               tabIndex={-1} />
-            <ListItemText primary={task.name} />
+            <ListItemText primary={task.name} classes={{primary: task.completed ? classes.completed : null }}/>
             <ListItemSecondaryAction
               className={classes.listItemSecondaryAction}
             >
@@ -70,8 +75,8 @@ const project = props => {
           </ListItem>
         ))}
           <ListItem className={!showInput ? classes.hideInput : null }>
-            <form onSubmit={(e) => {e.preventDefault(); handleAddTask(project)}}>
-              <Input type="text" name={`${project.name}__newTask`} onChange={handleInput} value={inputValue} fullWidth />
+            <form onSubmit={(e) => {e.preventDefault(); handleAddTask(project)}} style={{width:'100%'}}>
+              <TextField name={`${project.name}__newTask`} placeholder={`New task under ${project.name}`} onChange={handleInput} value={inputValue} fullWidth />
             </form>
           </ListItem>
       </List>

@@ -66,7 +66,7 @@ class TaskAutosuggest extends Component {
 
     getSuggestions = (value) => {
         const regex = new RegExp('^' + value, 'i');
-        return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.props.project))).map(task => task.name);
+        return this.props.tasks.filter(task => (regex.test(task.name) && (task.project === this.props.project) && !task.completed)).map(task => task.name);
     }
 
     handleSuggestionsFetchRequested = ({ value }) => {

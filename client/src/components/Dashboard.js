@@ -8,6 +8,7 @@ import MODES from './displayModes';
 import Header from './UI/Header/Header';
 import SprintWorkspace from './SprintWorkspace/SprintWorkspace';
 import ProjectManager from './ProjectManager/ProjectManager';
+import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
 
 class Dashboard extends Component {
@@ -52,6 +53,8 @@ class Dashboard extends Component {
                 return <SprintWorkspace />;
             case MODES.PROJECT:
                 return <ProjectManager />;
+            case MODES.REPORT:
+                return <Reports />;
             default:
                 return <SprintWorkspace />;
         }
