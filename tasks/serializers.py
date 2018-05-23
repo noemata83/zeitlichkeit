@@ -144,11 +144,12 @@ class TaskSerializer(WritableNestedModelSerializer):
                     categories.append(Category.objects.create(name=category['name']))
             data['categories'] = categories
         data['workspace'] = Workspace.objects.get(id=self.context['workspace'])
-        if hasattr(data, 'project'):
-            try:
-                data['project'] = Project.objects.get(name=data['project']['name'])
-            except ObjectDoesNotExist:
-                data['project'] = Project.objects.create(workspace=data['workspace'],
+        try:
+            data['project'] = Project.objects.get(name=data['project']['name'])
+        except KeyError:
+            pass
+        except ObjectDoesNotExist:
+            data['project'] = Project.objects.create(workspace=data['workspace'],
                                                      name=data['project']['name'])
         return data
 

@@ -29,6 +29,19 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'zeitlichdb',
+        'USER': 'postgres',
+        'PASSWORD': 'haugeland',
+        'HOST': 'localhost',
+        'PORT': 5432
+    }
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -176,3 +189,14 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'zeitlichdb',
+        'USER': 'postgres',
+        'PASSWORD': 'haugeland',
+        'HOST': 'localhost',
+        'PORT': 5432
+    }
+}
