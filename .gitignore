@@ -4,7 +4,8 @@
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
+static/
+zeitlichkeit/production_settings.py
 db.sqlite3
 media
 .vscode/
