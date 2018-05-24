@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import BarChart from './WeekChart/BarChart';
+import PieChart from './PieChart/PieChart';
 import { Paper, Typography, withStyles } from '@material-ui/core';
 
 const styles = theme => ({
@@ -31,6 +32,13 @@ const ConvertToHours = seconds => {
     return seconds / 3600000;
 }
 
+const filterByProject = (project, sprints, tasks) => {
+    return sprints.filter(sprint => {
+        const task = tasks.filter(task => task.name === sprint.task)[0];
+        return task.project === project;
+    })
+}
+
 class Reports extends Component {
 
     generateWeek = (date) => {
@@ -47,15 +55,29 @@ class Reports extends Component {
         })
     }
 
+    generateProjectData = () => {
+        return this.props.projects.map(project => ({ 
+            name: project.name,
+            duration: ConvertToHours(getDurationInMilliseconds(filterByProject(project.name, this.props.sprints, this.props.tasks)))
+        }));
+    }
+
     render() {
         const { classes } = this.props;
         const weekData = this.generateWeekData(this.generateWeek(new Date()));
+        const projectData = this.generateProjectData();
         return (
             <div>
                 <Paper className={classes.root}>
                     <Typography variant="title" classes={{title: classes.title}}>Hours Worked This Week</Typography>
                     <div style={{textAlign: "center"}}>
                         <BarChart data={weekData} yValue="duration" xValue="day" svgHeight={500} svgWidth={800} />
+                    </div>
+                </Paper>
+                <Paper className={classes.root}>
+                    <Typography variant="title" classes={{title: classes.title}}>Work Done By Project</Typography>
+                    <div style={{textAlign: "center"}}>
+                        <PieChart svgHeight={500} svgWidth={600} valueName="duration" data={projectData} />
                     </div>
                 </Paper>
             </div>)
@@ -65,6 +87,8 @@ class Reports extends Component {
 const mapStateToProps = state => {
     return {
         sprints: state.workspace.sprints,
+        projects: state.workspace.project_set,
+        tasks: state.workspace.task_set
     }
 }
 
