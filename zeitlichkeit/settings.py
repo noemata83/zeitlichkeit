@@ -26,8 +26,7 @@ SECRET_KEY = '5@we&&l_z&1kb9v83-$75^hhf3g4ss5pi26=48&#fpcq_dl20k'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['206.81.4.24',]
-
+ALLOWED_HOSTS = ['206.81.4.24', 'localhost']
 
 
 DATABASES = {

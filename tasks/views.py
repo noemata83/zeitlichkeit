@@ -11,7 +11,7 @@ from tasks.models import Task, Workspace, Sprint, Project, Category
 from tasks.permissions import IsMember
 from .serializers import (TaskSerializer, WorkspaceSerializer, SprintSerializer,
                           UserSerializer, CreateUserSerializer, LoginUserSerializer,
-                          ProjectSerializer, CategorySerializer)
+                          ProjectSerializer, CategorySerializer, UserLimitedSerializer)
 
 logger = logging.getLogger(__name__)
 
@@ -205,3 +205,14 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": AuthToken.objects.create(user)
         })
+
+class CheckUsername(generics.RetrieveAPIView):
+    serializer_class = UserLimitedSerializer
+    permission_classes = (permissions.AllowAny, )
+
+    def get_queryset(self):
+        return User.objects.filter(username=self.kwargs['username'])
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        return get_object_or_404(queryset)

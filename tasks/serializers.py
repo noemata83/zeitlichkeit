@@ -14,6 +14,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
+    def validate(self, data):
+        """ Check that the username is not currently in use."""
+        user = User.objects.get(username=data['username'])
+        if user is not None:
+            raise serializers.ValidationError("Username is already in use.")
+        return data
+
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'],
                                         None,
