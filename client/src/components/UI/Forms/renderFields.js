@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
+import { Input } from '@material-ui/core';
 
 export const renderTimeField = ({
     input,
@@ -57,6 +58,19 @@ export const renderTextField = ({
         type="text"
         inputProps={{...inputProps}}
         InputLabelProps={{shrink:true}}
+        {...custom}
+    />
+);
+
+export const renderInput = ({
+    inputProps,
+    placeholder,
+    ...custom
+}) => (
+    <Input
+        placeholder={placeholder}
+        inputProps={{...inputProps}}
+        fullWidth
         {...custom}
     />
 );

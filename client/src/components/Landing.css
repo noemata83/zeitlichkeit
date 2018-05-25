@@ -10,7 +10,7 @@
     top: 65%;
     left: 70%;
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0,0,0,0.8) !important;
     color: black;
     padding: 2rem;
     text-align: right;
@@ -26,8 +26,6 @@
 
 .HeaderText__brand {
     font-size: 8rem;
-    /* font-family: 'Clicker Script', cursive; */
-    /* font-style: italic; */
     background: #fff;
     color: #000;
     padding: 2rem 0rem 2rem 2rem;
@@ -80,8 +78,12 @@
     }
     
     .TextBox {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         width: 60%;
         padding: 1.5rem;
+        height: auto;
     }
 }
 

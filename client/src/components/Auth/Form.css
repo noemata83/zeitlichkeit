@@ -48,3 +48,15 @@
     text-decoration: underline;
     font-weight: bold;
 }
+
+.Field {
+    display: inline-block;
+    flex-basis: 50%;
+}
+
+.Form {
+    margin: '1rem 1rem';
+    display: 'flex'; 
+    flex-direction: 'row';
+    flex-wrap: wrap;
+}

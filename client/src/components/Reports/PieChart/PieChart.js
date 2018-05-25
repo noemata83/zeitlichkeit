@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { scaleOrdinal } from 'd3-scale';
-import { pie, arc } from 'd3-shape';
+import { pie } from 'd3-shape';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 
 import LabeledArc from './Arc/LabeledArc';
@@ -27,16 +26,12 @@ export default class PieChart extends Component {
     }
 
     render() {
-        const { svgWidth, svgHeight, data, valueName } = this.props;
+        const { svgWidth, svgHeight, data } = this.props;
 
         const pie = this.pie(data),
               translate = `translate(${svgWidth / 2}, ${svgHeight /2 })`;
         const radius = Math.min(svgWidth, svgHeight) / 2;
         
-        const path = arc()
-            .outerRadius(radius - 10)
-            .innerRadius(0);
-
         return (
             <svg
                 width={svgWidth}

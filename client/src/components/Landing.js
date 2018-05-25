@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { Redirect } from 'react-router-dom';
 
+import { Paper } from '@material-ui/core';
+
 // import { Link } from 'react-router-dom';
 import classes from './Landing.css';
 import Background from './UI/Background/Background';
@@ -17,6 +19,7 @@ class Landing extends Component {
     }
     
     handleLogin = (values) => {
+        console.log(values);
         this.props.login(values.username, values.password);
     }
 
@@ -36,21 +39,14 @@ class Landing extends Component {
         }
         switch(this.state.display) {
             case('LOGIN'):
-                return(<div>
-                        <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
-                        <LoginForm handleLogin={this.handleLogin} switchMode={this.switchMode} />
-                    </div>);
+                return <LoginForm handleLogin={this.handleLogin} switchMode={this.switchMode} />;
             case('REGISTER'):
-                return(<div>
-                        <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
-                        <RegistrationForm handleRegistration={this.handleRegistration} switchMode={this.switchMode} />
-                        </div>);
+                return <RegistrationForm handleRegistration={this.handleRegistration} switchMode={this.switchMode} />;
             default:
                 return (<div>
-                    <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
-                    <a className={classes.Link} onClick={() => this.switchMode('REGISTER')}>Register</a><br />
-                    <a className={classes.Link} onClick={() => this.switchMode('LOGIN')}>Login</a>
-                </div>
+                        <a className={classes.Link} onClick={() => this.switchMode('REGISTER')}>Register</a><br />
+                        <a className={classes.Link} onClick={() => this.switchMode('LOGIN')}>Login</a>
+                    </div>
                 );
         }
     }
@@ -59,9 +55,10 @@ class Landing extends Component {
         return (
     <div className={classes.Landing}>
         <Background />
-        <div className={classes.TextBox}>
+        <Paper classes={{root: classes.TextBox}} elevation={8}>
+            <h1 className={classes.HeaderText__brand}>Temporalite.<span className={classes.Tagline}>Time management for humans</span></h1>
             {this.renderContent()}
-        </div>
+        </Paper>
         <div className={classes.Footer}>
             <div style={{textAlign: 'left', width: '50%', display: 'inline-block'}}>
                 <span>&copy; {new Date().getFullYear()} by Tucker McKinney</span>

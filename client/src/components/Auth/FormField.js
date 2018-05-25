@@ -1,11 +1,12 @@
 import React from 'react';
-import classes from './Form.css';
+import { withStyles } from '@material-ui/core';
+import styles from './formStyles';
 
-export default ({ input, type, label, placeholder, meta: {error, touched}}) => (
-    <div>
-        <input className={classes.Input} {...input} type={type} placeholder={placeholder}/>
+export default withStyles(styles)(({ input, type, label, placeholder, classes, meta: {error, touched}}) => (
+    <div className={classes.Field}>
+        <input className={classes.input} {...input} type={type} placeholder={placeholder}/>
         <div style={{color: 'red'}}>
             {touched && error}
         </div>
     </div>
-)
+));

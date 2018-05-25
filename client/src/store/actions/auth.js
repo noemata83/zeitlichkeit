@@ -41,25 +41,17 @@ export const login = (username, password) => {
         let body = {username, password};
 
         return axios.post('/api/login', body, {headers}).then(res => {
-            if (res.status < 500) {
-                return {status: res.status, data: res.data};
-            } else {
-                console.log("Server error!");
-                throw res;
-            }
+            dispatch({type: actionTypes.LOGIN, data: res.data});
         })
-        .then(res => {
-            if (res.status === 200) {
-                dispatch({type: actionTypes.LOGIN, data: res.data});
-                return res.data;
-            } else if (res.status === 403 || res.status === 401) {
-                dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})
-                throw res.data;
-            } else {
-                dispatch({type: actionTypes.LOGIN_FAILED, data: res.data})
-                throw res.data;
+        .catch(err => {
+            if (err.response) {
+                console.log(err.response);
+                console.log(err.response.request.response);
+            } else if (err.request) {
+                console.log(err.request);
             }
-        })
+            dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: err});
+        });
     }
 }
 
