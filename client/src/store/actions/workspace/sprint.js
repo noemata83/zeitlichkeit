@@ -8,8 +8,8 @@ export const loadSprints = () => {
         setTimeZone();
         const { headers, workspace } = setupRequest(getState);
         return axios.get(`/api/workspaces/${workspace}/sprints/`, {headers, })
-            .then(res => handleServerError(res))
-            .then(res => dispatch(handleResponse(res, actionTypes.SPRINT_LOADED, res.data))); 
+            .then(res => dispatch(handleResponse(res, actionTypes.SPRINT_LOADED, res.data)))
+            .catch(err => dispatch(handleServerError(err)));
     }
 }
 
@@ -17,8 +17,8 @@ export const addSprint = (sprint_data) => {
     return (dispatch, getState) => {
         const { headers, workspace } = setupRequest(getState);
         return axios.post(`/api/workspaces/${workspace}/sprints/`, sprint_data, {headers, })
-            .then(res => handleServerError(res))
-            .then(res => dispatch(handleResponse(res, actionTypes.ADD_SPRINT, res.data))); 
+            .then(res => dispatch(handleResponse(res, actionTypes.ADD_SPRINT, res.data)))
+            .catch(err => dispatch(handleServerError(err)));
     }
 }
 
@@ -26,8 +26,8 @@ export const deleteSprint = (sprint_id) => {
     return (dispatch, getState) => {
         const { headers, workspace } = setupRequest(getState);
         return axios.delete(`/api/workspaces/${workspace}/sprints/${sprint_id}/`, {headers, })
-            .then(res => handleServerError(res))               
-            .then(res => dispatch(handleResponse(res, actionTypes.DELETE_SPRINT, sprint_id)));
+            .then(res => dispatch(handleResponse(res, actionTypes.DELETE_SPRINT, sprint_id)))
+            .catch(err => dispatch(handleServerError(err)));
     }       
 }
 
@@ -35,7 +35,6 @@ export const addTaskandSprint = (task_data, sprint_data) => {
     return (dispatch, getState) => {
         const { headers, workspace } = setupRequest(getState);
         return axios.post(`/api/workspaces/${workspace}/tasks/`, task_data, {headers, })
-            .then(res => handleServerError(res))
             .then(res => {
                 if (res.status === 201) {
                     dispatch({type: actionTypes.ADD_TASK, data: {
@@ -46,10 +45,8 @@ export const addTaskandSprint = (task_data, sprint_data) => {
                         completed: res.data.completed
                     }});
                     dispatch(addSprint(sprint_data));
-                } else if (res.status >= 400 && res.status < 500) {
-                    dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})
-                    throw res.data;
                 }
-            }); 
+            })
+            .catch(err => dispatch(handleServerError(err))); 
     }
 }

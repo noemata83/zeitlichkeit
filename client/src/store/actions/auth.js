@@ -16,22 +16,8 @@ export const loadUser = () => {
         }
         return axios.get('/api/user/', {headers, })
             .then(res => {
-                if (res.status < 500) {
-                    return {status: res.status, data: res.data};
-                } else {
-                    console.log("Server error.");
-                    throw res;
-                }
-            })
-            .then(res => {
-                if (res.status === 200) {
-                    dispatch({type: actionTypes.USER_LOADED, user: res.data});
-                    return res.data;
-                } else if (res.status >= 400 && res.status < 500) {
-                    dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data})
-                    throw res.data;
-                }
-            })
+                if (res.status === 200) dispatch({type: actionTypes.USER_LOADED, user: res.data});
+            }).catch(err => dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: err}));
     }
 }
 
@@ -45,12 +31,11 @@ export const login = (username, password) => {
         })
         .catch(err => {
             if (err.response) {
-                console.log(err.response);
-                console.log(err.response.request.response);
+                const errors = JSON.parse(err.response.request.response).non_field_errors;
+                dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: errors});
             } else if (err.request) {
                 console.log(err.request);
             }
-            dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: err});
         });
     }
 }
@@ -58,27 +43,11 @@ export const login = (username, password) => {
 export const register = (username, password) => {
     return (dispatch, getState) => {
         let headers = {"Content-type": "application/json"};
-
         return axios.post(`/api/register`, {username, password}, {headers,}).then(res => {
-            if (res.status < 500) {
-                return {status: res.status, data: res.data};
-            } else {
-                console.log("Server error.");
-                throw res;
-            }
-        })
-        .then(res => {
-            if (res.status === 200) {
-                dispatch({type: actionTypes.REGISTRATION_SUCCESSFUL, data: res.data});
-                return res.data;
-            } else if (res.status === 403 || res.status === 401) {
-                dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data});
-                throw res.data;
-            } else {
-                dispatch({type: actionTypes.REGISTRATION_FAILED, data: res.data});
-                throw res.data;
-            }
-        })
+            dispatch({type: actionTypes.REGISTRATION_SUCCESSFUL, data: res.data});
+        }).catch(err => {
+            dispatch({type: actionTypes.REGISTRATION_FAILED, data: JSON.parse(err.response.request.response).non_field_errors});
+        });
     }
 }
 
@@ -92,23 +61,7 @@ export const logout = () => {
         headers["Authorization"] = `Token ${token}`;
         }
         return axios.post('/api/auth/logout/', "", {headers,}).then(res => {
-            if (res.status === 204) {
-                return {status: res.status, data: {}};
-            } else if (res.status < 500) {
-                return {status: res.status, data: res.data};
-            }
-            else {
-                console.log("Server Error!");
-                throw res;
-            }
-        }).then(res => {
-            if (res.status === 204) {
-                dispatch({type: actionTypes.LOGOUT});
-                return res.data;
-            } else if (res.status === 403 || res.status === 401) {
-                dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: res.data});
-                throw res.data;
-            }
-        }) 
+            if (res.status === 204) dispatch({type: actionTypes.LOGOUT});
+        }).catch(err => dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: err})); 
     }
 }

@@ -16,15 +16,14 @@ const setHeaders = (getState) => {
     return headers;
 }
 
-export const loadWorkspace = () => {
+export const loadWorkspace = (workspace) => {
     return (dispatch, getState) => {
         dispatch({type: actionTypes.WORKSPACE_LOADING});
-        const headers = setHeaders(getState);        
-        const workspace = getState().auth.user.account.default_workspace.id;
+        const headers = setHeaders(getState); 
 
         return axios.get(`/api/workspaces/${workspace}/`, {headers, })
-            .then(res => handleServerError(res))
-            .then(res => dispatch(handleResponse(res, actionTypes.WORKSPACE_LOADED, res.data)));
+            .then(res => dispatch(handleResponse(res, actionTypes.WORKSPACE_LOADED, res.data)))
+            .catch(err => dispatch(handleServerError(err)));
     }
 }
 

@@ -39,7 +39,7 @@ class Landing extends Component {
         }
         switch(this.state.display) {
             case('LOGIN'):
-                return <LoginForm handleLogin={this.handleLogin} switchMode={this.switchMode} />;
+                return <LoginForm handleLogin={this.handleLogin} switchMode={this.switchMode} errors={this.props.errors} />;
             case('REGISTER'):
                 return <RegistrationForm handleRegistration={this.handleRegistration} switchMode={this.switchMode} />;
             default:
@@ -74,7 +74,8 @@ class Landing extends Component {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.isAuthenticated
+        isAuthenticated: state.auth.isAuthenticated,
+        errors: state.auth.errors
     }
 }
 const mapDispatchToProps = dispatch => {

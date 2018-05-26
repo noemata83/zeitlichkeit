@@ -7,8 +7,8 @@ export const loadProjects = () => {
         dispatch({type: actionTypes.PROJECTS_LOADING});
         const { headers, workspace } = setupRequest(getState);
         return axios.get(`/api/workspaces/${workspace}/projects/`, {headers, })
-            .then(res => handleServerError(res))
-            .then(res => dispatch(handleResponse(res, actionTypes.PROJECTS_LOADED, res.data.results)));
+            .then(res => dispatch(handleResponse(res, actionTypes.PROJECTS_LOADED, res.data.results)))
+            .catch(err => dispatch(handleServerError(err)));
     }
 }
 
@@ -19,8 +19,8 @@ export const addProject = (project) => {
             name: project
         };
         return axios.post(`/api/workspaces/${workspace}/projects/`, request, {headers,})
-            .then(res => handleServerError(res))
-            .then(res => dispatch(handleResponse(res, actionTypes.ADD_PROJECT, res.data)));
+            .then(res => dispatch(handleResponse(res, actionTypes.ADD_PROJECT, res.data)))
+            .catch(err => dispatch(handleServerError(err)));
     }
 }
 
@@ -28,7 +28,7 @@ export const deleteProject = (id, name) => {
     return (dispatch, getState) => {
         const { headers, workspace } = setupRequest(getState);
         return axios.delete(`/api/workspaces/${workspace}/projects/${id}/`, {headers, })
-            .then(res => handleServerError(res))
-            .then (res => dispatch(handleResponse(res, actionTypes.DELETE_PROJECT, {id, name})));
+            .then(res => dispatch(handleResponse(res, actionTypes.DELETE_PROJECT, {id, name})))
+            .catch(err => dispatch(handleServerError(err)));
     }
 }

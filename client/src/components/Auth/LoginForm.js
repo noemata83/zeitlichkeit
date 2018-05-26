@@ -77,7 +77,7 @@ import styles from './formStyles';
 
 
 const LoginForm = props => {
-    const { handleLogin, classes } = props;
+    const { handleLogin, classes, errors } = props;
     return (
         <form onSubmit={props.handleSubmit(handleLogin)} className={classes.Form}>
             <div className={classes.Fields}>
@@ -91,6 +91,9 @@ const LoginForm = props => {
                         component={FormField}
                         type="password"
                         placeholder="Password" />
+            </div>
+            <div className={classes.Error}>
+                {errors}
             </div>
             <div className={classes.Controls}>
                 <button className={classes.Link} type="submit">Login</button>

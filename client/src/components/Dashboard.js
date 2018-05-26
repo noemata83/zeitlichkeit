@@ -21,8 +21,9 @@ class Dashboard extends Component {
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.user && prevState.loading) {
-            nextProps.loadWorkspace();
+        if (nextProps.user && prevState.loading && !prevState.user) {
+            const workspace =nextProps.user.account.default_workspace.id;
+            nextProps.loadWorkspace(workspace);
         }
         return {...prevState, user: nextProps.user}
     }
@@ -84,7 +85,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadWorkspace: () => dispatch(loadWorkspace()),
+        loadWorkspace: (workspace) => dispatch(loadWorkspace(workspace)),
         loadUser: () => dispatch(loadUser())
     }
 }
