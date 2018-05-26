@@ -21,3 +21,5 @@ temporalite/
 
 
 # End of https://www.gitignore.io/api/django
+temporalite.code-workspace
+client/webpack-stats.dev.json

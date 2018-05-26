@@ -1,8 +1,10 @@
 import React from 'react';
+import axios from 'axios';
 import { Field, reduxForm } from 'redux-form';
 
-import classes from './Form.css';
+import styles from'./formStyles';
 import FormField from './FormField';
+import { withStyles } from '@material-ui/core';
 
 const formFields = [
     {name: 'username', type:'text', label: 'Username'},
@@ -10,27 +12,41 @@ const formFields = [
     {name: 'confirmpassword', type:'password', label: 'Confirm Password'}
 ];
 
-const renderFields = formFields.map(({name, type, label}) => (
-    <div key={name} style={{display:'inline-block', width: '50%'}}>
-                <Field 
-                    name={name}
-                    component={FormField}
-                    type={type} 
-                    placeholder={label} />
-            </div>
-))
-
 const RegistrationForm = props => {
-    const { handleRegistration } = props;
+    const { handleRegistration, classes } = props;
+    const renderFields = formFields.map(({name, type, label}) => (
+                    <Field 
+                        key={name}
+                        name={name}
+                        component={FormField}
+                        type={type} 
+                        placeholder={label} />
+    ))
     return (
-    <div>
-        <form onSubmit={props.handleSubmit(handleRegistration)}>
+        <form onSubmit={props.handleSubmit(handleRegistration)} className={classes.Form}>
+            <div  className={classes.Fields}>
             {renderFields}
-            <button className={classes.Link} type="submit">Register</button>
-            <button className={classes.Back} onClick={() => props.switchMode('GREETING')}>Back</button>
+            </div>
+            <div className={classes.Controls}>
+                <button className={classes.Link} type="submit">Register</button>
+                <button className={[classes.Link, classes.Back].join(' ')} onClick={() => props.switchMode('GREETING')}>Back</button>
+            </div>
         </form>
-    </div>
     );
+}
+
+const asyncValidate = (values) => {
+    return new Promise((resolve, reject) => {
+        axios.get(`/api/users/${values.username}/`)
+            .then(res => {
+                if (res.data.result) {
+                    return resolve();
+                }
+                else {
+                    reject({ username: 'Username is taken'});
+                }
+            });
+    });
 }
 
 function validate(values) {
@@ -47,11 +63,12 @@ function validate(values) {
         }
     });
 
-    console.log(errors);
     return errors;
 }
 
 export default reduxForm({
     validate,
+    asyncValidate,
+    asyncBlurFields: ['username'],
     form: 'register',
-})(RegistrationForm);
+})(withStyles(styles)(RegistrationForm));

@@ -57,14 +57,16 @@ Back: {
 Fields: {
     display: 'flex',
     flexWrap: 'wrap',
-    [theme.breakpoints.up('lg')]: {
-        flexWrap: 'nowrap',
-      },
+    // [theme.breakpoints.up('lg')]: {
+    //     flexWrap: 'nowrap',
+    //   },
     width: '100%',
 },
 Field: {
     display: 'inline-block',
-    flexBasis: '50%',
+    flexBasis: '20%',
+    flexShrink: 1,
+    font: 'inherit',
     margin: '.5rem 0',
 },
 Controls: {
@@ -76,5 +78,10 @@ Controls: {
 Form: {
     margin: '1rem',
     overflow: 'hidden',
+},
+Error: {
+    fontSize: '1.2rem',
+    color: 'red',
+    height: '1.2rem',
 }
 });

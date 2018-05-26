@@ -5,6 +5,7 @@ import logging
 from rest_framework import permissions, generics, viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
+from django.db.models.base import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from knox.models import AuthToken
 from tasks.models import Task, Workspace, Sprint, Project, Category
@@ -207,12 +208,18 @@ class LoginAPI(generics.GenericAPIView):
         })
 
 class CheckUsername(generics.RetrieveAPIView):
+    queryset = User.objects.all()
     serializer_class = UserLimitedSerializer
     permission_classes = (permissions.AllowAny, )
 
-    def get_queryset(self):
-        return User.objects.filter(username=self.kwargs['username'])
+    def get(self, request, *args, **kwargs):
+        try: 
+            User.objects.get(username=self.kwargs['username'])
+        except ObjectDoesNotExist:
+            return Response({
+                "result": True
+            })
+        return Response({
+            "result": False
+        })
 
-    def get_object(self):
-        queryset = self.get_queryset()
-        return get_object_or_404(queryset)
