@@ -6,7 +6,9 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db.models.base import ObjectDoesNotExist
 from drf_writable_nested import WritableNestedModelSerializer
-from tasks.models import Workspace, Task, Sprint, Project, Category, Account
+from tasks.models import Workspace, Task, Sprint, Project, Category
+from accounts.models import Account
+from accounts.serializers import UserLimitedSerializer, UserSerializer
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,24 +38,12 @@ class LoginUserSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Unable to log in with provided credentials.")
 
-class UserLimitedSerializer(serializers.ModelSerializer):
-    username= serializers.CharField(required=False)
-    id = serializers.IntegerField(required=False)
-    class Meta:
-        model = User
-        fields = ('id', 'username')
-
 class WorkspaceLimitedSerializer(serializers.ModelSerializer):
+    """ A limited serializer for workspaces"""
     id = serializers.IntegerField()
     class Meta:
         model = Workspace
         fields = ('id', 'name')
-
-class AccountSerializer(serializers.ModelSerializer):
-    default_workspace = WorkspaceLimitedSerializer()
-    class Meta:
-        model = Account
-        fields = ('default_workspace',)
 
 class ProjectSerializer(serializers.ModelSerializer):
     workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all(), required=False)
@@ -73,20 +63,6 @@ class CategorySerializer(serializers.ModelSerializer):
     def validate(self, data):
         data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
         return data
-
-class UserSerializer(serializers.ModelSerializer):
-    workspace_set = WorkspaceLimitedSerializer(many=True)
-    account = AccountSerializer()
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'workspace_set', 'account')
-
-    @staticmethod
-    def setup_eager_loading(queryset):
-        queryset = queryset.select_related('account')
-        queryset = queryset.prefetch_related('workspace_set')
-        return queryset
-
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
     task = serializers.SlugRelatedField(slug_field='name', queryset=Task.objects.all())

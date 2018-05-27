@@ -14,7 +14,7 @@ export const loadUser = () => {
         if (token) {
             headers["Authorization"]= `Token ${token}`;
         }
-        return axios.get('/api/user/', {headers, })
+        return axios.get('/api/user', {headers, })
             .then(res => {
                 if (res.status === 200) dispatch({type: actionTypes.USER_LOADED, user: res.data});
             }).catch(err => dispatch({type: actionTypes.AUTHENTICATION_ERROR, data: err}));

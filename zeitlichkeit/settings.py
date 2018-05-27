@@ -45,6 +45,7 @@ DATABASES = {
 
 INSTALLED_APPS = [
     'tasks',
+    'accounts',
     'knox',
     'silk',
     'rest_framework',
