@@ -76,6 +76,9 @@ class SideBar extends Component {
               <ListItem button onClick={() => setMode(MODES.REPORT)}>
                 <ListItemText primary="Reports" />
               </ListItem>
+              <ListItem button onClick={() => setMode(MODES.TEAM)}> 
+                <ListItemText primary="Team" />
+              </ListItem>
             </List>
         </div>
     );

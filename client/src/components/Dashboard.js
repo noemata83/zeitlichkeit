@@ -18,6 +18,7 @@ class Dashboard extends Component {
         user: null,
         mode: MODES.SPRINT,
         mobileOpen: false,
+        anchorEl: null,
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -48,6 +49,14 @@ class Dashboard extends Component {
         this.setState({ mobileOpen: !this.state.mobileOpen});
     }
 
+    handleMenu = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    }
+
+    handleClose = () => {
+        this.setState({ anchorEl: null });
+    }
+
     renderWorkspace = (mode) => {
         switch(mode) {
             case MODES.SPRINT:
@@ -56,6 +65,8 @@ class Dashboard extends Component {
                 return <ProjectManager />;
             case MODES.REPORT:
                 return <Reports />;
+            case MODES.TEAM:
+                return <div style={{fontSize: '3rem', padding: '2rem'}}>Meet Your Team... Later!</div>
             default:
                 return <SprintWorkspace />;
         }
@@ -65,7 +76,7 @@ class Dashboard extends Component {
         const { user, loading, mode } = this.state;
         return (!user && !loading) ? <Redirect to="/" /> : (
             <div className={classes.Dashboard}>
-                <Header handleDrawerToggle={this.handleDrawerToggle} />
+                <Header handleDrawerToggle={this.handleDrawerToggle} handleMenu={this.handleMenu} handleClose={this.handleClose} anchorEl={this.state.anchorEl} />
                 <main className={classes.Main}>
                     <SideBar setMode={this.setMode} mobileOpen={this.state.mobileOpen} handleDrawerToggle={this.handleDrawerToggle} />
                     <div className={classes.Workspace}>

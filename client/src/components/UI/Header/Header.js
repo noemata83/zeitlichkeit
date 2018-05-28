@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { Menu, MenuItem } from '@material-ui/core';
 
 const styles = theme => ({
     root: {
@@ -40,25 +42,23 @@ const styles = theme => ({
         display: 'inline-block',
         marginRight: 'auto',
     },
-    NavMenu: {
-        display: 'flex'
-    },
-    NavMenuItem: {
-        fontSize: '2rem',
-        color: '#fff',
-        padding: '1rem',
-        margin: '.2rem 2rem',
-    },
     Logo: {
         padding: '1rem .5rem',
         height: '25px',
         width: '25px',
         color: 'white'
+    },
+    AccountIcon: {
+        marginRight: '1rem'
+    },
+    AccountCircle: {
+        fontSize: '3.5rem'
     }
 });
 
 const header = props => {
-    const { classes } = props;
+    const { classes, anchorEl, handleMenu, handleClose } = props;
+    const open = Boolean(anchorEl);
     return (
     <AppBar color="primary" style={styles.root} position='static'>
         <Toolbar disableGutters>
@@ -74,7 +74,7 @@ const header = props => {
             <Typography variant="title" className={classes.title}>    
                 Temporalite
             </Typography>
-        <div className={classes.NavMenuContainer}>
+        {/* <div className={classes.NavMenuContainer}>
             <div className={classes.NavMenu}>
                 <div className={classes.NavMenuItem}>
                     Workspaces
@@ -86,7 +86,35 @@ const header = props => {
                     Logout
                 </div>
             </div>
-        </div>
+        </div> */}
+        <IconButton
+            aria-owns={open ? 'menu-appbar' : null }
+            aria-haspopup="true"
+            onClick={handleMenu}
+            color="inherit"
+            className={classes.AccountIcon}
+        >
+            <AccountCircle classes={{root: classes.AccountCircle}}/>
+        </IconButton>
+        <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            open={open}
+            onClose={handleClose}
+        >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>Switch Workspace</MenuItem>
+            <MenuItem onClick={handleClose}>Create Workspace</MenuItem>
+            <MenuItem onClick={() => { handleClose(); props.logout()}}>Logout</MenuItem>
+        </Menu>
         </Toolbar>
     </AppBar>
     );
