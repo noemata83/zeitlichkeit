@@ -157,15 +157,22 @@ class TaskSerializer(WritableNestedModelSerializer):
         return instance
 
 
-class WorkspaceSerializer(serializers.ModelSerializer):
+class WorkspaceSerializer(WritableNestedModelSerializer):
     """ Serializer for Workspaces"""
     users = UserLimitedSerializer(many=True, default=[serializers.CurrentUserDefault(),])
-    project_set = ProjectSerializer(many=True)
-    category_set = serializers.StringRelatedField(many=True)
-    task_set = TaskListSerializer(many=True)
+    project_set = ProjectSerializer(many=True, required=False)
+    category_set = serializers.StringRelatedField(many=True, required=False)
+    task_set = TaskListSerializer(many=True, required=False)
     class Meta:
         model = Workspace
         fields = ('id', 'name', 'users', 'project_set', 'task_set', 'category_set')
+
+    def create(self, validated_data):
+        workspace = Workspace(name=validated_data['name'])
+        workspace.save()
+        users = [self.context['user'],]
+        workspace.users.set(users)
+        return workspace
 
     @staticmethod
     def setup_eager_loading(queryset):

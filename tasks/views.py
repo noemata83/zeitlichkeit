@@ -25,9 +25,8 @@ class WorkspaceViewSet(viewsets.ModelViewSet):
         queryset = self.get_serializer_class().setup_eager_loading(queryset)
         return queryset
 
-    def perform_create(self, serializer):
-        users = [self.request.user,]
-        serializer.save(users=users)
+    def get_serializer_context(self):
+        return {"user": self.request.user}
 
 class WorkspaceDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Workspace.objects.all()
