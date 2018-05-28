@@ -1,6 +1,7 @@
 import actionTypes from './actionTypes';
 import axios from 'axios';
 import { handleServerError, handleResponse } from '../helpers/utils';
+import { loadSprints } from './workspace/sprint';
 
 const setHeaders = (getState) => {
     const token = getState().auth.token;
@@ -22,7 +23,7 @@ export const loadWorkspace = (workspace) => {
         const headers = setHeaders(getState); 
 
         return axios.get(`/api/workspaces/${workspace}/`, {headers, })
-            .then(res => dispatch(handleResponse(res, actionTypes.WORKSPACE_LOADED, res.data)))
+            .then(res => { dispatch(handleResponse(res, actionTypes.WORKSPACE_LOADED, res.data)); dispatch(loadSprints()); })
             .catch(err => dispatch(handleServerError(err)));
     }
 }

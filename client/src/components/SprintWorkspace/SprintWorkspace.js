@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { loadSprints } from '../../store/actions/';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -18,13 +16,6 @@ class SprintWorkspace extends Component {
         mode: 'DAY_VIEW',
     }
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if (nextProps.workspace_loaded && nextProps.loading) {
-            nextProps.loadSprints();
-        }
-        return { ...prevState, loading: nextProps.loading}
-    }
-
     modeChangeHandler = (mode) => {
         this.setState({
             mode,
@@ -38,16 +29,4 @@ class SprintWorkspace extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        workspace_loaded: !state.workspace.loading,
-        loading: state.workspace.sprint_loading
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        loadSprints: () => dispatch(loadSprints()),
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(SprintWorkspace));
+export default withStyles(styles)(SprintWorkspace);

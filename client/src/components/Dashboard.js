@@ -10,6 +10,7 @@ import SprintWorkspace from './SprintWorkspace/SprintWorkspace';
 import ProjectManager from './ProjectManager/ProjectManager';
 import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
+import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 
 class Dashboard extends Component {
 
@@ -19,6 +20,7 @@ class Dashboard extends Component {
         mode: MODES.SPRINT,
         mobileOpen: false,
         anchorEl: null,
+        dialogOpen: false,
     }
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -53,8 +55,23 @@ class Dashboard extends Component {
         this.setState({ anchorEl: event.currentTarget });
     }
 
-    handleClose = () => {
+    handleMenuClose = () => {
         this.setState({ anchorEl: null });
+    }
+
+    handleDialogOpen = () => {
+        this.setState({ 
+            anchorEl: null,
+            dialogOpen: true });
+    }
+    
+    handleDialogClose = () => {
+        this.setState({ dialogOpen: false });
+    }
+
+    handleSwitchWorkspace = (id) => {
+        this.setState({ dialogOpen: false });
+        this.props.loadWorkspace(id);
     }
 
     renderWorkspace = (mode) => {
@@ -76,13 +93,14 @@ class Dashboard extends Component {
         const { user, loading, mode } = this.state;
         return (!user && !loading) ? <Redirect to="/" /> : (
             <div className={classes.Dashboard}>
-                <Header handleDrawerToggle={this.handleDrawerToggle} handleMenu={this.handleMenu} handleClose={this.handleClose} anchorEl={this.state.anchorEl} />
+                <Header handleDrawerToggle={this.handleDrawerToggle} handleMenu={this.handleMenu} handleClose={this.handleMenuClose} anchorEl={this.state.anchorEl} handleDialogOpen={this.handleDialogOpen} />
                 <main className={classes.Main}>
                     <SideBar setMode={this.setMode} mobileOpen={this.state.mobileOpen} handleDrawerToggle={this.handleDrawerToggle} />
                     <div className={classes.Workspace}>
                         {this.renderWorkspace(mode)}
                     </div>
                 </main>
+                <SwitchWorkspaceDialog open={this.state.dialogOpen} handleClose={this.handleDialogClose} handleSwitchWorkspace={this.handleSwitchWorkspace} />
             </div>
         )
     }

@@ -19,7 +19,6 @@ class Landing extends Component {
     }
     
     handleLogin = (values) => {
-        console.log(values);
         this.props.login(values.username, values.password);
     }
 

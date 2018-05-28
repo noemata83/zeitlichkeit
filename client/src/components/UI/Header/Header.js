@@ -57,7 +57,7 @@ const styles = theme => ({
 });
 
 const header = props => {
-    const { classes, anchorEl, handleMenu, handleClose } = props;
+    const { classes, anchorEl, handleMenu, handleClose, handleDialogOpen } = props;
     const open = Boolean(anchorEl);
     return (
     <AppBar color="primary" style={styles.root} position='static'>
@@ -111,7 +111,7 @@ const header = props => {
             onClose={handleClose}
         >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>Switch Workspace</MenuItem>
+            <MenuItem onClick={handleDialogOpen}>Switch Workspace</MenuItem>
             <MenuItem onClick={handleClose}>Create Workspace</MenuItem>
             <MenuItem onClick={() => { handleClose(); props.logout()}}>Logout</MenuItem>
         </Menu>
