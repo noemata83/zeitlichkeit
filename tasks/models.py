@@ -6,8 +6,8 @@ from django.utils import timezone
 
 class Workspace(models.Model):
     """
-    A workspace is the generic container for user task information. Workspaces contain tasks and
-    projects as primitives: a task may belong to a project, or it may not.
+    A workspace is the generic container for time and project information. Workspaces contain tasks
+    and projects as primitives.
     Attributes:
         name: A string description of the workspace (e.g. "Household", "Office")
         users: A list of the users who access the workspace
@@ -21,7 +21,7 @@ class Workspace(models.Model):
 
 class Project(models.Model):
     """
-    A project is an optional subgrouping of tasks used for generating data within a workspace.
+    A project is an optional grouping of tasks used for generating data within a workspace.
     Attributes:
         name: A string description of the project
         workspace: A reference to the workspace to which the project belongs. A project may
@@ -35,8 +35,9 @@ class Project(models.Model):
 
 class Category(models.Model):
     """
-    A category is an alternate grouping of tasks within a workspace. The intent is to allow the user to
-    categorize, and thus visualize, they types of work that they do in addition to the projects that they work on.
+    A category is an alternate grouping of tasks within a workspace. The intent is to allow the
+    user to categorize, and thus visualize, they types of work that they do in addition to the
+    projects that they work on.
     Attributes:
         name: A string description of the category (e.g., "Chores", "Leisure")
         color: A string hexadecimal color code

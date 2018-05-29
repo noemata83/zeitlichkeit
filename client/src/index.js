@@ -1,3 +1,6 @@
+/*
+    This is the root module, which wraps the app with its the redux state management layer.
+*/
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';

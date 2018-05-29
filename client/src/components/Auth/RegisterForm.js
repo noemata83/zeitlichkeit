@@ -1,3 +1,4 @@
+// A stateless component for displaying the registration form.
 import React from 'react';
 import axios from 'axios';
 import { Field, reduxForm } from 'redux-form';

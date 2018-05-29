@@ -1,3 +1,4 @@
+//  A container for managing the data for the Project Management component of the app. 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid'; 
@@ -107,6 +108,7 @@ class ProjectManager extends Component {
                 </Grid>
             </Paper>
             <Button variant="fab" color='secondary' className={classes.fab} onClick={this.handleClickOpen}><AddIcon /></Button>
+          {/* Refactor below into separate component */}
             <Dialog
                 open={this.state.open}
                 onClose={this.handleClose}

@@ -1,3 +1,6 @@
+/*  This component is used to render form fields within the auth-related components, allowing errors
+    to be programmatically displayed. */
+    
 import React from 'react';
 import { withStyles } from '@material-ui/core';
 import styles from './formStyles';

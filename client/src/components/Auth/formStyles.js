@@ -1,3 +1,4 @@
+// A common source for auth form styling.
 export default theme => ({
     input: {
         background: 'transparent',

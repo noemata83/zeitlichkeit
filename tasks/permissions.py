@@ -1,3 +1,6 @@
+"""
+    This module contains permissions classes for use with workspace-related records.
+"""
 from rest_framework import permissions
 
 class IsMember(permissions.BasePermission):

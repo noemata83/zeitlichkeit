@@ -1,3 +1,4 @@
+// A stateless component for displaying a single project and its associated tasks.
 import React from "react";
 import {
   List,

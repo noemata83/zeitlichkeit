@@ -1,3 +1,6 @@
+/*  This module contains the action creators associating with authentication and loading user information
+    from the backend server. */
+    
 import actionTypes from './actionTypes';
 import axios from 'axios';
 

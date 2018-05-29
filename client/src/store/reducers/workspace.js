@@ -46,6 +46,10 @@ export default (state=initialState, action) => {
             return { ...state, task_set};
         }
         case actionTypes.DELETE_TASK: {
+            /*  ACTION INCOMPLETE:
+                This action should take care of removing associated sprints. These sprints
+                are automatically deleted by the backend server. Run a filter on sprints
+                to remove those associated with the task to be deleted. */
             const taskId = action.data;
             const task_set = state.task_set.filter(task => task.id !== taskId);
             return {...state, task_set};
@@ -76,6 +80,10 @@ export default (state=initialState, action) => {
             return {...state, project_set};
         }
         case actionTypes.DELETE_PROJECT: {
+            /*  ACTION INCOMPLETE:
+                This action should also take care of cleaning up after deleting a project,
+                removing all associated task and sprint data for the task (and sprints) 
+                which fall under it. This is heavy-lifting, though. */
             const { id } = action.data;
             const project_set = state.project_set.filter(project => project.id !== id);
             return {...state, project_set};

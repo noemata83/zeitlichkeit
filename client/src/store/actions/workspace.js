@@ -1,3 +1,5 @@
+/*  This module collects the action creators associated with reading, updating, and destroying  *
+ *  workspace records.                                                                        */
 import actionTypes from './actionTypes';
 import axios from 'axios';
 import { handleServerError, handleResponse } from '../helpers/utils';

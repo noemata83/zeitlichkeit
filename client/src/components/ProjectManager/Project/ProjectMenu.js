@@ -1,3 +1,4 @@
+// Stateful component implements a menu for managing projects: adding tasks, deleting projects, &c.
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import MoreVertIcon from "@material-ui/icons/MoreVert";
