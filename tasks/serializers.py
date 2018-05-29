@@ -1,6 +1,8 @@
 """
 This module defines the serializers for the tasks api.
 """
+import logging
+import json
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -9,6 +11,8 @@ from drf_writable_nested import WritableNestedModelSerializer
 from tasks.models import Workspace, Task, Sprint, Project, Category
 from accounts.models import Account
 from accounts.serializers import UserLimitedSerializer, UserSerializer
+
+logger = logging.getLogger(__name__)
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,11 +62,19 @@ class ProjectSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('name', 'id')
+        fields = ('name', 'id', 'color')
 
     def validate(self, data):
         data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
         return data
+    
+    def create(self, validated_data):
+        category = Category(name=validated_data['name'],
+                            color=validated_data['color'],
+                            workspace=validated_data['workspace'])
+        category.save()
+        return category
+
 class SprintSerializer(serializers.ModelSerializer):
     """ Serializer for Sprints"""
     task = serializers.SlugRelatedField(slug_field='name', queryset=Task.objects.all())
@@ -113,14 +125,18 @@ class TaskSerializer(WritableNestedModelSerializer):
 
     def validate(self, data):
         # manually get the Category instance from the input data
-        if hasattr(data, 'categories'):
+        logger.debug("HELLO FROM VALIDATE!!!")
+        try:
             categories = []
             for category in data['categories']:
                 try:
                     categories.append(Category.objects.get(name=category['name']))
                 except ObjectDoesNotExist:
-                    categories.append(Category.objects.create(name=category['name']))
+                    categories.append(Category.objects.create(name=category['name'], color='#FFFFFF'))
+            logger.debug("catogories = " + str(categories))
             data['categories'] = categories
+        except KeyError:
+            pass
         data['workspace'] = Workspace.objects.get(id=self.context['workspace'])
         try:
             data['project'] = Project.objects.get(name=data['project']['name'])
@@ -144,15 +160,22 @@ class TaskSerializer(WritableNestedModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data['name']
-        if hasattr(validated_data, 'project'):
-            instance.project = validated_data['project']
         instance.workspace = validated_data['workspace']
-        instance.completed = validated_data['completed']
-        if hasattr(validated_data, 'categories'):
+        try:
+            instance.project = validated_data['project']
+        except KeyError:
+            pass
+        try:
+            instance.completed = validated_data['completed']
+        except KeyError:
+            pass
+        try:
             categories = []
             for category in validated_data['categories']:
                 categories.append(category)
             instance.categories.set(categories)
+        except KeyError:
+            pass
         instance.save()
         return instance
 

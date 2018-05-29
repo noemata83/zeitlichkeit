@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'tasks',
     'accounts',
     'knox',
-    'silk',
+    # 'silk',
     'rest_framework',
     'webpack_loader',
     'django.contrib.admin',
@@ -59,7 +59,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'silk.middleware.SilkyMiddleware',
+    # 'silk.middleware.SilkyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -172,6 +172,11 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'tasks.serializers': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
     }
 }
 

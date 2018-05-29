@@ -74,19 +74,6 @@ const header = props => {
             <Typography variant="title" className={classes.title}>    
                 Temporalite
             </Typography>
-        {/* <div className={classes.NavMenuContainer}>
-            <div className={classes.NavMenu}>
-                <div className={classes.NavMenuItem}>
-                    Workspaces
-                </div>
-                <div className={classes.NavMenuItem}>
-                    Team
-                </div>
-                <div className={classes.NavMenuItem} onClick={() => props.logout()}>
-                    Logout
-                </div>
-            </div>
-        </div> */}
         <IconButton
             aria-owns={open ? 'menu-appbar' : null }
             aria-haspopup="true"
@@ -112,7 +99,7 @@ const header = props => {
         >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleDialogOpen}>Switch Workspace</MenuItem>
-            <MenuItem onClick={handleClose}>Create Workspace</MenuItem>
+            <MenuItem onClick={handleClose}>Join Workspace</MenuItem>
             <MenuItem onClick={() => { handleClose(); props.logout()}}>Logout</MenuItem>
         </Menu>
         </Toolbar>

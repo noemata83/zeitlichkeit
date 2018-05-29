@@ -35,11 +35,14 @@ class Project(models.Model):
 
 class Category(models.Model):
     """
-    A category is an alternate grouping of tasks within a workspace.
+    A category is an alternate grouping of tasks within a workspace. The intent is to allow the user to
+    categorize, and thus visualize, they types of work that they do in addition to the projects that they work on.
     Attributes:
         name: A string description of the category (e.g., "Chores", "Leisure")
+        color: A string hexadecimal color code
     """
     name = models.CharField(max_length=128)
+    color = models.CharField(max_length=7)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, default=Workspace.DEFAULT_PK)
 
     def __str__(self):

@@ -68,10 +68,10 @@ class SideBar extends Component {
             </Card>
             <List component="nav">
               <ListItem button onClick={() => setMode(MODES.SPRINT)}>
-                <ListItemText primary="Sprints" />
+                <ListItemText primary="Time Tracker" />
               </ListItem>
               <ListItem button onClick={() => setMode(MODES.PROJECT)}>
-                <ListItemText primary="Projects" />
+                <ListItemText primary="Project Manager" />
               </ListItem>
               <ListItem button onClick={() => setMode(MODES.REPORT)}>
                 <ListItemText primary="Reports" />
