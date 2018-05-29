@@ -60,6 +60,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         return data
 
 class CategorySerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=True) 
+    color = serializers.CharField(required=False)
     class Meta:
         model = Category
         fields = ('name', 'id', 'color')
@@ -69,8 +71,12 @@ class CategorySerializer(serializers.ModelSerializer):
         return data
     
     def create(self, validated_data):
+        try:
+            color = validated_data['color']
+        except KeyError:
+            color = '#000000'
         category = Category(name=validated_data['name'],
-                            color=validated_data['color'],
+                            color=color,
                             workspace=validated_data['workspace'])
         category.save()
         return category

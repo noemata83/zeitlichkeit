@@ -42,7 +42,7 @@ class Category(models.Model):
         color: A string hexadecimal color code
     """
     name = models.CharField(max_length=128)
-    color = models.CharField(max_length=7)
+    color = models.CharField(max_length=7, default="#000000")
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, default=Workspace.DEFAULT_PK)
 
     def __str__(self):
