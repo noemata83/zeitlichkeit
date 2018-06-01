@@ -21,6 +21,5 @@ const styles = {
 export default connect(mapStateToProps)(withStyles(styles)(props => {
     const { cat, categories, classes } = props;
     const category = categories.find(c => c.name === cat);
-    console.log(category);
     return <Chip style={{backgroundColor: category.color}} key={`category-${category.id}`} label={category.name} classes={{root: classes.Category, label: classes.CategoryLabel}} />;
 }));
