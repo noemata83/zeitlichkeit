@@ -84,6 +84,8 @@ class Dashboard extends Component {
                 return <Reports />;
             case MODES.TEAM:
                 return <div style={{fontSize: '3rem', padding: '2rem'}}>Meet Your Team... Later!</div>
+            case MODES.CATEGORIES:
+                return <div style={{fontSize: '3rem', padding: '2rem'}}>Manage Workspace Categories... Later!</div>
             default:
                 return <SprintWorkspace />;
         }

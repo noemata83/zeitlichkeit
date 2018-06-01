@@ -73,6 +73,9 @@ class SideBar extends Component {
               <ListItem button onClick={() => setMode(MODES.PROJECT)}>
                 <ListItemText primary="Project Manager" />
               </ListItem>
+              <ListItem button onClick={() => setMode(MODES.CATEGORIES)}> 
+                <ListItemText primary="Manage Categories" />
+              </ListItem>
               <ListItem button onClick={() => setMode(MODES.REPORT)}>
                 <ListItemText primary="Reports" />
               </ListItem>

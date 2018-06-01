@@ -35,7 +35,7 @@ class TaskView extends Component {
 
     renderTaskView = sprints => {
         const tasks = Object.keys(sprints);
-        return tasks.map((task, index) => <Task key={index} sprints={sprints[task]} task={task} />);
+        return tasks.map((sprintTask, index) => <Task key={index} sprints={sprints[sprintTask]} task={this.props.tasks.find(task => task.name === sprintTask)} /> );
     }
 
     render() {
@@ -52,7 +52,9 @@ class TaskView extends Component {
 
 const mapStateToProps = state => {
     return {
-        sprints: state.workspace.sprints
+        sprints: state.workspace.sprints,
+        tasks: state.workspace.task_set,
+        categories: state.workspace.category_set
     }
 }
 

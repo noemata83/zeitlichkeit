@@ -3,5 +3,6 @@ export default {
     TODO: 'TODO',
     PROJECT: 'PROJECT',
     REPORT: 'REPORT',
-    TEAM: 'TEAM'
+    TEAM: 'TEAM',
+    CATEGORIES: 'CATEGORIES'
 }
