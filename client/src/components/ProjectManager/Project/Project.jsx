@@ -1,5 +1,5 @@
 // A stateless component for displaying a single project and its associated tasks.
-import React from "react";
+import React from 'react';
 import {
   List,
   ListItem,
@@ -8,39 +8,39 @@ import {
   Checkbox,
   IconButton,
   withStyles,
-  TextField
-} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import ProjectMenu from "./ProjectMenu";
-import { Toolbar } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CategoryChip from "../../UI/CategoryChip/CategoryChip";
+  TextField,
+  Toolbar,
+} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import ProjectMenu from './ProjectMenu';
+import CategoryChip from '../../UI/CategoryChip/CategoryChip';
 
-const styles = theme => ({
+const styles = {
   title: {
-    display: "inline-block",
-    borderBottom: `1px solid gray`
+    display: 'inline-block',
+    borderBottom: '1px solid gray',
   },
   listItemSecondaryAction: {
-    visibility: "hidden"
+    visibility: 'hidden',
   },
   listItem: {
-    "&:hover $listItemSecondaryAction": {
-      visibility: "inherit"
-    }
+    '&:hover $listItemSecondaryAction': {
+      visibility: 'inherit',
+    },
   },
   hideInput: {
-    display: "none"
+    display: 'none',
   },
   completed: {
-    textDecoration: "line-through",
-    color: "#aaa",
-    fontStyle: "italic"
-  }
-});
+    textDecoration: 'line-through',
+    color: '#aaa',
+    fontStyle: 'italic',
+  },
+};
 
-const project = props => {
+export default withStyles(styles)((props) => {
   const {
     project,
     tasks,
@@ -51,7 +51,7 @@ const project = props => {
     handleInput,
     handleAddTask,
     inputValue,
-    handleUpdateTaskCompleted
+    handleUpdateTaskCompleted,
   } = props;
   return (
     <Grid item xs={12} md={6}>
@@ -66,7 +66,7 @@ const project = props => {
         />
       </Toolbar>
       <List>
-        {tasks.map(task => {
+        {tasks.map((task) => {
           const categoryList = task.categories.map(cat => (
             <CategoryChip key={`${task.name} - ${cat}`} cat={cat} />
           ));
@@ -75,7 +75,7 @@ const project = props => {
               key={task.name}
               divider
               classes={{
-                container: classes.listItem
+                container: classes.listItem,
               }}
             >
               <Checkbox
@@ -109,11 +109,11 @@ const project = props => {
         })}
         <ListItem className={!showInput ? classes.hideInput : null}>
           <form
-            onSubmit={e => {
+            onSubmit={(e) => {
               e.preventDefault();
               handleAddTask(project);
             }}
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
           >
             <TextField
               name={`${project.name}__newTask`}
@@ -127,6 +127,4 @@ const project = props => {
       </List>
     </Grid>
   );
-};
-
-export default withStyles(styles)(project);
+});
