@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -38,4 +39,7 @@ class SprintWorkspace extends Component {
   }
 }
 
+SprintWorkspace.propTypes = {
+  classes: PropTypes.object.isRequired,
+}
 export default withStyles(styles)(SprintWorkspace);

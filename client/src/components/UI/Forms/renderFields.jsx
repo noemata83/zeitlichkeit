@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Select from '@material-ui/core/Select';
 import { Input } from '@material-ui/core';
@@ -18,6 +19,22 @@ export const renderTimeField = ({
   />
 );
 
+renderTimeField.defaultProps = {
+  input: {},
+  meta: {
+    touched: false,
+    error: null,
+  },
+};
+renderTimeField.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool,
+    error: PropTypes.string,
+  }),
+};
+
 export const renderDateField = ({
   input,
   label,
@@ -34,18 +51,55 @@ export const renderDateField = ({
   />
 );
 
+renderDateField.defaultProps = {
+  input: {},
+  meta: {
+    touched: false,
+    error: null,
+  },
+};
+
+renderDateField.propTypes = {
+  input: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool,
+    error: PropTypes.string,
+  }),
+};
+
 export const renderSelectField = ({
   input,
   inputProps,
   label,
   children,
   ...custom
-}) => {
-  return (
+}) =>
+  (
     <Select {...input} inputProps={{ ...inputProps }} {...custom}>
       {children}
     </Select>
   );
+
+renderSelectField.defaultProps = {
+  input: {},
+  inputProps: {},
+  meta: {
+    touched: false,
+    error: null,
+  },
+  children: null,
+};
+
+renderSelectField.propTypes = {
+  input: PropTypes.object,
+  inputProps: PropTypes.object,
+  label: PropTypes.string.isRequired,
+  meta: PropTypes.shape({
+    touched: PropTypes.bool,
+    error: PropTypes.string,
+  }),
+  children: PropTypes.any,
 };
 
 export const renderTextField = ({ inputProps, label, ...custom }) => (
@@ -58,6 +112,15 @@ export const renderTextField = ({ inputProps, label, ...custom }) => (
   />
 );
 
+renderTextField.defaultProps = {
+  inputProps: {},
+};
+
+renderTextField.propTypes = {
+  inputProps: PropTypes.object,
+  label: PropTypes.string.isRequired,
+};
+
 export const renderInput = ({ inputProps, placeholder, ...custom }) => (
   <Input
     placeholder={placeholder}
@@ -66,3 +129,12 @@ export const renderInput = ({ inputProps, placeholder, ...custom }) => (
     {...custom}
   />
 );
+
+renderInput.defaultProps = {
+  inputProps: {},
+};
+
+renderInput.propTypes = {
+  inputProps: PropTypes.object,
+  placeholder: PropTypes.string.isRequired,
+};

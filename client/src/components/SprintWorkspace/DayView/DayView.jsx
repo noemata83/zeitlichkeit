@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as R from 'ramda';
 
@@ -17,7 +18,7 @@ const groupByDates = sprints =>
   sprints.reduce((sprintsByDate, sprint) => {
     const sprintList = {
       ...sprintsByDate,
-    }
+    };
     if (sprintsByDate[sprint.start_time.toDateString()]) {
       sprintList[sprint.start_time.toDateString()] = sprintsByDate[
         sprint.start_time.toDateString()
@@ -29,24 +30,14 @@ const groupByDates = sprints =>
   }, {});
 
 class DayView extends Component {
-  state = {
-    sprints: [],
-    loading: true,
-  };
-
   static getDerivedStateFromProps(nextProps, prevState) {
     const processSprints = R.pipe(retrieveDates, groupByDates);
     if (!nextProps.loading) {
-      const sprints = processSprints(
-        nextProps.sprints.map((sprint) => ({
-          ...sprint,
-          duration: new Date(
-            new Date(sprint.end_time) - new Date(sprint.start_time),
-          )
-            .toISOString()
-            .substr(11, 8),
-        })),
-      );
+      const sprints = processSprints(nextProps.sprints.map(sprint => ({
+        ...sprint,
+        duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time))
+          .toISOString().substr(11, 8),
+      })));
       return {
         ...prevState,
         sprints,
@@ -54,12 +45,13 @@ class DayView extends Component {
     }
     return { ...prevState };
   }
+  state = {
+    sprints: [],
+  };
 
   renderDayView = (sprints) => {
-    const sortedDates = Object.keys(sprints).sort(
-      (a, b) => new Date(b) - new Date(a),
-    );
-    return sortedDates.map((date) => (
+    const sortedDates = Object.keys(sprints).sort((a, b) => new Date(b) - new Date(a));
+    return sortedDates.map(date => (
       <Day key={date.toString()} date={date} sprints={sprints[date]} />
     ));
   };
@@ -77,11 +69,19 @@ class DayView extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    sprints: state.workspace.sprints,
-    loading: state.workspace.sprint_loading,
-  };
+const mapStateToProps = state => ({
+  sprints: state.workspace.sprints,
+  loading: state.workspace.sprint_loading,
+});
+
+DayView.defaultProps = {
+  loading: true,
+};
+
+DayView.propTypes = {
+  sprints: PropTypes.array.isRequired, // eslint-disable-line
+  loading: PropTypes.bool, // prop is so used!?
+  changeMode: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(DayView);

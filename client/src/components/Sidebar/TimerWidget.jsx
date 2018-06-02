@@ -1,37 +1,38 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
-import PlayArrow from "@material-ui/icons/PlayArrow";
-import Stop from "@material-ui/icons/Stop";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Button from "@material-ui/core/Button";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import TaskAutosuggest from "../UI/Forms/Autosuggest/TaskAutosuggest";
-import { addSprint, addTaskandSprint } from "../../store/actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import PlayArrow from '@material-ui/icons/PlayArrow';
+import Stop from '@material-ui/icons/Stop';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import TaskAutosuggest from '../UI/Forms/Autosuggest/TaskAutosuggest';
+import { addSprint, addTaskandSprint } from '../../store/actions';
 
 const styles = theme => ({
   container: {
-    position: "relative"
+    position: 'relative',
   },
   formControl: {
     margin: theme.spacing.unit,
     marginTop: 0,
     minWidth: 120,
-    display: "flex",
-    flexDirection: "column",
-    height: "300px"
+    display: 'flex',
+    flexDirection: 'column',
+    height: '300px',
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
   },
   Timer: {
     margin: theme.spacing.unit * 2,
-    display: "block",
-    textAlign: "center",
-    fontSize: "3rem"
-  }
+    display: 'block',
+    textAlign: 'center',
+    fontSize: '3rem',
+  },
 });
 
 class TimerWidget extends Component {
@@ -39,49 +40,49 @@ class TimerWidget extends Component {
     timing: false,
     counter: 0,
     timer: null,
-    project: "",
-    task: "",
-    start_time: null
+    project: '',
+    task: '',
+    start_time: null,
   };
 
-  updateTaskInput = (event, { newValue, method }) => {
+  updateTaskInput = (event, { newValue }) => {
     this.setState({
-      task: newValue
+      task: newValue,
     });
   };
 
   handleStart = () => {
-    let timer = setInterval(this.tick, 1000);
+    const timer = setInterval(this.tick, 1000);
     this.setState({
       timing: true,
       timer,
-      start_time: new Date().toISOString()
+      start_time: new Date().toISOString(),
     });
   };
 
-  handleChange = event => {
+  handleChange = (event) => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
 
   tick = () => {
     this.setState({
-      counter: this.state.counter + 1
+      counter: this.state.counter + 1,
     });
   };
 
   handleStop = () => {
     clearInterval(this.state.timer);
     const { task, project, start_time } = this.state;
-    if (task === "" || project === "") {
+    if (task === '' || project === '') {
       this.setState({
         timing: false,
         timer: null,
         counter: 0,
         start_time: null,
-        project: "",
-        task: ""
+        project: '',
+        task: '',
       });
       return;
     }
@@ -91,17 +92,17 @@ class TimerWidget extends Component {
     const sprint_data = {
       task,
       start_time,
-      end_time
+      end_time,
     };
     if (isNew) {
       const task_data = {
         name: task,
         project: {
-          name: project
+          name: project,
         },
         categories: [],
         completed: false,
-        sprint_set: []
+        sprint_set: [],
       };
       this.props.addTaskAndSprint(task_data, sprint_data);
     } else {
@@ -112,8 +113,8 @@ class TimerWidget extends Component {
       timer: null,
       counter: 0,
       start_time: null,
-      project: "",
-      task: ""
+      project: '',
+      task: '',
     });
   };
 
@@ -130,22 +131,16 @@ class TimerWidget extends Component {
     return false;
   };
 
-  displayTimer = counter => {
+  displayTimer = (counter) => {
     const hh = Math.floor(counter / 3600);
     const mm = Math.floor((counter % 3600) / 60);
-    const ss = counter - hh * 3600 - mm * 60;
-    return (
-      `${hh}`.padStart(2, "0") +
-      ":" +
-      `${mm}`.padStart(2, "0") +
-      ":" +
-      `${ss}`.padStart(2, "0")
-    );
+    const ss = counter - (hh * 3600) - (mm * 60);
+    return (`${`${hh}`.padStart(2, '0')}:${`${mm}`.padStart(2, '0')}:${`${ss}`.padStart(2, '0')}`);
   };
   render() {
     const { projects, classes } = this.props;
-    const projectlist = ["None", ...projects].map((project, index) => (
-      <MenuItem key={index} value={project.name}>
+    const projectlist = ['None', ...projects].map(project => (
+      <MenuItem key={project.name} value={project.name}>
         {project.name}
       </MenuItem>
     ));
@@ -163,18 +158,18 @@ class TimerWidget extends Component {
           <TaskAutosuggest
             updateTaskInput={this.updateTaskInput}
             task={this.state.task}
-            project={this.state.project || ""}
+            project={this.state.project || ''}
           />
           <div className={classes.Timer}>
             {this.state.timing
               ? this.displayTimer(this.state.counter)
-              : "00:00:00"}
+              : '00:00:00'}
           </div>
           <Button
             variant="raised"
             color="secondary"
             onClick={() =>
-              this.state.timing ? this.handleStop() : this.handleStart()
+              (this.state.timing ? this.handleStop() : this.handleStart())
             }
           >
             {this.state.timing ? <Stop /> : <PlayArrow />}
@@ -185,21 +180,22 @@ class TimerWidget extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    projects: state.workspace.project_set,
-    tasks: state.workspace.task_set
-  };
+const mapStateToProps = state => ({
+  projects: state.workspace.project_set,
+  tasks: state.workspace.task_set,
+});
+
+const mapDispatchToProps = dispatch => ({
+  addTaskAndSprint: (task_data, sprint_data) => dispatch(addTaskandSprint(task_data, sprint_data)),
+  addSprint: sprint_data => dispatch(addSprint(sprint_data)),
+});
+
+TimerWidget.propTypes = {
+  addTaskAndSprint: PropTypes.func.isRequired,
+  addSprint: PropTypes.func.isRequired,
+  projects: PropTypes.array.isRequired, // eslint-disable-line
+  tasks: PropTypes.array.isRequired, // eslint-disable-line
+  classes: PropTypes.object.isRequired,
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addTaskAndSprint: (task_data, sprint_data) =>
-      dispatch(addTaskandSprint(task_data, sprint_data)),
-    addSprint: sprint_data => dispatch(addSprint(sprint_data))
-  };
-};
-
-TimerWidget = withStyles(styles)(TimerWidget);
-
-export default connect(mapStateToProps, mapDispatchToProps)(TimerWidget);
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(TimerWidget));

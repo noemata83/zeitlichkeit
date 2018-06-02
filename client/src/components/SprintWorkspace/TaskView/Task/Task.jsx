@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Toolbar, List } from '@material-ui/core';
 
 import moment from '../../../../services/moment';
@@ -6,7 +7,7 @@ import classes from './Task.css';
 import Sprint from '../../Sprint/Sprint';
 import CategoryChip from '../../../UI/CategoryChip/CategoryChip';
 
-export default (props) => {
+const task = (props) => {
   const sprintList = [...props.sprints]
     .sort((a, b) => b.start_time - a.start_time)
     .map(sprint => (
@@ -34,3 +35,10 @@ export default (props) => {
     </div>
   );
 };
+
+task.propTypes = {
+  sprints: PropTypes.array.isRequired,
+  task: PropTypes.object.isRequired,
+};
+
+export default task;
