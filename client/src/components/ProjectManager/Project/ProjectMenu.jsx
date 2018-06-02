@@ -67,17 +67,18 @@ const mapDispatchToProps = dispatch => ({
   onDeleteProject: (id, name) => dispatch(deleteProject(id, name)),
 });
 
+ProjectMenu.defaultProps = {
+  classes: styles,
+};
+
 ProjectMenu.propTypes = {
   id: PropTypes.number.isRequired,
   onDeleteProject: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   addTaskToProject: PropTypes.func.isRequired,
   classes: PropTypes.shape({
-    button: {
-      display: PropTypes.string.isRequired,
-      marginLeft: PropTypes.string.isRequired,
-    },
-  }).isRequired,
+    button: PropTypes.string,
+  }),
 };
 
 export default connect(null, mapDispatchToProps)(withStyles(styles)(ProjectMenu));

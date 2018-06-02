@@ -197,8 +197,8 @@ ProjectManager.propTypes = {
   addTask: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
   // Todo: work out how to gracefully circumnavigate airbnb eslint rule violated below!
-  tasks: PropTypes.object.isRequired, // eslint-disable-line
-  projects: PropTypes.object.isRequired, // eslint-disable-line
+  tasks: PropTypes.array.isRequired, // eslint-disable-line
+  projects: PropTypes.array.isRequired, // eslint-disable-line
   classes: PropTypes.object.isRequired, // eslint-disable-line
 };
 

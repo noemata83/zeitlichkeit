@@ -14,7 +14,6 @@ import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 
 class Dashboard extends Component {
-
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.user && prevState.loading && !prevState.user) {
       const workspace = nextProps.user.account.default_workspace.id;
@@ -35,12 +34,12 @@ class Dashboard extends Component {
   componentDidMount() {
     if (this.state.loading) {
       this.props.loadUser();
-      // Don't do this?
+      // TODO: This is probably an anti-pattern. Refactor.
+      // eslint-disable-next-line
       this.setState({
         loading: false,
       });
     }
-
   }
 
   setMode = (mode) => {
