@@ -4,7 +4,7 @@ import auth from './auth';
 import workspace from './workspace';
 
 export default combineReducers({
-    form: formReducer,
-    auth: auth,
-    workspace: workspace
+  form: formReducer,
+  auth,
+  workspace,
 });

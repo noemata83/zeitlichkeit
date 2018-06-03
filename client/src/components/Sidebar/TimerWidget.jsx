@@ -140,7 +140,7 @@ class TimerWidget extends Component {
   render() {
     const { projects, classes } = this.props;
     const projectlist = ['None', ...projects].map(project => (
-      <MenuItem key={project.name} value={project.name}>
+      <MenuItem key={project.name || 'none'} value={project.name || ''}>
         {project.name}
       </MenuItem>
     ));

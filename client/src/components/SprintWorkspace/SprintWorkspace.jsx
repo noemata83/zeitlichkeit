@@ -41,5 +41,6 @@ class SprintWorkspace extends Component {
 
 SprintWorkspace.propTypes = {
   classes: PropTypes.object.isRequired,
-}
+};
+
 export default withStyles(styles)(SprintWorkspace);
