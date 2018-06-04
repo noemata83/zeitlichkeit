@@ -7,16 +7,17 @@ import PropTypes from 'prop-types';
 
 const styles = theme => ({
   suggestionsContainerOpen: {
-    position: 'absolute',
-    zIndex: 1,
+    zIndex: 200,
     marginTop: theme.spacing.unit,
     left: 0,
     right: 0,
+    position: 'absolute',
   },
   suggestion: {
     display: 'block',
   },
   suggestionsList: {
+    background: 'white',
     margin: 0,
     padding: 0,
     listStyleType: 'none',
@@ -59,21 +60,20 @@ function renderSuggestion(suggestion,
   );
 }
 
-class TaskAutosuggest extends Component {
+class CategoryAutoSuggest extends Component {
   state = {
     suggestions: [],
   };
 
   getSuggestions = (value) => {
     const regex = new RegExp(`^${value}`, 'i');
-    return this.props.tasks
-      .filter(task => regex.test(task.name) &&
-        task.project === this.props.project &&
-        !task.completed)
-      .map(task => task.name);
+    return this.props.categories
+      .filter(category => regex.test(category.name)
+        && !this.props.task.categories.includes(category.name))
+      .map(category => category.name);
   };
 
-  getSuggestionValue = suggestion => suggestion;
+  getSuggestionValue = suggestion => this.props.selectCategory(suggestion);
 
 
   handleSuggestionsFetchRequested = ({ value }) => {
@@ -91,9 +91,9 @@ class TaskAutosuggest extends Component {
   render() {
     const { classes } = this.props;
     const inputProps = {
-      placeholder: 'What are you up to?',
-      value: this.props.task,
-      onChange: this.props.updateTaskInput,
+      placeholder: 'Category',
+      value: this.props.category,
+      onChange: this.props.updateCategoryInput,
     };
     return (
       <Autosuggest
@@ -117,20 +117,21 @@ class TaskAutosuggest extends Component {
 }
 
 const mapStateToProps = state => ({
-  tasks: state.workspace.task_set,
+  categories: state.workspace.category_set,
 });
 
-TaskAutosuggest.defaultProps = {
-  tasks: [],
+CategoryAutoSuggest.defaultProps = {
+  categories: [],
   classes: styles,
 };
 
-TaskAutosuggest.propTypes = {
-  tasks: PropTypes.array, // eslint-disable-line
-  task: PropTypes.string.isRequired,
-  project: PropTypes.string.isRequired,
+CategoryAutoSuggest.propTypes = {
+  task: PropTypes.object.isRequired,
+  categories: PropTypes.array, // eslint-disable-line
+  category: PropTypes.string.isRequired,
   classes: PropTypes.object, // eslint-disable-line
-  updateTaskInput: PropTypes.func.isRequired,
+  updateCategoryInput: PropTypes.func.isRequired,
+  selectCategory: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(TaskAutosuggest));
+export default connect(mapStateToProps)(withStyles(styles)(CategoryAutoSuggest));

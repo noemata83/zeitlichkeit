@@ -43,7 +43,7 @@ const LoginForm = (props) => {
 LoginForm.propTypes = {
   handleLogin: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  errors: PropTypes.array.isRequired,
+  errors: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   switchMode: PropTypes.func.isRequired,
 };

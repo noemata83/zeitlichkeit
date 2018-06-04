@@ -156,14 +156,13 @@ const mapDispatchToProps = dispatch => ({
 
 Landing.defaultProps = {
   isAuthenticated: false,
-  errors: {},
 };
 
 Landing.propTypes = {
   login: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
-  errors: PropTypes.object,
+  errors: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Landing);

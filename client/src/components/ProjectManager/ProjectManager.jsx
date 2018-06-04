@@ -44,6 +44,8 @@ class ProjectManager extends Component {
     open: false,
     newProject: '',
     addTaskToProject: null,
+    anchorEl: null,
+    categoryInput: '',
   };
 
   getProjectTasks = (tasks, project) =>
@@ -53,10 +55,6 @@ class ProjectManager extends Component {
     this.setState({
       [event.target.name]: event.target.value,
     });
-  };
-
-  handleDeleteTask = (taskId) => {
-    this.props.deleteTask(taskId);
   };
 
   handleClickOpen = () => {
@@ -98,9 +96,8 @@ class ProjectManager extends Component {
     this.setState({ addTaskToProject: null });
   };
 
-  handleUpdateTaskCompleted = (task, completed) => {
-    const updatedTask = { name: task.name, completed };
-    this.props.updateTask(task.id, updatedTask);
+  handleUpdateTask = (task, taskData) => {
+    this.props.updateTask(task, { ...taskData });
   };
 
   renderProjects = (projects, task_set) =>
@@ -112,11 +109,9 @@ class ProjectManager extends Component {
             key={project.id}
             tasks={tasks}
             project={project}
-            deleteTask={this.handleDeleteTask}
             addTaskToProject={this.handleAddTaskToProject}
             showInput={this.state.addTaskToProject === project.id}
             handleInput={this.handleInput}
-            handleUpdateTaskCompleted={this.handleUpdateTaskCompleted}
             handleAddTask={this.handleAddTask}
             inputValue={this.state[`${project.name}__newTask`] || ''}
           />
@@ -193,7 +188,6 @@ const mapDispatchToProps = dispatch => ({
 
 ProjectManager.propTypes = {
   addProject: PropTypes.func.isRequired,
-  deleteTask: PropTypes.func.isRequired,
   addTask: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
   // Todo: work out how to gracefully circumnavigate airbnb eslint rule violated below!

@@ -1,34 +1,22 @@
 // A stateless component for displaying a single project and its associated tasks.
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   List,
   ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
-  Checkbox,
-  IconButton,
   withStyles,
   TextField,
   Toolbar,
 } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ProjectMenu from './ProjectMenu';
-import CategoryChip from '../../UI/CategoryChip/CategoryChip';
+import TaskList from './TaskList/taskList';
 
-const styles = {
+const styles = theme => ({
   title: {
     display: 'inline-block',
     borderBottom: '1px solid gray',
-  },
-  listItemSecondaryAction: {
-    visibility: 'hidden',
-  },
-  listItem: {
-    '&:hover $listItemSecondaryAction': {
-      visibility: 'inherit',
-    },
   },
   hideInput: {
     display: 'none',
@@ -38,20 +26,25 @@ const styles = {
     color: '#aaa',
     fontStyle: 'italic',
   },
-};
+  popup: {
+    overflowY: 'visible !important',
+    // position: 'relative',
+  },
+  popover: {
+    margin: theme.spacing.unit * 2,
+  },
+});
 
-export default withStyles(styles)((props) => {
+const Project = (props) => {
   const {
     project,
     tasks,
     classes,
-    deleteTask,
     addTaskToProject,
     showInput,
     handleInput,
     handleAddTask,
     inputValue,
-    handleUpdateTaskCompleted,
   } = props;
   return (
     <Grid item xs={12} md={6}>
@@ -66,47 +59,7 @@ export default withStyles(styles)((props) => {
         />
       </Toolbar>
       <List>
-        {tasks.map((task) => {
-          const categoryList = task.categories.map(cat => (
-            <CategoryChip key={`${task.name} - ${cat}`} cat={cat} />
-          ));
-          return (
-            <ListItem
-              key={task.name}
-              divider
-              classes={{
-                container: classes.listItem,
-              }}
-            >
-              <Checkbox
-                onChange={event =>
-                  handleUpdateTaskCompleted(task, event.target.checked)
-                }
-                checked={task.completed}
-                tabIndex={-1}
-              />
-              <ListItemText
-                primary={
-                  <div>
-                    <span>{task.name}</span>
-                    {categoryList}
-                  </div>
-                }
-                classes={{ primary: task.completed ? classes.completed : null }}
-              />
-              <ListItemSecondaryAction
-                className={classes.listItemSecondaryAction}
-              >
-                <IconButton
-                  aria-label="Delete Task"
-                  onClick={() => deleteTask(task.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
+        <TaskList tasks={tasks} />
         <ListItem className={!showInput ? classes.hideInput : null}>
           <form
             onSubmit={(e) => {
@@ -127,4 +80,17 @@ export default withStyles(styles)((props) => {
       </List>
     </Grid>
   );
-});
+};
+
+Project.propTypes = {
+  project: PropTypes.object.isRequired,
+  tasks: PropTypes.array.isRequired,
+  classes: PropTypes.object.isRequired,
+  addTaskToProject: PropTypes.func.isRequired,
+  showInput: PropTypes.bool.isRequired,
+  handleInput: PropTypes.func.isRequired,
+  handleAddTask: PropTypes.func.isRequired,
+  inputValue: PropTypes.string.isRequired,
+};
+
+export default withStyles(styles)(Project);
