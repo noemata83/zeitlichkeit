@@ -13,7 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FolderIcon from '@material-ui/icons/Folder';
 
-import { updateTask, deleteTask } from '../../../../store/actions/';
+import { updateTask, deleteTask, checkIfCategoryExists, addCategory } from '../../../../store/actions/';
 import CategoryAutosuggest from '../../../UI/Forms/Autosuggest/CategoryAutosuggest';
 import CategoryChip from '../../../UI/CategoryChip/CategoryChip';
 
@@ -40,6 +40,9 @@ const styles = theme => ({
 });
 
 class Task extends Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return { ...prevState, task: { ...nextProps.task } };
+  }
   state = {
     category: '',
     anchorEl: null,
@@ -65,16 +68,32 @@ class Task extends Component {
     this.setState({ category });
   }
 
+  handleSubmit = (event) => {
+    const { category, task } = this.state;
+    event.preventDefault();
+    if (!this.props.checkIfCategoryExists(category)) {
+      this.props.addCategory({ name: category });
+      while (!checkIfCategoryExists(category)) {} // eslint-disable-line
+    }
+    this.props.updateTask(task.id, { ...task, categories: [...task.categories, category] });
+    this.handleClose();
+  }
+
   updateCategoryInput = (event) => {
     if (event.target.value !== undefined) {
       this.setState({ category: event.target.value });
     }
   }
 
+  deleteCategory = (oldTask, cat) => {
+    const categories = oldTask.categories.filter(category => category === cat.name);
+    this.props.updateTask(oldTask.id, {...oldTask, categories });
+  }
+
   render() {
     const { task, classes } = this.props;
     const categoryList = task.categories.map(cat => (
-      <CategoryChip key={`${task.name} - ${cat}`} cat={cat} />
+      <CategoryChip key={`${task.name} - ${cat}`} cat={cat} task={task} deleteCategory={this.deleteCategory} />
     ));
     return (
       <ListItem
@@ -125,14 +144,7 @@ class Task extends Component {
             classes={{ paper: classes.popup }}
           >
             <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                this.handleTaskUpdate(task.id, {
-                    ...task,
-                    categories: [...task.categories, this.state.category],
-                });
-                }
-              }
+              onSubmit={this.handleSubmit}
               className={classes.popover}
             >
               <CategoryAutosuggest
@@ -158,6 +170,8 @@ class Task extends Component {
 const mapDispatchToProps = dispatch => ({
   deleteTask: taskId => dispatch(deleteTask(taskId)),
   updateTask: (id, task) => dispatch(updateTask(id, task)),
+  checkIfCategoryExists: category => dispatch(checkIfCategoryExists(category)),
+  addCategory: category => dispatch(addCategory(category)),
 });
 
 Task.propTypes = {

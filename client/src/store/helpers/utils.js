@@ -23,7 +23,7 @@ export const setupRequest = getState => ({
 });
 
 export const handleServerError = err => dispatch =>
-  dispatch({ type: actionTypes.AUTHENTICATION_ERROR, data: err });
+  dispatch({ type: actionTypes.SERVER_ERROR, data: err });
 
 export const handleResponse = (res, action, data) => dispatch =>
   dispatch({ type: action, data: data || null });

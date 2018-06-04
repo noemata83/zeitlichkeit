@@ -111,6 +111,20 @@ export default (state = initialState, action) => {
       const projects = action.data;
       return { ...state, project_loading: false, projects };
     }
+    case actionTypes.ADD_CATEGORY: {
+      const category = action.data;
+      const category_set = [...state.category_set, category];
+      return { ...state, category_set };
+    }
+    case actionTypes.DELETE_CATEGORY: {
+      const id = action.data;
+      const category_set = state.category_set.filter(cat => cat.id !== id);
+      return { ...state, category_set };
+    }
+    case actionTypes.SERVER_ERROR: {
+      const error = action.data;
+      return { ...state, error };
+    }
     default:
       return state;
   }
