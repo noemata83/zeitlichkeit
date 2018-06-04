@@ -24,7 +24,7 @@ const LoginForm = (props) => {
           placeholder="Password"
         />
       </div>
-      <div className={classes.Error}>{errors}</div>
+      <div className={classes.Error}>{Object.keys(errors).map(error => errors[error])}</div>
       <div className={classes.Controls}>
         <button className={classes.Link} type="submit">
           Login

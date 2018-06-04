@@ -27,7 +27,7 @@ export default (state = initialState, action) => {
         ...action.data,
         isAuthenticated: true,
         loading: false,
-        errors: null,
+        errors: {},
       };
     case actionTypes.AUTHENTICATION_ERROR:
     case actionTypes.LOGIN_FAILED:
