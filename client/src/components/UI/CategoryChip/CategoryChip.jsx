@@ -3,11 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
-import { updateTask } from '../../../store/actions/';
 
 const styles = {
   Category: {
-    margin: '0 1rem',
+    margin: '0 .25rem',
   },
   CategoryLabel: {
     color: 'white',
@@ -15,7 +14,13 @@ const styles = {
 };
 
 const CategoryChip = (props) => {
-  const { cat, categories, classes, task, deleteCategory } = props;
+  const {
+    cat,
+    categories,
+    classes,
+    task,
+    deleteCategory,
+  } = props;
   const category = categories.find(c => c.name === cat);
   return (
     <Chip
@@ -34,11 +39,7 @@ CategoryChip.propTypes = {
   classes: PropTypes.object.isRequired,
   task: PropTypes.object.isRequired,
   deleteCategory: PropTypes.func.isRequired,
-}
-
-const mapDispatchToProps = dispatch => ({
-  updateTask: (id, data) => dispatch(updateTask(id, data))
-});
+};
 
 const mapStateToProps = state => ({
   categories: state.workspace.category_set,

@@ -87,7 +87,7 @@ class Task extends Component {
 
   deleteCategory = (oldTask, cat) => {
     const categories = oldTask.categories.filter(category => category === cat.name);
-    this.props.updateTask(oldTask.id, {...oldTask, categories });
+    this.props.updateTask(oldTask.id, { ...oldTask, categories });
   }
 
   render() {
@@ -177,6 +177,8 @@ const mapDispatchToProps = dispatch => ({
 Task.propTypes = {
   updateTask: PropTypes.func.isRequired,
   deleteTask: PropTypes.func.isRequired,
+  checkIfCategoryExists: PropTypes.func.isRequired,
+  addCategory: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   task: PropTypes.object.isRequired,
 };

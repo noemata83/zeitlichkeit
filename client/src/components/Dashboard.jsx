@@ -12,6 +12,7 @@ import ProjectManager from './ProjectManager/ProjectManager';
 import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
+import CategoryManager from './CategoryManager/CategoryManager';
 
 class Dashboard extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -92,11 +93,7 @@ class Dashboard extends Component {
           </div>
         );
       case MODES.CATEGORIES:
-        return (
-          <div style={{ fontSize: '3rem', padding: '2rem' }}>
-            Manage Workspace Categories... Later!
-          </div>
-        );
+        return <CategoryManager />;
       default:
         return <SprintWorkspace />;
     }
