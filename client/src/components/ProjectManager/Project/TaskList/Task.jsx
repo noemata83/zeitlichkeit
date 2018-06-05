@@ -86,7 +86,7 @@ class Task extends Component {
   }
 
   deleteCategory = (oldTask, cat) => {
-    const categories = oldTask.categories.filter(category => category === cat.name);
+    const categories = oldTask.categories.filter(category => category !== cat);
     this.props.updateTask(oldTask.id, { ...oldTask, categories });
   }
 
@@ -157,7 +157,7 @@ class Task extends Component {
           </Popover>
           <IconButton
             aria-label="Delete Task"
-            onClick={() => deleteTask(task.id)}
+            onClick={() => this.handleDeleteTask(task.id)}
           >
             <DeleteIcon />
           </IconButton>
