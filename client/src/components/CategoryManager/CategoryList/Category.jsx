@@ -4,19 +4,27 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { withStyles } from '@material-ui/core/styles';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 const styles = {
   color: {
     paddingLeft: '2rem',
-    position: 'relative',
+    height: '100%',
   },
   colorBox: {
-    width: '1.5rem',
-    height: '1.5rem',
+    width: '2rem',
+    height: '2rem',
     display: 'inline-block',
     position: 'absolute',
-    top: '5px',
-    left: '5px',
+    top: '50%',
+    left: 0,
+    transform: 'translateY(-50%)',
+    outline: 'none',
+    border: 'none',
+    marginRight: '1rem',
   },
 };
 
@@ -28,12 +36,14 @@ const Category = (props) => {
   } = props;
   return (
     <ListItem>
+      <ListItemIcon>
+        <button type="button" className={classes.colorBox} style={{ backgroundColor: color }} />
+      </ListItemIcon>
       <ListItemText primary={name} />
       <ListItemSecondaryAction>
-        {/* Color picker goes here */}
-        <div className={classes.color}>
-          <div className={classes.colorBox} style={{ backgroundColor: color }} />
-        </div>
+        <IconButton>
+          <DeleteIcon />
+        </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
   );
