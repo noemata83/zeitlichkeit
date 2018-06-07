@@ -11,7 +11,7 @@ media
 .vscode/
 client/node_modules
 assets/
-client/webpack-stats*.json
+client/webpack-stats.dev.json
 webpack-stats.json
 temporalite/
 

@@ -37,6 +37,9 @@ const styles = theme => ({
   popover: {
     margin: theme.spacing.unit * 2,
   },
+  taskText: {
+    padding: '0 4rem 0 2rem !important',
+  },
 });
 
 class Task extends Component {
@@ -113,11 +116,11 @@ class Task extends Component {
         <ListItemText
           primary={
             <div>
-              <span>{task.name}</span>
-              {categoryList}
+              <div style={{ display: 'inline-block', marginRight: '1rem'}}>{task.name}</div>
+              <div style={{ display: 'inline-block' }}>{categoryList}</div>
             </div>
           }
-          classes={{ primary: task.completed ? classes.completed : null }}
+          classes={{ primary: task.completed ? classes.completed : null, root: classes.taskText }}
         />
         <ListItemSecondaryAction
           className={classes.listItemSecondaryAction}

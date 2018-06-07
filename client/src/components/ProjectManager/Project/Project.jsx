@@ -47,7 +47,7 @@ const Project = (props) => {
     inputValue,
   } = props;
   return (
-    <Grid item xs={12} md={6}>
+    <Grid item xs={12} md={12} lg={6}>
       <Toolbar>
         <Typography variant="title" className={classes.title}>
           {project.name}

@@ -98,8 +98,8 @@ class Dashboard extends Component {
             Meet Your Team... Later!
           </div>
         );
-      case MODES.CATEGORIES:
-        return <CategoryManager />;
+      // case MODES.CATEGORIES:
+        // return <CategoryManager />;
       default:
         return <SprintWorkspace />;
     }

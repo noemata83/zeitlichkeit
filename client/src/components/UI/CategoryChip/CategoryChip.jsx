@@ -7,6 +7,8 @@ import Chip from '@material-ui/core/Chip';
 const styles = {
   Category: {
     margin: '0 .25rem',
+    fontSize: '1.1rem !important',
+    height: 'auto',
   },
   CategoryLabel: {
     color: 'white',

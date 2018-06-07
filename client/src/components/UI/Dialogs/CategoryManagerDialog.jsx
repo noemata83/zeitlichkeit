@@ -11,7 +11,7 @@ import CategoryListControls from '../../CategoryManager/CategoryList/CategoryLis
 import CategoryList from '../../CategoryManager/CategoryList/CategoryList';
 import { checkIfCategoryExists, addCategory } from '../../../store/actions';
 
-class CategoryManager extends Component {
+class CategoryManagerDialog extends Component {
   state = {
     input: '',
     color: '',
@@ -120,10 +120,16 @@ const mapStateToProps = state => ({
   categories: state.workspace.category_set,
 });
 
-CategoryManager.propTypes = {
-  categories: PropTypes.array.isRequired,
-  checkIfCategoryExists: PropTypes.func.isRequired,
-  addCategory: PropTypes.func.isRequired,
+CategoryManagerDialog.defaultProps = {
+  categories: [],
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CategoryManager);
+CategoryManagerDialog.propTypes = {
+  categories: PropTypes.array,
+  checkIfCategoryExists: PropTypes.func.isRequired,
+  addCategory: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryManagerDialog);

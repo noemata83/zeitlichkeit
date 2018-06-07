@@ -11,6 +11,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Watch from '@material-ui/icons/Watch';
 import Timer from '@material-ui/icons/Timer';
+import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
 
 import ManualSprintWidget from './ManualSprintWidget';
@@ -74,14 +75,15 @@ class SideBar extends Component {
           <ListItem button onClick={() => setMode(MODES.PROJECT)}>
             <ListItemText primary="Project Manager" />
           </ListItem>
-          <ListItem button onClick={handleCatDialogOpen}>
-            <ListItemText primary="Manage Categories" />
-          </ListItem>
           <ListItem button onClick={() => setMode(MODES.REPORT)}>
             <ListItemText primary="Reports" />
           </ListItem>
           <ListItem button onClick={() => setMode(MODES.TEAM)}>
             <ListItemText primary="Team" />
+          </ListItem>
+          <Divider />
+          <ListItem button onClick={handleCatDialogOpen}>
+            <ListItemText primary="Manage Categories" />
           </ListItem>
         </List>
       </div>
@@ -119,6 +121,7 @@ SideBar.propTypes = {
   setMode: PropTypes.func.isRequired,
   mobileOpen: PropTypes.bool.isRequired,
   handleDrawerToggle: PropTypes.func.isRequired,
+  handleCatDialogOpen: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(SideBar);
