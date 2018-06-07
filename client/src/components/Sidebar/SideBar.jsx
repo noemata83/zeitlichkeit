@@ -46,7 +46,7 @@ class SideBar extends Component {
     this.setState({ value });
   };
   render() {
-    const { classes, setMode } = this.props;
+    const { classes, setMode, handleCatDialogOpen } = this.props;
     const { value } = this.state;
 
     const drawer = (
@@ -74,7 +74,7 @@ class SideBar extends Component {
           <ListItem button onClick={() => setMode(MODES.PROJECT)}>
             <ListItemText primary="Project Manager" />
           </ListItem>
-          <ListItem button onClick={() => setMode(MODES.CATEGORIES)}>
+          <ListItem button onClick={handleCatDialogOpen}>
             <ListItemText primary="Manage Categories" />
           </ListItem>
           <ListItem button onClick={() => setMode(MODES.REPORT)}>

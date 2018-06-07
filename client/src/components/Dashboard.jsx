@@ -13,6 +13,7 @@ import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 import CategoryManager from './CategoryManager/CategoryManager';
+import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
 
 class Dashboard extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -29,7 +30,8 @@ class Dashboard extends Component {
     mode: MODES.SPRINT,
     mobileOpen: false,
     anchorEl: null,
-    dialogOpen: false,
+    swDialogOpen: false,
+    catDialogOpen: false,
   };
 
   componentDidMount() {
@@ -62,21 +64,25 @@ class Dashboard extends Component {
     this.setState({ anchorEl: null });
   };
 
-  handleDialogOpen = () => {
+  handleSWDialogOpen = () => {
     this.setState({
       anchorEl: null,
-      dialogOpen: true,
+      swDialogOpen: true,
     });
   };
 
-  handleDialogClose = () => {
-    this.setState({ dialogOpen: false });
+  handleSWDialogClose = () => {
+    this.setState({ swDialogOpen: false });
   };
 
   handleSwitchWorkspace = (id) => {
-    this.setState({ dialogOpen: false });
+    this.setState({ swDialogOpen: false });
     this.props.loadWorkspace(id);
   };
+
+  handleCatDialogOpen = () => this.setState({ catDialogOpen: true });
+
+  handleCatDialogClose = () => this.setState({ catDialogOpen: false });
 
   renderWorkspace = (mode) => {
     switch (mode) {
@@ -110,20 +116,25 @@ class Dashboard extends Component {
           handleMenu={this.handleMenu}
           handleClose={this.handleMenuClose}
           anchorEl={this.state.anchorEl}
-          handleDialogOpen={this.handleDialogOpen}
+          handleDialogOpen={this.handleSWDialogOpen}
         />
         <main className={classes.Main}>
           <SideBar
             setMode={this.setMode}
             mobileOpen={this.state.mobileOpen}
             handleDrawerToggle={this.handleDrawerToggle}
+            handleCatDialogOpen={this.handleCatDialogOpen}
           />
           <div className={classes.Workspace}>{this.renderWorkspace(mode)}</div>
         </main>
         <SwitchWorkspaceDialog
-          open={this.state.dialogOpen}
-          handleClose={this.handleDialogClose}
+          open={this.state.swDialogOpen}
+          handleClose={this.handleSWDialogClose}
           handleSwitchWorkspace={this.handleSwitchWorkspace}
+        />
+        <CategoryManagerDialog
+          open={this.state.catDialogOpen}
+          handleClose={this.handleCatDialogClose}
         />
       </div>
     );
