@@ -27,7 +27,16 @@ export const deleteCategory = id =>
     return axios
       .delete(`/api/workspaces/${workspace}/category/${id}/`, { headers })
       .then(res => dispatch(handleResponse(res, actionTypes.DELETE_CATEGORY, id)))
-      .catch(err => handleServerError(err));
+      .catch(err => dispatch(handleServerError(err)));
+  };
+
+export const updateCategory = category =>
+  (dispatch, getState) => {
+    const { headers, workspace } = setupRequest(getState);
+    return axios
+      .put(`/api/workspaces/${workspace}/category/${category.id}/`, category, { headers })
+      .then(res => dispatch(handleResponse(res, actionTypes.UPDATE_CATEGORY, res.data)))
+      .catch(err => dispatch(handleServerError(err)));
   };
 
 export const checkIfCategoryExists = category =>

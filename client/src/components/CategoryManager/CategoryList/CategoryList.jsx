@@ -9,7 +9,7 @@ const categoryList = (props) => {
     categories,
   } = props;
   const listItems = categories.map(category =>
-    <Category key={category.name} name={category.name} color={category.color} />);
+    <Category key={category.name} id={category.id} name={category.name} color={category.color} />);
   return (
     <List>
       {listItems}
