@@ -121,6 +121,16 @@ export default (state = initialState, action) => {
       const category_set = state.category_set.filter(cat => cat.id !== id);
       return { ...state, category_set };
     }
+    case actionTypes.UPDATE_CATEGORY: {
+      const category = action.data;
+      const category_set = state.category_set.map((cat) => {
+        if (cat.id === category.id) {
+          return category;
+        }
+        return cat;
+      });
+      return { ...state, category_set };
+    }
     case actionTypes.SERVER_ERROR: {
       const error = action.data;
       return { ...state, error };

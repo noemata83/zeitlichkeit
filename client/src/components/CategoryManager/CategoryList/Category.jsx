@@ -9,6 +9,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { deleteCategory, updateCategory } from '../../../store/actions';
+import { Popover } from '@material-ui/core';
+import { BlockPicker } from 'react-color';
+import colors from '../../../services/colors';
 
 
 const styles = {
@@ -32,27 +35,45 @@ const styles = {
 
 class Category extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
-    return { ...prevState, colorInput: nextProps.color };
+    return { ...prevState, color: nextProps.color };
   }
   state = {
     anchorEl: null,
-    colorInput: null,
+    color: null,
   }
 
   handleDelete = () => {
     this.props.deleteCategory(this.props.id);
   }
 
+  handleOpen = event =>
+    this.setState({
+      anchorEl: event.currentTarget,
+    });
+
+  handleClose = () =>
+    this.setState({
+      anchorEl: null,
+    });
+
+  handleChangeComplete = (color, _) => {
+    this.setState({ color: color.hex, anchorEl: null });
+    this.props.updateCategory({ id: this.props.id, name: this.props.name, color: color.hex });
+  }
+
   render() {
     const {
       name,
-      color,
       classes,
     } = this.props;
+    const {
+      color,
+      anchorEl,
+    } = this.state;
     return (
       <ListItem>
         <ListItemIcon>
-          <button type="button" className={classes.colorBox} style={{ backgroundColor: color }} />
+          <button type="button" className={classes.colorBox} style={{ backgroundColor: color }} onClick={this.handleOpen} />
         </ListItemIcon>
         <ListItemText primary={name} />
         <ListItemSecondaryAction>
@@ -60,6 +81,25 @@ class Category extends Component {
             <DeleteIcon onClick={this.handleDelete} />
           </IconButton>
         </ListItemSecondaryAction>
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={this.handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <BlockPicker
+            colors={colors}
+            color={color}
+            onChangeComplete={this.handleChangeComplete}
+          />
+        </Popover>
       </ListItem>
     );
   }
