@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { arc } from 'd3-shape';
 
 export default class Arc extends Component {
@@ -10,7 +11,7 @@ export default class Arc extends Component {
     this.updateD3(this.props);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     this.updateD3(this.props);
   }
 
@@ -19,9 +20,16 @@ export default class Arc extends Component {
     this.arc.outerRadius(newProps.outerRadius);
   }
 
+  calculatePercentage = (data, total) => ((data / total) * 100).toFixed(0);
+
   render() {
     return (
       <path d={this.arc(this.props.data)} style={{ fill: this.props.color }} />
     );
   }
 }
+
+Arc.propTypes = {
+  data: PropTypes.object.isRequired,
+  color: PropTypes.string.isRequired,
+};

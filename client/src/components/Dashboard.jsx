@@ -12,7 +12,6 @@ import ProjectManager from './ProjectManager/ProjectManager';
 import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
-import CategoryManager from './CategoryManager/CategoryManager';
 import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
 
 class Dashboard extends Component {

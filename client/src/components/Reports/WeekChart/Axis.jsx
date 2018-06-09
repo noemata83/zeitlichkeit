@@ -41,6 +41,6 @@ export default class Axis extends Component {
 Axis.propTypes = {
   orient: PropTypes.string.isRequired,
   translate: PropTypes.string.isRequired,
-  scale: PropTypes.object.isRequired,
+  scale: PropTypes.func.isRequired,
   tickSize: PropTypes.number.isRequired,
 };

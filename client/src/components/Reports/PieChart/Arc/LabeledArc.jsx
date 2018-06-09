@@ -1,5 +1,6 @@
 import React from 'react';
 import Arc from './Arc';
+import classes from './LabeledArc.css';
 
 export default class LabeledArc extends Arc {
   render() {
@@ -8,8 +9,8 @@ export default class LabeledArc extends Arc {
     return (
       <g>
         {super.render()}
-        <text transform={labelTranslate} textAnchor="middle">
-          {this.props.data.data[this.props.valueName]}
+        <text className={classes.Label} transform={labelTranslate} textAnchor="middle">
+          {`${this.calculatePercentage(this.props.data.data[this.props.valueName], this.props.total)}%`}
         </text>
       </g>
     );

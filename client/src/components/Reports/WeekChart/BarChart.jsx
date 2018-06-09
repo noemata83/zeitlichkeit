@@ -66,7 +66,7 @@ export default class BarChart extends Component {
 BarChart.propTypes = {
   svgWidth: PropTypes.number.isRequired,
   svgHeight: PropTypes.number.isRequired,
-  xValue: PropTypes.number.isRequired,
-  yValue: PropTypes.number.isRequired,
+  xValue: PropTypes.string.isRequired,
+  yValue: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
 };

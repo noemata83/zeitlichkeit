@@ -45,6 +45,6 @@ Bars.propTypes = {
   margins: PropTypes.object.isRequired,
   svgHeight: PropTypes.number.isRequired,
   data: PropTypes.array.isRequired,
-  xValue: PropTypes.number.isRequired,
-  yValue: PropTypes.number.isRequired,
+  xValue: PropTypes.string.isRequired,
+  yValue: PropTypes.string.isRequired,
 };

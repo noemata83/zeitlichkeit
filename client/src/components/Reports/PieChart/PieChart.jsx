@@ -14,13 +14,14 @@ export default class PieChart extends Component {
     this.colors = schemeCategory10;
   }
 
-  generateArc(d, i, radius) {
+  generateArc(d, i, radius, total) {
     return (
       <LabeledArc
         key={`arc-${i}`}
         data={d}
+        total={total}
         valueName={this.props.valueName}
-        innerRadius={0}
+        innerRadius={radius - 120}
         outerRadius={radius - 10}
         color={this.colors[i]}
       />
@@ -30,14 +31,16 @@ export default class PieChart extends Component {
   render() {
     const { svgWidth, svgHeight, data } = this.props;
 
-    const pie = this.pie(data);
+    console.log(data);
+    const datapie = this.pie(data);
     const translate = `translate(${svgWidth / 2}, ${svgHeight / 2})`;
     const radius = Math.min(svgWidth, svgHeight) / 2;
 
+    const totalTime = data.reduce((total, project) => total + project.duration, 0);
     return (
       <svg width={svgWidth} height={svgHeight}>
         <g transform={translate}>
-          {pie.map((d, i) => this.generateArc(d, i, radius))}
+          {datapie.map((d, i) => this.generateArc(d, i, radius, totalTime))}
         </g>
       </svg>
     );

@@ -36,6 +36,9 @@ const filterByProject = (project, sprints, tasks) => sprints.filter((sprint) => 
   return thetask.project === project;
 });
 
+const getTotalDuration = sprints =>
+  sprints.reduce((total, sprint) => total + (new Date(sprint.end_time) - new Date(sprint.start_time)), 0);
+
 class Reports extends Component {
   generateWeek = (date) => {
     const week = [6, 5, 4, 3, 2, 1, 0];
@@ -58,12 +61,13 @@ class Reports extends Component {
         this.props.sprints,
         this.props.tasks,
       ))),
-    }));
+    })).filter(project => project.duration !== 0);
 
   render() {
     const { classes } = this.props;
     const weekData = this.generateWeekData(this.generateWeek(new Date()));
     const projectData = this.generateProjectData();
+    // console.log(getTotalDuration(this.props.sprints));
     return (
       <div>
         <Paper className={classes.root}>
