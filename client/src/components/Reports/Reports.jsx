@@ -5,6 +5,7 @@ import { Paper, Typography, withStyles } from '@material-ui/core';
 
 import BarChart from './WeekChart/BarChart';
 import PieChart from './PieChart/PieChart';
+import moment from '../../services/moment';
 
 const styles = theme => ({
   root: theme.mixins.gutters({
@@ -22,12 +23,16 @@ const addDays = (date, days) => new Date().setDate(date.getDate() + days);
 const filterByDay = (sprints, date) =>
   sprints.filter(sprint => new Date(sprint.start_time).getDate() === date);
 
-const getDurationInMilliseconds = sprints =>
+const getDurationInMilliseconds = sprint =>
+  (new Date(sprint.end_time) - new Date(sprint.start_time));
+
+const getTotalDurationInMilliseconds = sprints =>
   sprints.reduce(
     (duration, sprint) =>
-      duration + (new Date(sprint.end_time) - new Date(sprint.start_time)),
+      duration + getDurationInMilliseconds(sprint),
     0,
   );
+
 
 const ConvertToHours = seconds => seconds / 3600000;
 
@@ -37,7 +42,10 @@ const filterByProject = (project, sprints, tasks) => sprints.filter((sprint) => 
 });
 
 const getTotalDuration = sprints =>
-  sprints.reduce((total, sprint) => total + (new Date(sprint.end_time) - new Date(sprint.start_time)), 0);
+  sprints.reduce(
+    (total, sprint) => moment.duration(total).add(getDurationInMilliseconds(sprint)),
+    moment.duration(0),
+  );
 
 class Reports extends Component {
   generateWeek = (date) => {
@@ -47,7 +55,7 @@ class Reports extends Component {
 
   generateWeekData = week => week.map(day => ({
     day,
-    duration: ConvertToHours(getDurationInMilliseconds(filterByDay(
+    duration: ConvertToHours(getTotalDurationInMilliseconds(filterByDay(
       this.props.sprints,
       new Date(day).getDate(),
     ))),
@@ -56,7 +64,7 @@ class Reports extends Component {
   generateProjectData = () =>
     this.props.projects.map(project => ({
       name: project.name,
-      duration: ConvertToHours(getDurationInMilliseconds(filterByProject(
+      duration: ConvertToHours(getTotalDurationInMilliseconds(filterByProject(
         project.name,
         this.props.sprints,
         this.props.tasks,
@@ -67,7 +75,7 @@ class Reports extends Component {
     const { classes } = this.props;
     const weekData = this.generateWeekData(this.generateWeek(new Date()));
     const projectData = this.generateProjectData();
-    // console.log(getTotalDuration(this.props.sprints));
+    const totalDuration = getTotalDuration(this.props.sprints).format('hh:mm:ss');
     return (
       <div>
         <Paper className={classes.root}>
@@ -94,6 +102,7 @@ class Reports extends Component {
               svgWidth={600}
               valueName="duration"
               data={projectData}
+              totalDuration={totalDuration}
             />
           </div>
         </Paper>

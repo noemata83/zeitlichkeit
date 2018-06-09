@@ -29,9 +29,8 @@ export default class PieChart extends Component {
   }
 
   render() {
-    const { svgWidth, svgHeight, data } = this.props;
+    const { svgWidth, svgHeight, data, totalDuration } = this.props;
 
-    console.log(data);
     const datapie = this.pie(data);
     const translate = `translate(${svgWidth / 2}, ${svgHeight / 2})`;
     const radius = Math.min(svgWidth, svgHeight) / 2;
@@ -41,6 +40,9 @@ export default class PieChart extends Component {
       <svg width={svgWidth} height={svgHeight}>
         <g transform={translate}>
           {datapie.map((d, i) => this.generateArc(d, i, radius, totalTime))}
+          <text style={{ fill: 'black', fontSize: '4rem' }} textAnchor="middle">
+            {totalDuration}
+          </text>
         </g>
       </svg>
     );
@@ -52,4 +54,5 @@ PieChart.propTypes = {
   svgHeight: PropTypes.number.isRequired,
   valueName: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
+  totalDuration: PropTypes.string.isRequired,
 };
