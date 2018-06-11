@@ -13,7 +13,7 @@ import Intro from './UI/Dialogs/Intro';
 import * as actions from '../store/actions';
 
 class Landing extends Component {
-  static getDerivedStateFromProps(nextProps,prevState) {
+  static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.isAuthenticated) {
       return { ...prevState };
     }
@@ -97,9 +97,9 @@ class Landing extends Component {
           </h1>
           {this.renderContent()}
         </Paper>
-        <Intro 
-            open={this.state.open}
-            handleClose={this.handleClose}
+        <Intro
+          open={this.state.open}
+          handleClose={this.handleClose}
         />
         <div className={classes.Footer}>
           <div
