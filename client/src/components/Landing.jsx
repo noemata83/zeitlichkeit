@@ -9,7 +9,7 @@ import classes from './Landing.css';
 import Background from './UI/Background/Background';
 import LoginForm from './Auth/LoginForm';
 import RegistrationForm from './Auth/RegisterForm';
-import Intro from './UI/Dialogs/Intro';
+// import Intro from './UI/Dialogs/Intro';
 import * as actions from '../store/actions';
 
 class Landing extends Component {
@@ -97,10 +97,10 @@ class Landing extends Component {
           </h1>
           {this.renderContent()}
         </Paper>
-        <Intro
+        {/* <Intro
           open={this.state.open}
           handleClose={this.handleClose}
-        />
+        /> */}
         <div className={classes.Footer}>
           <div
             style={{ textAlign: 'left', width: '50%', display: 'inline-block' }}

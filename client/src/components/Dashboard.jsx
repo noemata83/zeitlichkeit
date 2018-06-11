@@ -13,7 +13,7 @@ import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
-import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
+// import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
 
 class Dashboard extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -139,10 +139,10 @@ class Dashboard extends Component {
           />
           <div className={classes.Workspace}>{this.renderWorkspace(mode)}</div>
         </main>
-        <GettingStartedDialog
+        {/* <GettingStartedDialog
           open={this.state.gsDialogOpen}
           handleClose={this.handleGSDialogClose}
-        />
+        /> */}
         <SwitchWorkspaceDialog
           open={this.state.swDialogOpen}
           handleClose={this.handleSWDialogClose}
