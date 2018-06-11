@@ -18,7 +18,7 @@ const task = (props) => {
       />
     ));
   const categoryList = props.task.categories.map(category => (
-    <CategoryChip key={`${props.task}-${category}`} cat={category} />
+    <CategoryChip key={`${props.task}-${category}`} cat={category} task={props.task} />
   ));
   const duration = props.sprints.reduce(
     (total, sprint) => moment.duration(total).add(sprint.duration),

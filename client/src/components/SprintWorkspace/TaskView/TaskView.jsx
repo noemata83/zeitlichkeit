@@ -57,17 +57,7 @@ class TaskView extends Component {
   };
 
   render() {
-    return (
-      <div style={{ padding: '2rem' }}>
-        <h1>Task View</h1>
-        <h3
-          onClick={() => this.props.changeMode('DAY_VIEW')}
-        >
-          Switch to Day View
-        </h3>
-        {this.renderTaskView(this.state.sprints)}
-      </div>
-    );
+    return <div>{this.renderTaskView(this.state.sprints)}</div>;
   }
 }
 
@@ -81,7 +71,6 @@ TaskView.propTypes = {
   sprints: PropTypes.array.isRequired, // eslint-disable-line
   tasks: PropTypes.array.isRequired, // eslint-disable-line
   categories: PropTypes.array.isRequired, // eslint-disable-line
-  changeMode: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps)(TaskView);

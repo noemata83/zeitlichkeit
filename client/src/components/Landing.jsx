@@ -9,12 +9,25 @@ import classes from './Landing.css';
 import Background from './UI/Background/Background';
 import LoginForm from './Auth/LoginForm';
 import RegistrationForm from './Auth/RegisterForm';
+import Intro from './UI/Dialogs/Intro';
 import * as actions from '../store/actions';
 
 class Landing extends Component {
+  static getDerivedStateFromProps(nextProps,prevState) {
+    if (nextProps.isAuthenticated) {
+      return { ...prevState };
+    }
+    return { ...prevState, open: true };
+  }
+
   state = {
     display: 'GREETING',
+    open: false,
   };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  }
 
   handleLogin = (values) => {
     this.props.login(values.username, values.password);
@@ -84,6 +97,10 @@ class Landing extends Component {
           </h1>
           {this.renderContent()}
         </Paper>
+        <Intro 
+            open={this.state.open}
+            handleClose={this.handleClose}
+        />
         <div className={classes.Footer}>
           <div
             style={{ textAlign: 'left', width: '50%', display: 'inline-block' }}
@@ -156,13 +173,14 @@ const mapDispatchToProps = dispatch => ({
 
 Landing.defaultProps = {
   isAuthenticated: false,
+  errors: {},
 };
 
 Landing.propTypes = {
   login: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
-  errors: PropTypes.object.isRequired,
+  errors: PropTypes.object,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Landing);

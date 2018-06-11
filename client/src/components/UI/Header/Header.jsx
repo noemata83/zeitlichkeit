@@ -136,7 +136,7 @@ header.propTypes = {
   handleDialogOpen: PropTypes.func.isRequired,
   handleDrawerToggle: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
-  anchorEl: PropTypes.element,
+  anchorEl: PropTypes.object,
 };
 
 export default connect(null, mapDispatchToProps)(withStyles(styles, { withTheme: true })(header));

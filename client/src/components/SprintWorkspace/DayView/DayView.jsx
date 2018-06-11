@@ -58,11 +58,7 @@ class DayView extends Component {
 
   render() {
     return (
-      <div style={{ padding: '2rem 2rem 0 2rem' }}>
-        <h1>Day View</h1>
-        <h3 onClick={() => this.props.changeMode('TASK_VIEW')}>
-          Switch to Task View
-        </h3>
+      <div>
         {this.renderDayView(this.state.sprints)}
       </div>
     );
@@ -80,8 +76,7 @@ DayView.defaultProps = {
 
 DayView.propTypes = {
   sprints: PropTypes.array.isRequired, // eslint-disable-line
-  loading: PropTypes.bool, // prop is so used!?
-  changeMode: PropTypes.func.isRequired,
+  loading: PropTypes.bool, // eslint-disable-line
 };
 
 export default connect(mapStateToProps)(DayView);

@@ -29,7 +29,12 @@ export default class PieChart extends Component {
   }
 
   render() {
-    const { svgWidth, svgHeight, data, totalDuration } = this.props;
+    const {
+      svgWidth,
+      svgHeight,
+      data,
+      totalDuration,
+    } = this.props;
 
     const datapie = this.pie(data);
     const translate = `translate(${svgWidth / 2}, ${svgHeight / 2})`;

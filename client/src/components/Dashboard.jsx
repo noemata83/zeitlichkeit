@@ -13,24 +13,32 @@ import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
-
+import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
 class Dashboard extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.user && prevState.loading && !prevState.user) {
       const workspace = nextProps.user.account.default_workspace.id;
       nextProps.loadWorkspace(workspace);
     }
+    if (prevState.workspace_loaded && nextProps.projects.length === 0) {
+      return { ...prevState, user: nextProps.user, gsDialogOpen: true };
+    }
+    if (!nextProps.loading) {
+      return { ...prevState, user: nextProps.user, workspace_loaded: true };
+    }
     return { ...prevState, user: nextProps.user };
   }
 
   state = {
     loading: true,
+    workspace_loaded: false,
     user: null,
     mode: MODES.SPRINT,
     mobileOpen: false,
     anchorEl: null,
     swDialogOpen: false,
     catDialogOpen: false,
+    gsDialogOpen: false,
   };
 
   componentDidMount() {
@@ -73,6 +81,10 @@ class Dashboard extends Component {
   handleSWDialogClose = () => {
     this.setState({ swDialogOpen: false });
   };
+
+  handleGSDialogClose = () => {
+    this.setState({ gsDialogOpen: false })
+  }
 
   handleSwitchWorkspace = (id) => {
     this.setState({ swDialogOpen: false });
@@ -126,6 +138,10 @@ class Dashboard extends Component {
           />
           <div className={classes.Workspace}>{this.renderWorkspace(mode)}</div>
         </main>
+        <GettingStartedDialog 
+          open={this.state.gsDialogOpen}
+          handleClose={this.handleGSDialogClose}
+        />
         <SwitchWorkspaceDialog
           open={this.state.swDialogOpen}
           handleClose={this.handleSWDialogClose}
@@ -148,6 +164,8 @@ Dashboard.propTypes = {
 const mapStateToProps = state =>
   ({
     user: state.auth.user,
+    projects: state.workspace.project_set,
+    loading: state.workspace.loading,
   });
 
 const mapDispatchToProps = dispatch =>
