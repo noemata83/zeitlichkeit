@@ -12,6 +12,7 @@ const styles = theme => ({
     paddingTop: 16,
     paddingBottom: 16,
     marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
   }),
   title: {
     textAlign: 'center',
@@ -98,7 +99,7 @@ class Reports extends Component {
           </Typography>
           <div style={{ textAlign: 'center' }}>
             <PieChart
-              svgHeight={500}
+              svgHeight={700}
               svgWidth={600}
               valueName="duration"
               data={projectData}

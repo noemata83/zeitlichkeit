@@ -4,6 +4,7 @@ import { pie } from 'd3-shape';
 import { schemeCategory10 } from 'd3-scale-chromatic';
 
 import LabeledArc from './Arc/LabeledArc';
+import Legend from './Legend/Legend';
 
 export default class PieChart extends Component {
   constructor(props) {
@@ -37,10 +38,11 @@ export default class PieChart extends Component {
     } = this.props;
 
     const datapie = this.pie(data);
-    const translate = `translate(${svgWidth / 2}, ${svgHeight / 2})`;
-    const radius = Math.min(svgWidth, svgHeight) / 2;
+    const translate = `translate(${svgWidth / 2}, ${(svgHeight - 200) / 2})`;
+    const radius = Math.min(svgWidth, (svgHeight - 200)) / 2;
 
     const totalTime = data.reduce((total, project) => total + project.duration, 0);
+    const legendData = data.map((datum, i) => ({ ...datum, color: this.colors[i] }));
     return (
       <svg width={svgWidth} height={svgHeight}>
         <g transform={translate}>
@@ -49,6 +51,7 @@ export default class PieChart extends Component {
             {totalDuration}
           </text>
         </g>
+        <Legend data={legendData} svgHeight={svgHeight} svgWidth={svgWidth} radius={radius} />
       </svg>
     );
   }

@@ -16,6 +16,18 @@ import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
 // import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
 
 class Dashboard extends Component {
+  state = {
+    loading: true,
+    workspace_loaded: false,
+    user: null,
+    mode: MODES.SPRINT,
+    mobileOpen: false,
+    anchorEl: null,
+    swDialogOpen: false,
+    catDialogOpen: false,
+    gsDialogOpen: false,
+  };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.user && prevState.loading && !prevState.user) {
       const workspace = nextProps.user.account.default_workspace.id;
@@ -29,19 +41,6 @@ class Dashboard extends Component {
     }
     return { ...prevState, user: nextProps.user };
   }
-
-  state = {
-    loading: true,
-    workspace_loaded: false,
-    user: null,
-    mode: MODES.SPRINT,
-    mobileOpen: false,
-    anchorEl: null,
-    swDialogOpen: false,
-    catDialogOpen: false,
-    gsDialogOpen: false,
-  };
-
   componentDidMount() {
     if (this.state.loading) {
       this.props.loadUser();
