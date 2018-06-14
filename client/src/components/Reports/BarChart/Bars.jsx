@@ -31,7 +31,7 @@ export default class Bars extends Component {
         x={xScale(d[xValue])}
         height={svgHeight - margins.bottom - scales.yScale(d[yValue])}
         width={xScale.bandwidth()}
-        fill={this.colorScale(d[yValue])}
+        fill={d.color || this.colorScale(d[yValue])}
       />
     ));
 

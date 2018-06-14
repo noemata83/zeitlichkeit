@@ -32,13 +32,12 @@ export default class BarChart extends Component {
     // scaleBand type
     const xScale = this.xScale
       .padding(0.5)
-      // domain should be an array of specified values
       .domain(data.map(d => d[xValue]))
       .range([margins.left, svgWidth - margins.right]);
 
     // scaleLinear type
     const yScale = this.yScale
-      .domain([0, 12])
+      .domain([0, Math.max(8, maxValue)])
       .range([svgHeight - margins.bottom, margins.top]);
 
     return (
