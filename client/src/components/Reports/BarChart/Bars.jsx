@@ -21,23 +21,30 @@ export default class Bars extends Component {
       svgHeight,
       xValue,
       yValue,
+      totalDuration,
     } = this.props;
     const { xScale, yScale } = scales;
-
-    const bars = data.map(d => (
-      <rect
-        key={d[xValue]}
-        y={yScale(d[yValue])}
-        x={xScale(d[xValue])}
-        height={svgHeight - margins.bottom - scales.yScale(d[yValue])}
-        width={xScale.bandwidth()}
-        fill={d.color || this.colorScale(d[yValue])}
-      />
-    ));
+    const bars = data.map((d) => {
+      const yVal = totalDuration ? (((d[yValue] * 3600000) / totalDuration) * 100) : d[yValue];
+      return (
+        <rect
+          key={d[xValue]}
+          y={yScale(yVal)}
+          x={xScale(d[xValue])}
+          height={svgHeight - margins.bottom - scales.yScale(yVal)}
+          width={xScale.bandwidth()}
+          fill={d.color || this.colorScale(d[yValue])}
+        />
+      );
+    });
 
     return <g>{bars}</g>;
   }
 }
+
+Bars.defaultProps = {
+  totalDuration: undefined,
+};
 
 Bars.propTypes = {
   maxValue: PropTypes.number.isRequired,
@@ -45,6 +52,7 @@ Bars.propTypes = {
   margins: PropTypes.object.isRequired,
   svgHeight: PropTypes.number.isRequired,
   data: PropTypes.array.isRequired,
+  totalDuration: PropTypes.number,
   xValue: PropTypes.string.isRequired,
   yValue: PropTypes.string.isRequired,
 };

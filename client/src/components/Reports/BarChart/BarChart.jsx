@@ -19,6 +19,7 @@ export default class BarChart extends Component {
       data,
       xValue,
       yValue,
+      totalDuration,
     } = this.props;
     const margins = {
       top: 50,
@@ -27,7 +28,7 @@ export default class BarChart extends Component {
       left: 60,
     };
 
-    const maxValue = Math.max(...data.map(d => d[yValue]));
+    const maxValue = totalDuration ? 100 : Math.max(...data.map(d => d[yValue]));
 
     // scaleBand type
     const xScale = this.xScale
@@ -55,6 +56,7 @@ export default class BarChart extends Component {
           maxValue={maxValue}
           xValue={xValue}
           yValue={yValue}
+          totalDuration={totalDuration || null}
           svgHeight={svgHeight}
         />
       </svg>
@@ -62,10 +64,15 @@ export default class BarChart extends Component {
   }
 }
 
+BarChart.defaultProps = {
+  totalDuration: undefined,
+};
+
 BarChart.propTypes = {
   svgWidth: PropTypes.number.isRequired,
   svgHeight: PropTypes.number.isRequired,
   xValue: PropTypes.string.isRequired,
   yValue: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
+  totalDuration: PropTypes.number,
 };

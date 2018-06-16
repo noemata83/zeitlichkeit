@@ -122,6 +122,18 @@ class Reports extends Component {
             data={this.generateCategoryData()}
           />);
       }
+      case 'CATEGORY_PCT': {
+        return (
+          <BarChart
+            svgHeight={500}
+            svgWidth={800}
+            yValue="duration"
+            xValue="name"
+            data={this.generateCategoryData()}
+            totalDuration={getTotalDuration(this.props.sprints).valueOf()}
+          />
+        );
+      }
       default:
         return (<PieChart
           svgHeight={700}
@@ -165,6 +177,7 @@ class Reports extends Component {
             >
               <option value="PROJECT">Percent Allocation by Project</option>
               <option value="CATEGORY">Duration by Category</option>
+              <option value="CATEGORY_PCT">Percent Allocation by Category</option>
             </NativeSelect>
           </FormControl>
           {/* <Typography variant="title" classes={{ title: classes.title }}>
