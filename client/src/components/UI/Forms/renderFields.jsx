@@ -94,7 +94,7 @@ renderSelectField.defaultProps = {
 renderSelectField.propTypes = {
   input: PropTypes.object,
   inputProps: PropTypes.object,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   meta: PropTypes.shape({
     touched: PropTypes.bool,
     error: PropTypes.string,

@@ -175,9 +175,9 @@ class Reports extends Component {
               onChange={this.switchBreakdown}
               name="breakdown"
             >
-              <option value="PROJECT">Percent Allocation by Project</option>
-              <option value="CATEGORY">Duration by Category</option>
-              <option value="CATEGORY_PCT">Percent Allocation by Category</option>
+              <option value="PROJECT">What percentage of time is spent on each project?</option>
+              <option value="CATEGORY">How much work of each category has been done?</option>
+              <option value="CATEGORY_PCT">What percentage of time is spent on work of each category?</option>
             </NativeSelect>
           </FormControl>
           {/* <Typography variant="title" classes={{ title: classes.title }}>

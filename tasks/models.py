@@ -59,7 +59,7 @@ class Task(models.Model):
     one or more categories.
     """
     name = models.CharField(max_length=128)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
     categories = models.ManyToManyField(Category, blank=True)
     workspace = models.ForeignKey(Workspace, default=Workspace.DEFAULT_PK, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)

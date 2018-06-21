@@ -58,6 +58,8 @@ export default (state = initialState, action) => {
     }
     case actionTypes.ADD_TASK: {
       const task = action.data;
+      console.log('Add tasks was called.');
+      console.log(task);
       const task_set = [...state.task_set, task];
       return { ...state, task_set };
     }

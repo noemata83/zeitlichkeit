@@ -155,9 +155,12 @@ class TaskSerializer(WritableNestedModelSerializer):
 
     def create(self, validated_data):
         task = Task(name=validated_data['name'],
-                    project=validated_data['project'],
                     workspace=validated_data['workspace'],
                     completed=validated_data['completed'])
+        try: 
+            task.project = validated_data['project']
+        except KeyError:
+            pass
         task.save()
         for category in validated_data['categories']:
             task.categories.add(category)

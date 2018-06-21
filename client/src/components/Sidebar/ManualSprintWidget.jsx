@@ -32,13 +32,13 @@ const styles = theme => ({
   },
 });
 
-const validate = (values) => {
-  const errors = {};
-  if (!values.project) {
-    errors.project = 'Value is required.';
-  }
-  return errors;
-};
+// const validate = (values) => {
+//   const errors = {};
+//   // if (!values.project) {
+//   //   errors.project = 'Value is required.';
+//   // }
+//   return errors;
+// };
 
 class ManualSprintWidget extends Component {
   state = {
@@ -64,13 +64,18 @@ class ManualSprintWidget extends Component {
     if (isNew) {
       const task_data = {
         name: task,
-        project: {
-          name: project,
-        },
+        // project: {
+        //   name: project,
+        // },
         categories: [],
         completed: false,
         sprint_set: [],
       };
+      if (project !== 'None') {
+        task_data.project = {
+          name: project,
+        };
+      }
       this.props.addTaskAndSprint(task_data, sprint_data);
       this.props.resetForm();
       return this.setState({
@@ -97,7 +102,7 @@ class ManualSprintWidget extends Component {
     // Duplicate
     if (
       !this.props.tasks
-        .filter(existingtask => existingtask.project === project)
+        .filter(existingtask => !existingtask.project || existingtask.project === project)
         .map(existingtask => existingtask.name)
         .includes(task)
     ) {
@@ -122,8 +127,8 @@ class ManualSprintWidget extends Component {
   render() {
     const { projects, classes } = this.props;
     const projectlist = ['None', ...projects].map(project => (
-      <MenuItem key={project.name || 'None'} value={project.name || ''}>
-        {project.name}
+      <MenuItem key={project.name || 'None'} value={project.name || 'None'}>
+        {project.name ? project.name : 'None'}
       </MenuItem>
     ));
     return (
@@ -239,5 +244,5 @@ export default reduxForm({
       .toString()
       .padStart(2, '0')}`,
   },
-  validate,
+  // validate,
 })(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ManualSprintWidget)));

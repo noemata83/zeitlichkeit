@@ -20,6 +20,7 @@ export const loadSprints = () =>
 
 export const addSprint = sprint_data =>
   (dispatch, getState) => {
+    console.log('addSprint was called...');
     const { headers, workspace } = setupRequest(getState);
     return axios
       .post(`/api/workspaces/${workspace}/sprints/`, sprint_data, { headers })
@@ -42,19 +43,18 @@ export const addTaskandSprint = (task_data, sprint_data) =>
     return axios
       .post(`/api/workspaces/${workspace}/tasks/`, task_data, { headers })
       .then((res) => {
-        if (res.status === 201) {
-          dispatch({
-            type: actionTypes.ADD_TASK,
-            data: {
-              name: res.data.name,
-              id: res.data.id,
-              project: res.data.project.name,
-              categories: res.data.categories,
-              completed: res.data.completed,
-            },
-          });
-          dispatch(addSprint(sprint_data));
-        }
+        const data = {
+          name: res.data.name,
+          id: res.data.id,
+          categories: res.data.categories,
+          completed: res.data.completed,
+        };
+        if (res.data.project) data.project = res.data.project.name;
+        dispatch({
+          type: actionTypes.ADD_TASK,
+          data,
+        });
+        dispatch(addSprint(sprint_data));
       })
       .catch(err => dispatch(handleServerError(err)));
   };
