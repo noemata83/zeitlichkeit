@@ -2,18 +2,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import {
   Button,
   TextField,
   Paper,
+  Tabs,
+  Tab,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Typography,
 } from '@material-ui/core';
 import {
   addProject,
@@ -46,7 +48,19 @@ class ProjectManager extends Component {
     addTaskToProject: null,
     anchorEl: null,
     categoryInput: '',
+    tab: null,
   };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return (nextProps.projects.length > 0 && !prevState.tab) ?
+      {
+        ...prevState,
+        tab: nextProps.projects[0].name,
+      }
+      : {
+        ...prevState,
+      };
+  }
 
   getProjectTasks = (tasks, project) =>
     tasks.filter(task => task.project === project);
@@ -56,6 +70,10 @@ class ProjectManager extends Component {
       [event.target.name]: event.target.value,
     });
   };
+
+  handleChangeTab = (event, value) => {
+    this.setState({ tab: value });
+  }
 
   handleClickOpen = () => {
     this.setState({
@@ -100,11 +118,13 @@ class ProjectManager extends Component {
     this.props.updateTask(task, { ...taskData });
   };
 
+  renderProjectTabs = projects => projects.map(project => <Tab key={`Project ${project.id}`} value={project.name} label={project.name} />);
+
   renderProjects = (projects, task_set) =>
-    (projects.length > 0 ? (
-      projects.map((project) => {
-        const tasks = this.getProjectTasks(task_set, project.name);
-        return (
+    projects.map((project) => {
+      const tasks = this.getProjectTasks(task_set, project.name);
+      return (
+        this.state.tab === project.name &&
           <Project
             key={project.id}
             tasks={tasks}
@@ -115,21 +135,33 @@ class ProjectManager extends Component {
             handleAddTask={this.handleAddTask}
             inputValue={this.state[`${project.name}__newTask`] || ''}
           />
-        );
-      })
-    ) : (
-      <div>No projects to display</div>
-    ));
+      );
+    });
 
   render() {
     const { tasks, projects, classes } = this.props;
+    const { tab } = this.state;
     return (
       <div className={classes.main}>
         <h1>Project Manager</h1>
         <Paper className={classes.paper} elevation={3}>
-          <Grid container spacing={24}>
-            {this.renderProjects(projects, tasks)}
-          </Grid>
+          {projects.length > 0 ?
+            <div>
+              <Tabs
+                value={tab}
+                onChange={this.handleChangeTab}
+                indicatorColor="secondary"
+                textColor="primary"
+                scrollable
+                scrollButtons="auto"
+              >
+                {this.renderProjectTabs(projects)}
+              </Tabs>
+              <Typography component="div" style={{ padding: '2rem' }}>
+                {this.renderProjects(projects, tasks)}
+              </Typography>
+            </div>
+          : <div>No Projects to Display</div>}
         </Paper>
         <Button
           variant="fab"
@@ -190,10 +222,9 @@ ProjectManager.propTypes = {
   addProject: PropTypes.func.isRequired,
   addTask: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
-  // Todo: work out how to gracefully circumnavigate airbnb eslint rule violated below!
-  tasks: PropTypes.array.isRequired, // eslint-disable-line
-  projects: PropTypes.array.isRequired, // eslint-disable-line
-  classes: PropTypes.object.isRequired, // eslint-disable-line
+  tasks: PropTypes.array.isRequired,
+  projects: PropTypes.array.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ProjectManager));

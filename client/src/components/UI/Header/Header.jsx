@@ -104,9 +104,9 @@ const header = (props) => {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleClose} disabled>Profile</MenuItem>
           <MenuItem onClick={handleDialogOpen}>Switch Workspace</MenuItem>
-          <MenuItem onClick={handleClose}>Join Workspace</MenuItem>
+          <MenuItem onClick={handleClose} disable>Join Workspace</MenuItem>
           <MenuItem
             onClick={() => {
               handleClose();
