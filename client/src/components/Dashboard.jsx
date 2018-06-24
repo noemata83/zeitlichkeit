@@ -13,6 +13,7 @@ import Reports from './Reports/Reports';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
+import JoinWorkSpaceDialog from './UI/Dialogs/joinWorkspace';
 // import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
 
 class Dashboard extends Component {
@@ -23,7 +24,9 @@ class Dashboard extends Component {
     mode: MODES.SPRINT,
     mobileOpen: false,
     anchorEl: null,
+    inviteCode: '',
     swDialogOpen: false,
+    jwDialogOpen: false,
     catDialogOpen: false,
     gsDialogOpen: false,
   };
@@ -82,6 +85,11 @@ class Dashboard extends Component {
     this.setState({ swDialogOpen: false });
   };
 
+  handleJWDialogOpen = () => this.setState({ jwDialogOpen: true, anchorEl: null });
+  handleJWDialogClose = () => this.setState({ jwDialogOpen: false });
+
+  handleInviteCodeInput = event => this.setState({ inviteCode: event.target.value });
+
   handleGSDialogClose = () => {
     this.setState({ gsDialogOpen: false });
   }
@@ -90,6 +98,11 @@ class Dashboard extends Component {
     this.setState({ swDialogOpen: false });
     this.props.loadWorkspace(id);
   };
+
+  handleJoinWorkspace = () => {
+    console.log(`Here is where we would send code: ${this.state.inviteCode} to the server.`);
+    this.setState({ jwDialogOpen: false });
+  }
 
   handleCatDialogOpen = () => this.setState({ catDialogOpen: true });
 
@@ -127,7 +140,8 @@ class Dashboard extends Component {
           handleMenu={this.handleMenu}
           handleClose={this.handleMenuClose}
           anchorEl={this.state.anchorEl}
-          handleDialogOpen={this.handleSWDialogOpen}
+          handleSWDialogOpen={this.handleSWDialogOpen}
+          handleJWDialogOpen={this.handleJWDialogOpen}
         />
         <main className={classes.Main}>
           <SideBar
@@ -146,6 +160,13 @@ class Dashboard extends Component {
           open={this.state.swDialogOpen}
           handleClose={this.handleSWDialogClose}
           handleSwitchWorkspace={this.handleSwitchWorkspace}
+        />
+        <JoinWorkSpaceDialog
+          open={this.state.jwDialogOpen}
+          handleClose={this.handleJWDialogClose}
+          handleInviteCodeInput={this.handleInviteCodeInput}
+          handleJoinWorkspace={this.handleJoinWorkspace}
+          inviteCode={this.state.inviteCode}
         />
         <CategoryManagerDialog
           open={this.state.catDialogOpen}

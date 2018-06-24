@@ -62,7 +62,8 @@ const header = (props) => {
     anchorEl,
     handleMenu,
     handleClose,
-    handleDialogOpen,
+    handleSWDialogOpen,
+    handleJWDialogOpen,
   } = props;
   const open = Boolean(anchorEl);
   return (
@@ -105,8 +106,8 @@ const header = (props) => {
           onClose={handleClose}
         >
           <MenuItem onClick={handleClose} disabled>Profile</MenuItem>
-          <MenuItem onClick={handleDialogOpen}>Switch Workspace</MenuItem>
-          <MenuItem onClick={handleClose} disable>Join Workspace</MenuItem>
+          <MenuItem onClick={handleSWDialogOpen}>Switch Workspace</MenuItem>
+          <MenuItem onClick={handleJWDialogOpen}>Join Workspace</MenuItem>
           <MenuItem
             onClick={() => {
               handleClose();
@@ -133,7 +134,8 @@ header.propTypes = {
   classes: PropTypes.object.isRequired, // eslint-disable-line
   handleMenu: PropTypes.func.isRequired,
   handleClose: PropTypes.func.isRequired,
-  handleDialogOpen: PropTypes.func.isRequired,
+  handleSWDialogOpen: PropTypes.func.isRequired,
+  handleJWDialogOpen: PropTypes.func.isRequired,
   handleDrawerToggle: PropTypes.func.isRequired,
   logout: PropTypes.func.isRequired,
   anchorEl: PropTypes.object,
