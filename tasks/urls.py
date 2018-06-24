@@ -35,4 +35,6 @@ urlpatterns = [
         views.SprintListByTask.as_view()),
     url(r'^(?P<pk>[0-9]+)/tasks/(?P<task_id>[0-9]+)/sprints/(?P<sprint_id>[0-9]+)/$',
         views.SprintDetail.as_view()),
+    url(r'^invite$', views.GenerateInvite.as_view()),
+    url(r'^join$', views.RedeemInvite.as_view())
  ]

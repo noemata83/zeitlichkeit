@@ -80,3 +80,14 @@ class Sprint(models.Model):
 
     def __str__(self):
         return f'{self.owner} - {self.task} - {self.id}'
+
+class Invite(models.Model):
+    """
+    An invite provides a way for one user to request that another join their workspace. When
+    an invite is created, the server should send an email to the recipient with a code. If
+    the recipient logs in and enters a matching code, it should add that user to the target
+    workspace and delete the Invite.
+    """
+    code = models.CharField(max_length=8, unique=True)
+    email = models.EmailField()
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, default=1)

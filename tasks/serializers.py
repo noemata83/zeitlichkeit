@@ -3,12 +3,14 @@ This module defines the serializers for the tasks api.
 """
 import logging
 import json
+import secrets
+import string
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db.models.base import ObjectDoesNotExist
 from drf_writable_nested import WritableNestedModelSerializer
-from tasks.models import Workspace, Task, Sprint, Project, Category
+from tasks.models import Workspace, Task, Sprint, Project, Category, Invite
 from accounts.models import Account
 from accounts.serializers import UserLimitedSerializer, UserSerializer
 
@@ -217,3 +219,51 @@ class WorkspaceSerializer(WritableNestedModelSerializer):
             'task_set__project'
         )
         return queryset
+
+class GenerateInviteSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all(), required=True)
+    code = serializers.CharField(required=False)
+
+    class Meta:
+        model = Invite
+        fields = ('email', 'workspace', 'code')
+
+    def create(self, validated_data):
+        while True:
+            code = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+            if not Invite.objects.filter(code=code).exists():
+                break
+        invite = Invite(email=validated_data['email'],
+            workspace=validated_data['workspace'],
+            code=code)
+        invite.save()
+        return invite
+
+class RedeemInviteSerializer(serializers.ModelSerializer):
+    workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all(), required=False)
+    code = serializers.CharField(required=True)
+
+    class Meta:
+        model = Invite
+        fields = ('workspace', 'code')
+
+    def validate(self, data):
+        try:
+            invite = Invite.objects.get(code=data['code'])
+        except ObjectDoesNotExist:
+            raise serializers.ValidationError('Invalid invite code')
+        data['workspace'] = invite.workspace.id
+        data['invite'] = invite
+        return data
+
+    def create(self, validated_data):
+        invite = validated_data['invite']
+        try:
+            workspace = Workspace.objects.get(id=validated_data['workspace'])
+        except ObjectDoesNotExist:
+            return {message: "Something went wrong. Workspace does not exist."}
+        workspace.users.add(self.context['user'])
+        workspace.save()
+        return invite
+    

@@ -8,10 +8,11 @@ from django.contrib.auth.models import User
 from django.db.models.base import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from knox.models import AuthToken
-from tasks.models import Task, Workspace, Sprint, Project, Category
+from tasks.models import Task, Workspace, Sprint, Project, Category, Invite
 from tasks.permissions import IsMember
 from .serializers import (TaskSerializer, WorkspaceSerializer, SprintSerializer,
-                          ProjectSerializer, CategorySerializer, UserLimitedSerializer)
+                          ProjectSerializer, CategorySerializer, UserLimitedSerializer, 
+                          GenerateInviteSerializer, RedeemInviteSerializer)
 
 logger = logging.getLogger(__name__)
 
@@ -162,4 +163,15 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
         self.check_object_permissions(self.request, obj)
         return obj
 
+class GenerateInvite(generics.CreateAPIView):
+    queryset = Invite.objects.all()
+    serializer_class = GenerateInviteSerializer
+    permission_classes = (permissions.IsAuthenticated,)
 
+class RedeemInvite(generics.CreateAPIView):
+    queryset = Invite.objects.all()
+    serializer_class = RedeemInviteSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_serializer_context(self):
+        return {"user": self.request.user}
