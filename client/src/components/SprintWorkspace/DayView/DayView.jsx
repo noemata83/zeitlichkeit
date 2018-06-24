@@ -5,6 +5,8 @@ import * as R from 'ramda';
 
 import Day from './Day/Day';
 
+const filterByUser = (sprints, user) => R.filter(sprint => sprint.owner === user, sprints);
+
 const retrieveDates = sprints =>
   R.map(
     sprint => ({
@@ -33,7 +35,7 @@ class DayView extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const processSprints = R.pipe(retrieveDates, groupByDates);
     if (!nextProps.loading) {
-      const sprints = processSprints(nextProps.sprints.map(sprint => ({
+      const sprints = processSprints(filterByUser(nextProps.sprints, nextProps.user).map(sprint => ({
         ...sprint,
         duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time))
           .toISOString().substr(11, 8),
@@ -68,6 +70,7 @@ class DayView extends Component {
 const mapStateToProps = state => ({
   sprints: state.workspace.sprints,
   loading: state.workspace.sprint_loading,
+  user: state.auth.user.username,
 });
 
 DayView.defaultProps = {

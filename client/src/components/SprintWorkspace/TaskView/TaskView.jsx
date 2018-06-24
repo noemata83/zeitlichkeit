@@ -5,6 +5,8 @@ import * as R from 'ramda';
 
 import Task from './Task/Task';
 
+const filterByUser = (sprints, user) => R.filter(sprint => sprint.owner === user, sprints);
+
 const retrieveDates = sprints =>
   R.map(
     sprint => ({
@@ -31,7 +33,7 @@ const groupByTasks = sprints =>
 class TaskView extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const processSprints = R.pipe(retrieveDates, groupByTasks);
-    const sprints = processSprints(nextProps.sprints.map(sprint => ({
+    const sprints = processSprints(filterByUser(nextProps.sprints, nextProps.user).map(sprint => ({
       ...sprint,
       duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time))
         .toISOString().substr(11, 8),
@@ -65,6 +67,7 @@ const mapStateToProps = state => ({
   sprints: state.workspace.sprints,
   tasks: state.workspace.task_set,
   categories: state.workspace.category_set,
+  user: state.auth.user.username,
 });
 
 TaskView.propTypes = {
