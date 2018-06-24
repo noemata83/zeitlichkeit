@@ -37,4 +37,4 @@ urlpatterns = [
         views.SprintDetail.as_view()),
     url(r'^invite$', views.GenerateInvite.as_view()),
     url(r'^join$', views.RedeemInvite.as_view())
- ]
+]

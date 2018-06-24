@@ -25,3 +25,4 @@ Plan.md
 # End of https://www.gitignore.io/api/django
 temporalite.code-workspace
 client/webpack-stats.dev.json
+zeitlichkeit/local_settings.py

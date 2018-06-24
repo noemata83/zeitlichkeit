@@ -5,7 +5,7 @@ import logging
 from rest_framework import permissions, generics, viewsets
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from django.db.models.base import ObjectDoesNotExist
+# from django.db.models.base import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from knox.models import AuthToken
 from tasks.models import Task, Workspace, Sprint, Project, Category, Invite
@@ -78,7 +78,7 @@ class SprintListByWorkspace(generics.ListCreateAPIView):
 
     def get_serializer_context(self):
         return {"workspace": self.kwargs['pk'], "user": self.request.user}
-    
+
 
 class SprintListByTask(generics.ListCreateAPIView):
     serializer_class = SprintSerializer

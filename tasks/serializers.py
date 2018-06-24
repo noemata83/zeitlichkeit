@@ -2,17 +2,18 @@
 This module defines the serializers for the tasks api.
 """
 import logging
-import json
+# import json
 import secrets
 import string
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.db.models.base import ObjectDoesNotExist
 from drf_writable_nested import WritableNestedModelSerializer
 from tasks.models import Workspace, Task, Sprint, Project, Category, Invite
 from accounts.models import Account
-from accounts.serializers import UserLimitedSerializer, UserSerializer
+from accounts.serializers import UserLimitedSerializer#, UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +63,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         return data
 
 class CategorySerializer(serializers.ModelSerializer):
-    name = serializers.CharField(required=True) 
+    name = serializers.CharField(required=True)
     color = serializers.CharField(required=False)
     class Meta:
         model = Category
@@ -71,7 +72,7 @@ class CategorySerializer(serializers.ModelSerializer):
     def validate(self, data):
         data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
         return data
-    
+
     def create(self, validated_data):
         try:
             color = validated_data['color']
@@ -235,9 +236,10 @@ class GenerateInviteSerializer(serializers.ModelSerializer):
             if not Invite.objects.filter(code=code).exists():
                 break
         invite = Invite(email=validated_data['email'],
-            workspace=validated_data['workspace'],
-            code=code)
+                 workspace=validated_data['workspace'],
+                 code=code)
         invite.save()
+        send_mail('Join a Temporalite Workspace', f'You have been invited to join {invite.workspace.name}. Login to Temporalite, click \'Join Workspace\' and use the code {code} to join!', 'tucker@tuckermckinney.com', [invite.email], fail_silently=False)
         return invite
 
 class RedeemInviteSerializer(serializers.ModelSerializer):
@@ -262,8 +264,10 @@ class RedeemInviteSerializer(serializers.ModelSerializer):
         try:
             workspace = Workspace.objects.get(id=validated_data['workspace'])
         except ObjectDoesNotExist:
-            return {message: "Something went wrong. Workspace does not exist."}
-        workspace.users.add(self.context['user'])
+            return { "message": "Something went wrong. Workspace does not exist." }
+        if not workspace.users.filter(id=self.context['user'].id).exists():            
+            workspace.users.add(self.context['user'])
         workspace.save()
+        invite.delete()
         return invite
     

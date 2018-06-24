@@ -207,3 +207,8 @@ DATABASES = {
 }
 
 STATIC_ROOT="/home/tempus/temporalite/assets/"
+
+try:
+    from .local_settings import *
+except:
+    pass
