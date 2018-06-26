@@ -1,0 +1,5 @@
+Hello!
+You have been invited to join {{ workspace_name }} . To join, simply login to Temporalite, click 'Join Workspace' and use the code {{ code }} to join!
+
+Happy Temporalizing!
+- The Temporalite Team

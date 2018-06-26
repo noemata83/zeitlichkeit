@@ -14,6 +14,7 @@ from drf_writable_nested import WritableNestedModelSerializer
 from tasks.models import Workspace, Task, Sprint, Project, Category, Invite
 from accounts.models import Account
 from accounts.serializers import UserLimitedSerializer#, UserSerializer
+from .invites import send_invite
 
 logger = logging.getLogger(__name__)
 
@@ -239,7 +240,8 @@ class GenerateInviteSerializer(serializers.ModelSerializer):
                  workspace=validated_data['workspace'],
                  code=code)
         invite.save()
-        send_mail('Join a Temporalite Workspace', f'You have been invited to join {invite.workspace.name}. Login to Temporalite, click \'Join Workspace\' and use the code {code} to join!', 'tucker@tuckermckinney.com', [invite.email], fail_silently=False)
+        #send_mail('Join a Temporalite Workspace', f'You have been invited to join {invite.workspace.name}. Login to Temporalite, click \'Join Workspace\' and use the code {code} to join!', 'tucker@tuckermckinney.com', [invite.email], fail_silently=False)
+        send_invite(invite.email, invite.workspace.name, code)
         return invite
 
 class RedeemInviteSerializer(serializers.ModelSerializer):
