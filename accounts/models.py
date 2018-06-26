@@ -8,6 +8,7 @@ class Account(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     default_workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE,
                                           default=Workspace.DEFAULT_PK)
+    display_name = models.CharField(max_length=128)
 
     def __str__(self):
         return f'{self.user}'
