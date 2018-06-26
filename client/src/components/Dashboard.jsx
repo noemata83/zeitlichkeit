@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import classes from './Dashboard.css';
-import { loadWorkspace, loadUser } from '../store/actions/';
+import { loadWorkspace, loadUser, joinWorkspace } from '../store/actions/';
 
 import MODES from './displayModes';
 import Header from './UI/Header/Header';
 import SprintWorkspace from './SprintWorkspace/SprintWorkspace';
 import ProjectManager from './ProjectManager/ProjectManager';
 import Reports from './Reports/Reports';
+import Team from './Team/Team';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
@@ -21,7 +23,7 @@ class Dashboard extends Component {
     loading: true,
     workspace_loaded: false,
     user: null,
-    mode: MODES.SPRINT,
+    mode: null,
     mobileOpen: false,
     anchorEl: null,
     inviteCode: '',
@@ -100,8 +102,8 @@ class Dashboard extends Component {
   };
 
   handleJoinWorkspace = () => {
-    console.log(`Here is where we would send code: ${this.state.inviteCode} to the server.`);
     this.setState({ jwDialogOpen: false });
+    this.props.joinWorkspace(this.state.inviteCode);
   }
 
   handleCatDialogOpen = () => this.setState({ catDialogOpen: true });
@@ -117,15 +119,11 @@ class Dashboard extends Component {
       case MODES.REPORT:
         return <Reports />;
       case MODES.TEAM:
-        return (
-          <div style={{ fontSize: '3rem', padding: '2rem' }}>
-            Meet Your Team... Later!
-          </div>
-        );
+        return <Team />;
       // case MODES.CATEGORIES:
         // return <CategoryManager />;
       default:
-        return <SprintWorkspace />;
+        return this.props.user ? <SprintWorkspace /> : <CircularProgress />;
     }
   };
 
@@ -180,6 +178,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
   loadUser: PropTypes.func.isRequired,
   loadWorkspace: PropTypes.func.isRequired,
+  joinWorkspace: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state =>
@@ -192,6 +191,7 @@ const mapStateToProps = state =>
 const mapDispatchToProps = dispatch =>
   ({
     loadWorkspace: workspace => dispatch(loadWorkspace(workspace)),
+    joinWorkspace: code => dispatch(joinWorkspace(code)),
     loadUser: () => dispatch(loadUser()),
   });
 
