@@ -45,6 +45,7 @@ const Project = (props) => {
     handleInput,
     handleAddTask,
     inputValue,
+    deleteProject,
   } = props;
   return (
     <div>
@@ -55,6 +56,7 @@ const Project = (props) => {
         <ProjectMenu
           id={project.id}
           name={project.name}
+          deleteProject={deleteProject}
           addTaskToProject={addTaskToProject}
         />
       </Toolbar>

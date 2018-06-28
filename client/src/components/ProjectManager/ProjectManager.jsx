@@ -19,6 +19,7 @@ import {
 } from '@material-ui/core';
 import {
   addProject,
+  deleteProject,
   deleteTask,
   addTask,
   updateTask,
@@ -94,6 +95,13 @@ class ProjectManager extends Component {
     this.props.addProject(this.state.newProject);
   };
 
+  handleDeleteProject = (id, name) => {
+    this.setState({
+      tab: this.props.projects[0].name,
+    });
+    this.props.deleteProject(id, name);
+  }
+
   handleAddTaskToProject = (id, name) => {
     this.setState({
       addTaskToProject: id,
@@ -129,6 +137,7 @@ class ProjectManager extends Component {
             key={project.id}
             tasks={tasks}
             project={project}
+            deleteProject={this.handleDeleteProject}
             addTaskToProject={this.handleAddTaskToProject}
             showInput={this.state.addTaskToProject === project.id}
             handleInput={this.handleInput}
@@ -213,6 +222,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addProject: project => dispatch(addProject(project)),
+  deleteProject: (id, name) => dispatch(deleteProject(id,name)),
   deleteTask: taskId => dispatch(deleteTask(taskId)),
   addTask: task => dispatch(addTask(task)),
   updateTask: (id, task) => dispatch(updateTask(id, task)),
@@ -222,6 +232,7 @@ ProjectManager.propTypes = {
   addProject: PropTypes.func.isRequired,
   addTask: PropTypes.func.isRequired,
   updateTask: PropTypes.func.isRequired,
+  deleteProject: PropTypes.func.isRequired,
   tasks: PropTypes.array.isRequired,
   projects: PropTypes.array.isRequired,
   classes: PropTypes.object.isRequired,

@@ -17,6 +17,9 @@ const initialState = {
   project_loading: true,
 };
 
+const deleteTaskAssociatedSprints = (task, sprints) => 
+  sprints.filter(sprint => sprint.task !== task.name);
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.WORKSPACE_LOADING: {
@@ -58,19 +61,15 @@ export default (state = initialState, action) => {
     }
     case actionTypes.ADD_TASK: {
       const task = action.data;
-      console.log('Add tasks was called.');
-      console.log(task);
       const task_set = [...state.task_set, task];
       return { ...state, task_set };
     }
     case actionTypes.DELETE_TASK: {
-      /*  ACTION INCOMPLETE:
-                This action should take care of removing associated sprints. These sprints
-                are automatically deleted by the backend server. Run a filter on sprints
-                to remove those associated with the task to be deleted. */
       const taskId = action.data;
+      const taskToDelete = state.task_set.find(task => task.id === taskId);
+      const sprints = deleteTaskAssociatedSprints(taskToDelete, state.sprints);
       const task_set = state.task_set.filter(task => task.id !== taskId);
-      return { ...state, task_set };
+      return { ...state, sprints, task_set };
     }
     case actionTypes.UPDATE_TASK: {
       const task = action.data;
@@ -103,8 +102,12 @@ export default (state = initialState, action) => {
                 removing all associated task and sprint data for the task (and sprints)
                 which fall under it. This is heavy-lifting, though. */
       const { id } = action.data;
+      const projectToDelete = state.project_set.find(project => project.id === id);
       const project_set = state.project_set.filter(project => project.id !== id);
-      return { ...state, project_set };
+      const associatedTasks = state.task_set.filter(task => task.project === projectToDelete.name).map(task => task.name);
+      const task_set = state.task_set.filter(task => !associatedTasks.includes(task.name));
+      const sprints = state.sprints.filter(sprint => !associatedTasks.includes(sprint.task));
+      return { ...state, sprints, task_set, project_set };
     }
     case actionTypes.PROJECTS_LOADING: {
       return { ...state, project_loading: true };
@@ -121,7 +124,12 @@ export default (state = initialState, action) => {
     case actionTypes.DELETE_CATEGORY: {
       const id = action.data;
       const category_set = state.category_set.filter(cat => cat.id !== id);
-      return { ...state, category_set };
+      const categoryToDelete = state.category_set.find(cat => cat.id === id);
+      const task_set = state.task_set.map((task) => {
+        const categories = task.categories.filter(cat => cat !== categoryToDelete.name);
+        return { ...task, categories };
+      });
+      return { ...state, category_set, task_set };
     }
     case actionTypes.UPDATE_CATEGORY: {
       const category = action.data;

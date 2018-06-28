@@ -1,6 +1,6 @@
 // Stateful component implements a menu for managing projects: adding tasks, deleting projects, &c.
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
@@ -32,7 +32,7 @@ class ProjectMenu extends Component {
     const {
       id,
       name,
-      onDeleteProject,
+      deleteProject,
       addTaskToProject,
       classes,
     } = this.props;
@@ -54,7 +54,7 @@ class ProjectMenu extends Component {
           <MenuItem onClick={() => addTaskToProject(id, name)}>
             Add Task
           </MenuItem>
-          <MenuItem onClick={() => onDeleteProject(id, name)}>
+          <MenuItem onClick={() => deleteProject(id, name)}>
             Delete Project
           </MenuItem>
         </Menu>
@@ -63,9 +63,6 @@ class ProjectMenu extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  onDeleteProject: (id, name) => dispatch(deleteProject(id, name)),
-});
 
 ProjectMenu.defaultProps = {
   classes: styles,
@@ -73,7 +70,7 @@ ProjectMenu.defaultProps = {
 
 ProjectMenu.propTypes = {
   id: PropTypes.number.isRequired,
-  onDeleteProject: PropTypes.func.isRequired,
+  deleteProject: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   addTaskToProject: PropTypes.func.isRequired,
   classes: PropTypes.shape({
@@ -81,4 +78,4 @@ ProjectMenu.propTypes = {
   }),
 };
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(ProjectMenu));
+export default withStyles(styles)(ProjectMenu);
