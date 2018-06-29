@@ -17,7 +17,7 @@ const initialState = {
   project_loading: true,
 };
 
-const deleteTaskAssociatedSprints = (task, sprints) => 
+const deleteTaskAssociatedSprints = (task, sprints) =>
   sprints.filter(sprint => sprint.task !== task.name);
 
 export default (state = initialState, action) => {
@@ -104,10 +104,17 @@ export default (state = initialState, action) => {
       const { id } = action.data;
       const projectToDelete = state.project_set.find(project => project.id === id);
       const project_set = state.project_set.filter(project => project.id !== id);
-      const associatedTasks = state.task_set.filter(task => task.project === projectToDelete.name).map(task => task.name);
+      const associatedTasks = state.task_set
+        .filter(task => task.project === projectToDelete.name)
+        .map(task => task.name);
       const task_set = state.task_set.filter(task => !associatedTasks.includes(task.name));
       const sprints = state.sprints.filter(sprint => !associatedTasks.includes(sprint.task));
-      return { ...state, sprints, task_set, project_set };
+      return {
+        ...state,
+        sprints,
+        task_set,
+        project_set,
+      };
     }
     case actionTypes.PROJECTS_LOADING: {
       return { ...state, project_loading: true };

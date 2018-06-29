@@ -49,4 +49,12 @@ const inviteToWorkspaceDialog = (props) => {
   );
 };
 
+inviteToWorkspaceDialog.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  handleSendInvite: PropTypes.func.isRequired,
+  handleRecipientInput: PropTypes.func.isRequired,
+  recipient: PropTypes.string.isRequired,
+};
+
 export default inviteToWorkspaceDialog;

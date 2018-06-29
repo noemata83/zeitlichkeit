@@ -8,7 +8,6 @@ import {
   TextField,
   Toolbar,
 } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ProjectMenu from './ProjectMenu';
 import TaskList from './TaskList/taskList';
@@ -93,6 +92,7 @@ Project.propTypes = {
   handleInput: PropTypes.func.isRequired,
   handleAddTask: PropTypes.func.isRequired,
   inputValue: PropTypes.string.isRequired,
+  deleteProject: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Project);

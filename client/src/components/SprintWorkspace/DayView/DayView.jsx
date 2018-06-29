@@ -32,14 +32,19 @@ const groupByDates = sprints =>
   }, {});
 
 class DayView extends Component {
+  state = {
+    sprints: [],
+  };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const processSprints = R.pipe(retrieveDates, groupByDates);
     if (!nextProps.loading) {
-      const sprints = processSprints(filterByUser(nextProps.sprints, nextProps.user).map(sprint => ({
-        ...sprint,
-        duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time))
-          .toISOString().substr(11, 8),
-      })));
+      const sprints = processSprints(filterByUser(nextProps.sprints, nextProps.user)
+        .map(sprint => ({
+          ...sprint,
+          duration: new Date(new Date(sprint.end_time) - new Date(sprint.start_time))
+            .toISOString().substr(11, 8),
+        })));
       return {
         ...prevState,
         sprints,
@@ -47,9 +52,6 @@ class DayView extends Component {
     }
     return { ...prevState };
   }
-  state = {
-    sprints: [],
-  };
 
   renderDayView = (sprints) => {
     const sortedDates = Object.keys(sprints).sort((a, b) => new Date(b) - new Date(a));

@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
 import { Menu, MenuItem, IconButton } from '@material-ui/core';
-import { deleteProject } from '../../../store/actions';
 
 const styles = {
   button: {

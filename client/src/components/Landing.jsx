@@ -13,6 +13,11 @@ import RegistrationForm from './Auth/RegisterForm';
 import * as actions from '../store/actions';
 
 class Landing extends Component {
+  state = {
+    display: 'GREETING',
+    open: false,
+  };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.isAuthenticated) {
       return { ...prevState };
@@ -20,10 +25,6 @@ class Landing extends Component {
     return { ...prevState, open: true };
   }
 
-  state = {
-    display: 'GREETING',
-    open: false,
-  };
 
   handleClose = () => {
     this.setState({ open: false });

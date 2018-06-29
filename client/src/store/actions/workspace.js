@@ -2,7 +2,7 @@
  *  workspace records.                                                                        */
 import axios from 'axios';
 import actionTypes from './actionTypes';
-import { handleServerError, handleResponse, setHeaders, setupRequest } from '../helpers/utils';
+import { handleServerError, handleResponse, setHeaders } from '../helpers/utils';
 import { loadSprints } from './workspace/sprint';
 
 export const loadWorkspace = workspace =>

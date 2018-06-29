@@ -7,10 +7,10 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { deleteCategory, updateCategory } from '../../../store/actions';
 import { Popover } from '@material-ui/core';
 import { BlockPicker } from 'react-color';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { deleteCategory, updateCategory } from '../../../store/actions';
 import colors from '../../../services/colors';
 
 
@@ -34,12 +34,13 @@ const styles = {
 };
 
 class Category extends Component {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return { ...prevState, color: nextProps.color };
-  }
   state = {
     anchorEl: null,
     color: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return { ...prevState, color: nextProps.color };
   }
 
   handleDelete = () => {
@@ -56,7 +57,7 @@ class Category extends Component {
       anchorEl: null,
     });
 
-  handleChangeComplete = (color, _) => {
+  handleChangeComplete = (color) => {
     this.setState({ color: color.hex, anchorEl: null });
     this.props.updateCategory({ id: this.props.id, name: this.props.name, color: color.hex });
   }
@@ -108,7 +109,9 @@ class Category extends Component {
 Category.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
-  color: PropTypes.string.isRequired,
+  // Eslint is disabled for the next line, because it cannot seem to see that
+  // I *am* using the color prop to define state.
+  color: PropTypes.string.isRequired, // eslint-disable-line
   classes: PropTypes.object.isRequired,
   deleteCategory: PropTypes.func.isRequired,
   updateCategory: PropTypes.func.isRequired,

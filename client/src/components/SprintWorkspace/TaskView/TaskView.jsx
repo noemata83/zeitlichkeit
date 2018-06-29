@@ -31,6 +31,10 @@ const groupByTasks = sprints =>
   }, {});
 
 class TaskView extends Component {
+  state = {
+    sprints: [],
+  };
+
   static getDerivedStateFromProps(nextProps, prevState) {
     const processSprints = R.pipe(retrieveDates, groupByTasks);
     const sprints = processSprints(filterByUser(nextProps.sprints, nextProps.user).map(sprint => ({
@@ -44,9 +48,6 @@ class TaskView extends Component {
     };
   }
 
-  state = {
-    sprints: [],
-  };
   renderTaskView = (sprints) => {
     const tasks = Object.keys(sprints);
     return tasks.map(sprintTask => (

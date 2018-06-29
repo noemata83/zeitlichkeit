@@ -222,7 +222,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addProject: project => dispatch(addProject(project)),
-  deleteProject: (id, name) => dispatch(deleteProject(id,name)),
+  deleteProject: (id, name) => dispatch(deleteProject(id, name)),
   deleteTask: taskId => dispatch(deleteTask(taskId)),
   addTask: task => dispatch(addTask(task)),
   updateTask: (id, task) => dispatch(updateTask(id, task)),

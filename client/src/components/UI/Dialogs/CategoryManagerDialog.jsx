@@ -46,7 +46,7 @@ class CategoryManagerDialog extends Component {
       anchorEl: null,
     });
 
-  handleChangeComplete = (color, _) => {
+  handleChangeComplete = (color) => {
     this.setState({ color: color.hex, anchorEl: null });
   }
 

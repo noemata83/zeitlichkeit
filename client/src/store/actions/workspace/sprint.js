@@ -20,7 +20,6 @@ export const loadSprints = () =>
 
 export const addSprint = sprint_data =>
   (dispatch, getState) => {
-    console.log('addSprint was called...');
     const { headers, workspace } = setupRequest(getState);
     return axios
       .post(`/api/workspaces/${workspace}/sprints/`, sprint_data, { headers })

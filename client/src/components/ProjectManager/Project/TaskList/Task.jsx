@@ -43,12 +43,13 @@ const styles = theme => ({
 });
 
 class Task extends Component {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return { ...prevState, task: { ...nextProps.task } };
-  }
   state = {
     category: '',
     anchorEl: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return { ...prevState, task: { ...nextProps.task } };
   }
 
   handleOpen = (event) => {
@@ -116,7 +117,7 @@ class Task extends Component {
         <ListItemText
           primary={
             <div>
-              <div style={{ display: 'inline-block', marginRight: '1rem'}}>{task.name}</div>
+              <div style={{ display: 'inline-block', marginRight: '1rem' }}>{task.name}</div>
               <div style={{ display: 'inline-block' }}>{categoryList}</div>
             </div>
           }
