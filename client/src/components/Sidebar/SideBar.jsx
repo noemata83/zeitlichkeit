@@ -14,8 +14,9 @@ import Timer from '@material-ui/icons/Timer';
 import Divider from '@material-ui/core/Divider';
 import AddCircle from '@material-ui/icons/AddCircle';
 
-import ManualSprintWidget from './ManualSprintWidget';
-import TimerWidget from './TimerWidget';
+import SprintEntry from './SprintEntry';
+// import ManualSprintWidget from './ManualSprintWidget';
+// import TimerWidget from './TimerWidget';
 import MODES from '../displayModes';
 
 const styles = {
@@ -64,8 +65,8 @@ class SideBar extends Component {
             <Tab className={classes.tabRoot} icon={<AddCircle />} />
             <Tab className={classes.tabRoot} icon={<Watch />} />
           </Tabs>
-          {value === 0 && <TimerWidget />}
-          {value === 1 && <ManualSprintWidget />}
+          {value === 0 && <SprintEntry mode="timer" />}
+          {value === 1 && <SprintEntry mode="manual" />}
           {value === 2 && <div>I will be a Pomodoro!</div>}
         </Card>
         <List component="nav">

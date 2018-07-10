@@ -32,14 +32,6 @@ const styles = theme => ({
   },
 });
 
-// const validate = (values) => {
-//   const errors = {};
-//   // if (!values.project) {
-//   //   errors.project = 'Value is required.';
-//   // }
-//   return errors;
-// };
-
 class ManualSprintWidget extends Component {
   state = {
     task: '',
@@ -142,8 +134,9 @@ class ManualSprintWidget extends Component {
               name: 'project',
               id: 'project_select',
             }}
-            children={projectlist}
-          />
+          >
+            {projectlist}
+          </Field>
           {/* For the time being, I am simply going to omit the Autosuggest field from
               my redux-form. I don't need to do any validation, and the state-based logic
               I have already set up seems perfectly fine. It will make for a slightly
@@ -244,5 +237,6 @@ export default reduxForm({
       .toString()
       .padStart(2, '0')}`,
   },
+  
   // validate,
 })(connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(ManualSprintWidget)));
