@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Button, ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 import classes from './Sprint.css';
 import { deleteSprint } from '../../../store/actions';
@@ -34,7 +36,8 @@ export default connect(null, mapDispatchToProps)(props => (
       <Button
         onClick={() => props.deleteSprint(props.sprint.id)}
       >
-        &times;
+        {/* &times; */}
+        <DeleteIcon />
       </Button>
     </ListItemSecondaryAction>
   </ListItem>

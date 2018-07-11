@@ -29,7 +29,7 @@ const task = (props) => {
       <Toolbar className={classes.ToolBar}>
         <div className={classes.Name}>{props.task.name}</div>
         <div className={classes.CategoryList}>{categoryList}</div>
-        <div className={classes.Duration}>{duration.format('hh:mm:ss')}</div>
+        <div className={classes.Duration}>{duration.format('hh:mm:ss', { trim: false })}</div>
       </Toolbar>
       <List>{sprintList}</List>
     </div>

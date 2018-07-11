@@ -113,7 +113,7 @@ class Dashboard extends Component {
   renderWorkspace = (mode) => {
     switch (mode) {
       case MODES.SPRINT:
-        return <SprintWorkspace />;
+        return <SprintWorkspace isData={this.props.sprintDataExists} />;
       case MODES.PROJECT:
         return <ProjectManager />;
       case MODES.REPORT:
@@ -123,7 +123,7 @@ class Dashboard extends Component {
       // case MODES.CATEGORIES:
         // return <CategoryManager />;
       default:
-        return this.props.user ? <SprintWorkspace /> : <CircularProgress />;
+        return this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> : <CircularProgress />;
     }
   };
 
@@ -186,6 +186,7 @@ const mapStateToProps = state =>
     user: state.auth.user,
     projects: state.workspace.project_set,
     loading: state.workspace.loading,
+    sprintDataExists: state.workspace.sprints.length > 0,
   });
 
 const mapDispatchToProps = dispatch =>

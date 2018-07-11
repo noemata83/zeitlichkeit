@@ -19,7 +19,7 @@ const day = (props) => {
     <div className={classes.Day}>
       <Toolbar className={classes.ToolBar}>
         <div className={classes.Date}>{props.date}</div>
-        <div className={classes.Duration}>{duration.format('hh:mm:ss')}</div>
+        <div className={classes.Duration}>{duration.format('hh:mm:ss', { trim: false })}</div>
       </Toolbar>
       <List>{sprintList}</List>
     </div>

@@ -7,6 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import DayView from './DayView/DayView';
 import TaskView from './TaskView/TaskView';
+import Welcome from '../UI/Welcome/Welcome';
 
 const styles = theme => ({
   progress: {
@@ -26,7 +27,7 @@ class SprintWorkspace extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, isData } = this.props;
     const label = this.state.taskView ? 'Task View' : 'Day View';
     const view =
       this.state.taskView ? (
@@ -34,9 +35,10 @@ class SprintWorkspace extends Component {
       ) : (
         <DayView changeMode={this.modeChangeHandler} />
       );
-    return this.state.loading ? (
-      <CircularProgress color="secondary" className={classes.progress} />
-    ) : (
+    if (this.state.loading) {
+      return <CircularProgress color="secondary" className={classes.progress} />
+    }
+    return isData ? (
       <div style={{ padding: '2rem 2rem 0 2rem' }}>
         <h1>{label}</h1>
         <FormControlLabel
@@ -51,7 +53,8 @@ class SprintWorkspace extends Component {
         />
         {view}
       </div>
-    );
+    ) :
+    (<Welcome />);
   }
 }
 

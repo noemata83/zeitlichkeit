@@ -170,7 +170,7 @@ class ProjectManager extends Component {
                 {this.renderProjects(projects, tasks)}
               </Typography>
             </div>
-          : <div>No Projects to Display</div>}
+          : <div style={{ fontSize: '2rem' }}>No Projects to Display</div>}
         </Paper>
         <Button
           variant="fab"

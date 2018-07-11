@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import { Field } from 'redux-form';
-import { FormControl  } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
 import { renderDateField, renderTimeField } from '../../UI/Forms/renderFields';
 
 export default () => (
@@ -32,4 +32,3 @@ export default () => (
     </Button>
   </FormControl>
 );
-// );
