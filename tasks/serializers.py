@@ -135,15 +135,13 @@ class TaskSerializer(WritableNestedModelSerializer):
 
     def validate(self, data):
         # manually get the Category instance from the input data
-        logger.debug("HELLO FROM VALIDATE!!!")
         try:
             categories = []
             for category in data['categories']:
                 try:
-                    categories.append(Category.objects.get(name=category['name']))
+                    categories.append(Category.objects.get(name=category['name'], workspace=category['workspace']))
                 except ObjectDoesNotExist:
                     categories.append(Category.objects.create(name=category['name'], color='#FFFFFF'))
-            logger.debug("catogories = " + str(categories))
             data['categories'] = categories
         except KeyError:
             pass
