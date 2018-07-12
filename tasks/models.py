@@ -19,6 +19,22 @@ class Workspace(models.Model):
     def __str__(self):
         return self.name
 
+class Client(models.Model):
+    """
+    Temporalite users can optionally associate projects with clients, in order to
+    track their business. Clients are listed by name, and can have an associated color.
+    Attributes:
+        name: The name of the client
+        color: A string hexadecimal color code
+    """
+
+    name = models.CharField(max_length=128)
+    color = models.CharField(max_length=7, default="#000000")
+    workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE, default= Workspace.DEFAULT_PK)
+
+    def __str__(self):
+        return self.name
+
 class Project(models.Model):
     """
     A project is an optional grouping of tasks used for generating data within a workspace.
@@ -26,9 +42,16 @@ class Project(models.Model):
         name: A string description of the project
         workspace: A reference to the workspace to which the project belongs. A project may
         belong to at most one workspace
+        client: An optional reference to a client
+
+        --- To Come ---
+        rate: An optional decimal field specifying the hourly rate for the project; must be blank if fee is specified
+        fee: An optional decimal rate specifying the total fee for the project; must be blank if rate is specified
+        archived: A boolean field specifying whether the project should be displayed in the project manager
     """
     name = models.CharField(max_length=128)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -52,11 +75,22 @@ class Category(models.Model):
     class Meta:
         verbose_name_plural = "categories"
 
+
 class Task(models.Model):
     """
     A task is the basic organizational unit of tracked time within a workspace. It may comprise
     several episodes (sprints) of contribution. It belongs to a workspace and may also attach to
     one or more categories.
+    Attributes:
+        name: A string description of the task
+        project: An optional reference to a project within the workspace
+        categories: an optional list of categories which describe the task
+        workspace: A required reference to the workspace
+        completed: A boolean specifying the status of the task
+
+    To implement?:
+        billable: A boolean field indicating whether the task should be treated as compensated
+        status: A string for sorting the task on a kanban board
     """
     name = models.CharField(max_length=128)
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
