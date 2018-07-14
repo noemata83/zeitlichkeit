@@ -43,8 +43,6 @@ class Project(models.Model):
         workspace: A reference to the workspace to which the project belongs. A project may
         belong to at most one workspace
         client: An optional reference to a client
-
-        --- To Come ---
         rate: An optional decimal field specifying the hourly rate for the project; must be blank if fee is specified
         fee: An optional decimal rate specifying the total fee for the project; must be blank if rate is specified
         archived: A boolean field specifying whether the project should be displayed in the project manager
@@ -52,6 +50,9 @@ class Project(models.Model):
     name = models.CharField(max_length=128)
     workspace = models.ForeignKey(Workspace, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, blank=True, null=True)
+    rate = models.DecimalField(max_digits=7, decimal_places=2, blank=True)
+    fee = models.DecimalField(max_digits=15, decimal_places=2, blank=True)
+    archived = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -87,9 +88,9 @@ class Task(models.Model):
         categories: an optional list of categories which describe the task
         workspace: A required reference to the workspace
         completed: A boolean specifying the status of the task
+        billable: A boolean field indicating whether the task should be treated as compensated
 
     To implement?:
-        billable: A boolean field indicating whether the task should be treated as compensated
         status: A string for sorting the task on a kanban board
     """
     name = models.CharField(max_length=128)
@@ -97,6 +98,7 @@ class Task(models.Model):
     categories = models.ManyToManyField(Category, blank=True)
     workspace = models.ForeignKey(Workspace, default=Workspace.DEFAULT_PK, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
+    billable = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name

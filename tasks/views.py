@@ -8,11 +8,11 @@ from django.contrib.auth.models import User
 # from django.db.models.base import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from knox.models import AuthToken
-from tasks.models import Task, Workspace, Sprint, Project, Category, Invite
+from tasks.models import Task, Workspace, Sprint, Project, Category, Invite, Client
 from tasks.permissions import IsMember
 from .serializers import (TaskSerializer, WorkspaceSerializer, SprintSerializer,
-                          ProjectSerializer, CategorySerializer, UserLimitedSerializer, 
-                          GenerateInviteSerializer, RedeemInviteSerializer)
+                          ProjectSerializer, CategorySerializer, ClientSerializer,
+                          UserLimitedSerializer, GenerateInviteSerializer, RedeemInviteSerializer)
 
 logger = logging.getLogger(__name__)
 
@@ -134,6 +134,9 @@ class ProjectDetail(generics.RetrieveUpdateDestroyAPIView):
         workspace_id = self.kwargs['pk']
         return Project.objects.filter(workspace=workspace_id)
 
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk'], "user": self.request.user}
+
 class CategoryList(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -159,6 +162,35 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
         queryset = self.get_queryset()
         filter = {}
         filter['pk'] = self.kwargs['category_id']
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+class ClientList(generics.ListCreateAPIView):
+    serializer_class = ClientSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return Client.objects.filter(workspace=self.kwargs['pk'])
+    
+    def get_serializer_context(self):
+        return { "workspace": self.kwargs['pk'] }
+
+class ClientDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_queryset(self):
+        return Client.objects.filter(workspace=self.kwargs['pk'])
+
+    def get_serializer_context(self):
+        return {"workspace": self.kwargs['pk']}
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        filter['pk'] = self.kwargs['client_id']
         obj = get_object_or_404(queryset, **filter)
         self.check_object_permissions(self.request, obj)
         return obj

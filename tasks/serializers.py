@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models.base import ObjectDoesNotExist
 from drf_writable_nested import WritableNestedModelSerializer
-from tasks.models import Workspace, Task, Sprint, Project, Category, Invite
+from tasks.models import Workspace, Task, Sprint, Project, Category, Invite, Client
 from accounts.models import Account
 from accounts.serializers import UserLimitedSerializer#, UserSerializer
 from .invites import send_invite
@@ -53,15 +53,85 @@ class WorkspaceLimitedSerializer(serializers.ModelSerializer):
         model = Workspace
         fields = ('id', 'name')
 
-class ProjectSerializer(serializers.ModelSerializer):
-    workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all(), required=False)
+class ClientSerializer(serializers.ModelSerializer):
+    name = serializers.CharField()
+    color = serializers.CharField(required=False)
+
     class Meta:
-        model = Project
-        fields = ('name', 'workspace', 'id')
+        model = Client
+        fields = ('id', 'name', 'color')
 
     def validate(self, data):
         data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
         return data
+
+    def create(self, validated_data):
+        try:
+            color = validated_data['color']
+        except KeyError:
+            color = '#000000'
+        client = Client(name=validated_data['name'],
+                            color=color,
+                            workspace=validated_data['workspace'])
+        client.save()
+        return client
+
+
+class ProjectSerializer(WritableNestedModelSerializer):
+    workspace = serializers.PrimaryKeyRelatedField(queryset=Workspace.objects.all(), required=False)
+    fee = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
+    rate = serializers.DecimalField(max_digits=7, decimal_places=2, required=False)
+    client = ClientSerializer(required=False)
+
+    class Meta:
+        model = Project
+        fields = ('name', 'workspace', 'id', 'fee', 'rate', 'client')
+
+    def validate(self, data):
+        logger.debug(data)
+        data['workspace'] = Workspace.objects.get(pk=self.context['workspace'])
+        try:
+            data['client'] = Client.objects.get(name=data['client']['name'], workspace=data['workspace'])
+        except KeyError:
+            pass
+        return data
+
+    def create(self, validated_data):
+        project = Project(name=validated_data['name'],
+                    workspace=validated_data['workspace'])
+        try: 
+            project.rate = validated_data['rate']
+        except KeyError:
+            pass
+        try: 
+            project.fee = validated_data['fee']
+        except KeyError:
+            pass
+        try:
+            project.client = validated_data['client']
+        except KeyError:
+            pass
+        project.save()
+        return project
+    
+    def update(self, instance, validated_data):
+        instance.name = validated_data['name']
+        instance.workspace = validated_data['workspace']
+        try:
+            instance.fee = validated_data['fee']
+        except KeyError:
+            pass
+        try:
+            instance.rate = validated_data['rate']
+        except KeyError:
+            pass
+        try:
+            instance.client = validated_data['client']
+        except KeyError:
+            pass
+        instance.save()
+        return instance
+
 
 class CategorySerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=True)
@@ -117,9 +187,10 @@ class TaskListSerializer(serializers.ModelSerializer):
     project = serializers.StringRelatedField()
     categories = serializers.StringRelatedField(many=True)
     completed = serializers.BooleanField
+    billable = serializers.BooleanField
     class Meta:
         model = Task
-        fields = ('name', 'id', 'project', 'categories', 'completed')
+        fields = ('name', 'id', 'project', 'categories', 'completed', 'billable')
 
 
 class TaskSerializer(WritableNestedModelSerializer):
@@ -129,9 +200,10 @@ class TaskSerializer(WritableNestedModelSerializer):
     sprint_set = LimitedSprintSerializer(many=True, required=False)
     workspace = WorkspaceLimitedSerializer(required=False)
     completed = serializers.BooleanField(required=False)
+    billable = serializers.BooleanField
     class Meta:
         model = Task
-        fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed', 'sprint_set')
+        fields = ('id', 'name', 'workspace', 'project', 'categories', 'completed', 'sprint_set', 'billable')
 
     def validate(self, data):
         # manually get the Category instance from the input data
@@ -197,9 +269,10 @@ class WorkspaceSerializer(WritableNestedModelSerializer):
     project_set = ProjectSerializer(many=True, required=False)
     category_set = CategorySerializer(many=True, required=False)
     task_set = TaskListSerializer(many=True, required=False)
+    client_set = ClientSerializer(many=True, required=False)
     class Meta:
         model = Workspace
-        fields = ('id', 'name', 'users', 'project_set', 'task_set', 'category_set')
+        fields = ('id', 'name', 'users', 'project_set', 'task_set', 'category_set', 'client_set')
 
     def create(self, validated_data):
         workspace = Workspace(name=validated_data['name'])
