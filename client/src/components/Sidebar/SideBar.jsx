@@ -48,7 +48,12 @@ class SideBar extends Component {
     this.setState({ value });
   };
   render() {
-    const { classes, setMode, handleCatDialogOpen, handleCliDialogOpen } = this.props;
+    const {
+      classes,
+      setMode,
+      handleCatDialogOpen,
+      handleCliDialogOpen,
+    } = this.props;
     const { value } = this.state;
 
     const drawer = (

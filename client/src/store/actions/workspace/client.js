@@ -25,16 +25,8 @@ export const addClient = (client) => {
 export const deleteClient = id => (dispatch, getState) => {
   const { headers, workspace } = setupRequest(getState);
   return axios.delete(`/api/workspaces/${workspace}/clients/${id}/`, { headers })
-    .then((res) => {
-      console.log(res);
-      console.log("Handling server response...");
-      dispatch(handleResponse(res, actionTypes.DELETE_CLIENT, id));
-    })
-    .catch((err) => {
-      console.log(err);
-      console.log("Dispatching handleServerError...");
-      dispatch(handleServerError(err))
-    });
+    .then(res => dispatch(handleResponse(res, actionTypes.DELETE_CLIENT, id)))
+    .catch(err => dispatch(handleServerError(err)));
 };
 
 export const updateClient = client =>

@@ -4,7 +4,19 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import classes from './Dashboard.css';
-import { loadWorkspace, loadUser, joinWorkspace } from '../store/actions/';
+import {
+  loadWorkspace,
+  loadUser,
+  joinWorkspace,
+  addCategory,
+  updateCategory,
+  deleteCategory,
+  checkIfCategoryExists,
+  addClient,
+  updateClient,
+  deleteClient,
+  checkIfClientExists,
+} from '../store/actions/';
 
 import MODES from './displayModes';
 import Header from './UI/Header/Header';
@@ -14,8 +26,9 @@ import Reports from './Reports/Reports';
 import Team from './Team/Team';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
-import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
-import ClientManagerDialog from './UI/Dialogs/ClientManagerDialog';
+// import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
+// import ClientManagerDialog from './UI/Dialogs/ClientManagerDialog';
+import ManagerDialog from './UI/Dialogs/ManagerDialog';
 import JoinWorkSpaceDialog from './UI/Dialogs/joinWorkspace';
 // import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
 
@@ -59,20 +72,18 @@ class Dashboard extends Component {
     }
   }
 
-  setMode = (mode) => {
+  setMode = mode =>
     this.setState({
       mode,
       mobileOpen: false,
     });
-  };
 
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
 
-  handleMenu = (event) => {
+  handleMenu = event =>
     this.setState({ anchorEl: event.currentTarget });
-  };
 
   handleMenuClose = () => {
     this.setState({ anchorEl: null });
@@ -89,14 +100,16 @@ class Dashboard extends Component {
     this.setState({ swDialogOpen: false });
   };
 
-  handleJWDialogOpen = () => this.setState({ jwDialogOpen: true, anchorEl: null });
+  handleJWDialogOpen = () =>
+    this.setState({ jwDialogOpen: true, anchorEl: null });
   handleJWDialogClose = () => this.setState({ jwDialogOpen: false });
 
-  handleInviteCodeInput = event => this.setState({ inviteCode: event.target.value });
+  handleInviteCodeInput = event =>
+    this.setState({ inviteCode: event.target.value });
 
   handleGSDialogClose = () => {
     this.setState({ gsDialogOpen: false });
-  }
+  };
 
   handleSwitchWorkspace = (id) => {
     this.setState({ swDialogOpen: false });
@@ -106,14 +119,14 @@ class Dashboard extends Component {
   handleJoinWorkspace = () => {
     this.setState({ jwDialogOpen: false });
     this.props.joinWorkspace(this.state.inviteCode);
-  }
+  };
 
   handleCatDialogOpen = () => this.setState({ catDialogOpen: true });
 
   handleCatDialogClose = () => this.setState({ catDialogOpen: false });
 
   handleCliDialogOpen = () => this.setState({ cliDialogOpen: true });
-  
+
   handleCliDialogClose = () => this.setState({ cliDialogOpen: false });
 
   renderWorkspace = (mode) => {
@@ -127,10 +140,13 @@ class Dashboard extends Component {
       case MODES.TEAM:
         return <Team />;
       // case MODES.CATEGORIES:
-        // return <CategoryManager />;
+      // return <CategoryManager />;
       default:
-        return this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> 
-          : <CircularProgress />;
+        return this.props.user ? (
+          <SprintWorkspace isData={this.props.sprintDataExists} />
+        ) : (
+          <CircularProgress />
+        );
     }
   };
 
@@ -174,14 +190,34 @@ class Dashboard extends Component {
           handleJoinWorkspace={this.handleJoinWorkspace}
           inviteCode={this.state.inviteCode}
         />
-        <CategoryManagerDialog
+        <ManagerDialog
           open={this.state.catDialogOpen}
           handleClose={this.handleCatDialogClose}
+          dialogTitle="Manage Workspace Categories"
+          inputName="newCategory"
+          inputLabel="Add New Category"
+          items={this.props.categories}
+          add={this.props.addCategory}
+          update={this.props.updateCategory}
+          deleteItem={this.props.deleteCategory}
+          checkForDuplicate={this.props.checkIfCategoryExists}
         />
-        <ClientManagerDialog
+        <ManagerDialog
           open={this.state.cliDialogOpen}
           handleClose={this.handleCliDialogClose}
+          dialogTitle="Manage Clients"
+          inputName="newClient"
+          inputLabel="Enter new client name"
+          items={this.props.clients}
+          add={this.props.addClient}
+          update={this.props.updateClient}
+          deleteItem={this.props.deleteClient}
+          checkForDuplicate={this.props.checkIfClientExists}
         />
+        {/* <ClientManagerDialog
+          open={this.state.cliDialogOpen}
+          handleClose={this.handleCliDialogClose}
+        /> */}
       </div>
     );
   }
@@ -197,21 +233,42 @@ Dashboard.propTypes = {
   user: PropTypes.object,
   joinWorkspace: PropTypes.func.isRequired,
   sprintDataExists: PropTypes.bool.isRequired,
+  clients: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
+  addCategory: PropTypes.func.isRequired,
+  updateCategory: PropTypes.func.isRequired,
+  deleteCategory: PropTypes.func.isRequired,
+  checkIfCategoryExists: PropTypes.func.isRequired,
+  addClient: PropTypes.func.isRequired,
+  updateClient: PropTypes.func.isRequired,
+  deleteClient: PropTypes.func.isRequired,
+  checkIfClientExists: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state =>
-  ({
-    user: state.auth.user,
-    projects: state.workspace.project_set,
-    loading: state.workspace.loading,
-    sprintDataExists: state.workspace.sprints.length > 0,
-  });
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  projects: state.workspace.project_set,
+  loading: state.workspace.loading,
+  clients: state.workspace.client_set,
+  categories: state.workspace.category_set,
+  sprintDataExists: state.workspace.sprints.length > 0,
+});
 
-const mapDispatchToProps = dispatch =>
-  ({
-    loadWorkspace: workspace => dispatch(loadWorkspace(workspace)),
-    joinWorkspace: code => dispatch(joinWorkspace(code)),
-    loadUser: () => dispatch(loadUser()),
-  });
+const mapDispatchToProps = dispatch => ({
+  loadWorkspace: workspace => dispatch(loadWorkspace(workspace)),
+  joinWorkspace: code => dispatch(joinWorkspace(code)),
+  loadUser: () => dispatch(loadUser()),
+  addClient: client => dispatch(addClient(client)),
+  updateClient: client => dispatch(updateClient(client)),
+  deleteClient: id => dispatch(deleteClient(id)),
+  checkIfClientExists: client => dispatch(checkIfClientExists(client)),
+  addCategory: category => dispatch(addCategory(category)),
+  updateCategory: category => dispatch(updateCategory(category)),
+  deleteCategory: id => dispatch(deleteCategory(id)),
+  checkIfCategoryExists: category => dispatch(checkIfCategoryExists(category)),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Dashboard);

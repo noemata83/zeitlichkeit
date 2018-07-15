@@ -9,7 +9,7 @@ import {
 import getRandomColor from '../../../services/randomColor';
 import CategoryListControls from '../../CategoryManager/CategoryList/CategoryListControls';
 import CategoryList from '../../CategoryManager/CategoryList/CategoryList';
-import { checkIfCategoryExists, addCategory } from '../../../store/actions';
+import { checkIfCategoryExists, addCategory, updateCategory, deleteCategory } from '../../../store/actions';
 
 class CategoryManagerDialog extends Component {
   state = {
@@ -114,6 +114,8 @@ class CategoryManagerDialog extends Component {
 const mapDispatchToProps = dispatch => ({
   checkIfCategoryExists: cat => dispatch(checkIfCategoryExists(cat)),
   addCategory: category => dispatch(addCategory(category)),
+  updateCategory: category => dispatch(updateCategory(category)),
+  deleteCategory: id => dispatch(deleteCategory(id)),
 });
 
 const mapStateToProps = state => ({

@@ -9,7 +9,8 @@ const initialState = {
   task_set: [],
   client_set: [],
   sprints: [],
-  projects: [],
+  category_set: [],
+  // projects: [],
   tasks: [],
   error: null,
   loading: true,
@@ -152,11 +153,11 @@ export default (state = initialState, action) => {
     case actionTypes.ADD_CLIENT: {
       const client = action.data;
       const client_set = [...state.client_set, client];
-      return {...state, client_set };
+      return { ...state, client_set };
     }
     case actionTypes.DELETE_CLIENT: {
       const id = action.data;
-      const client_set = state.client_set.filter(client => client.id !== id );
+      const client_set = state.client_set.filter(client => client.id !== id);
       const project_set = state.project_set.map((project) => {
         if (project.client) {
           const client = project.client.id === id ? null : { ...project.client };

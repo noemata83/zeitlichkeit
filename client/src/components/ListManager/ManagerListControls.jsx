@@ -1,4 +1,3 @@
-/* Deprecated Component */
 import React from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
@@ -6,7 +5,7 @@ import Popover from '@material-ui/core/Popover';
 import { withStyles } from '@material-ui/core/styles';
 import { BlockPicker } from 'react-color';
 
-import colors from '../../../services/colors';
+import colors from '../../services/colors';
 
 const styles = {
   container: {
@@ -35,8 +34,10 @@ const styles = {
   },
 };
 
-const categoryListControls = (props) => {
+const managerListControls = (props) => {
   const {
+    inputName,
+    inputLabel,
     handleInput,
     handleSubmit,
     input,
@@ -55,8 +56,8 @@ const categoryListControls = (props) => {
       <div className={classes.container}>
         <div className={classes.input}>
           <TextField
-            name="newCategory"
-            label="Add New Category"
+            name={inputName}
+            label={inputLabel}
             onChange={handleInput}
             value={input}
             fullWidth
@@ -89,11 +90,13 @@ const categoryListControls = (props) => {
   );
 };
 
-categoryListControls.defaultProps = {
+managerListControls.defaultProps = {
   anchorEl: null,
 };
 
-categoryListControls.propTypes = {
+managerListControls.propTypes = {
+  inputName: PropTypes.string.isRequired,
+  inputLabel: PropTypes.string.isRequired,
   handleInput: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleChangeComplete: PropTypes.func.isRequired,
@@ -105,4 +108,4 @@ categoryListControls.propTypes = {
   anchorEl: PropTypes.object,
 };
 
-export default withStyles(styles)(categoryListControls);
+export default withStyles(styles)(managerListControls);

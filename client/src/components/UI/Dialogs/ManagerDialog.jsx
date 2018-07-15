@@ -1,32 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
-import {
-  Dialog,
-  DialogTitle,
-} from '@material-ui/core';
+import ManagerListControls from '../../ListManager/ManagerListControls';
+import ManagerList from '../../ListManager/ManagerList';
 
-
-import ClientList from '../../ClientManager/ClientList/ClientList';
-import ClientListControls from '../../ClientManager/ClientList/ClientListControls';
 import getRandomColor from '../../../services/randomColor';
-import { addClient, checkIfClientExists, updateClient, deleteClient } from '../../../store/actions';
 
-class ClientManagerDialog extends Component {
-  static propTypes = {
-    open: PropTypes.bool.isRequired,
-    handleClose: PropTypes.func.isRequired,
-    clients: PropTypes.array.isRequired,
-    checkIfClientExists: PropTypes.func.isRequired,
-    addClient: PropTypes.func.isRequired,
-  };
-
+class ManagerDialog extends Component {
   state = {
     color: '',
     input: '',
     anchorEl: null,
-  }
+  };
 
   componentDidMount() {
     if (this.state.color === '') {
@@ -38,13 +25,12 @@ class ClientManagerDialog extends Component {
     this.setState({
       color: getRandomColor(),
     });
-  }
+  };
 
-  handleInput = (event) => {
+  handleInput = event =>
     this.setState({
       input: event.target.value,
     });
-  }
 
   handleOpen = event =>
     this.setState({
@@ -56,40 +42,39 @@ class ClientManagerDialog extends Component {
       anchorEl: null,
     });
 
-  handleChangeComplete = (color) => {
+  handleChangeComplete = color =>
     this.setState({ color: color.hex, anchorEl: null });
-  }
 
-  resetInput = () => {
+  resetInput = () =>
     this.setState({
       input: '',
       color: getRandomColor(),
     });
-  }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    if (this.props.checkIfClientExists(this.state.input)) {
+    if (this.props.checkForDuplicate(this.state.input)) {
       return;
     }
-    this.props.addClient({
+    this.props.add({
       name: this.state.input,
       color: this.state.color,
     });
     this.resetInput();
-  }
+  };
 
   render() {
     const {
       open,
       handleClose,
-      clients,
+      dialogTitle,
+      inputName,
+      inputLabel,
+      items,
+      update,
+      deleteItem,
     } = this.props;
-    const {
-      input,
-      color,
-      anchorEl,
-    } = this.state;
+    const { input, color, anchorEl } = this.state;
     return (
       <Dialog
         style={{ fontSize: '2.5rem', padding: '2rem' }}
@@ -98,9 +83,11 @@ class ClientManagerDialog extends Component {
         open={open}
         onClose={handleClose}
       >
-        <DialogTitle>Manage Clients</DialogTitle>
+        <DialogTitle>{dialogTitle}</DialogTitle>
         <div style={{ width: '80%', padding: '2rem', margin: '0 auto' }}>
-          <ClientListControls
+          <ManagerListControls
+            inputName={inputName}
+            inputLabel={inputLabel}
             input={input}
             handleInput={this.handleInput}
             handleSubmit={this.handleSubmit}
@@ -111,8 +98,10 @@ class ClientManagerDialog extends Component {
             handleChangeComplete={this.handleChangeComplete}
           />
           <div style={{ maxHeight: '50vh', overflowY: 'auto' }}>
-            <ClientList
-              clients={clients}
+            <ManagerList
+              items={items}
+              update={update}
+              deleteItem={deleteItem}
             />
           </div>
         </div>
@@ -121,15 +110,17 @@ class ClientManagerDialog extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  clients: state.workspace.client_set,
-});
+ManagerDialog.propTypes = {
+  checkForDuplicate: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  add: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
+  inputName: PropTypes.string.isRequired,
+  inputLabel: PropTypes.string.isRequired,
+  items: PropTypes.array.isRequired,
+  open: PropTypes.bool.isRequired,
+  handleClose: PropTypes.func.isRequired,
+  dialogTitle: PropTypes.string.isRequired,
+};
 
-const mapDispatchToProps = dispatch => ({
-  addClient: client => dispatch(addClient(client)),
-  checkIfClientExists: client => dispatch(checkIfClientExists(client)),
-  updateClient: client => dispatch(updateClient(client)),
-  deleteClient: id => dispatch(deleteClient(id)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ClientManagerDialog);
+export default ManagerDialog;

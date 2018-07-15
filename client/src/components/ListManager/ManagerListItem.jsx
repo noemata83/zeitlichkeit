@@ -1,7 +1,5 @@
-/* Deprecated Component */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -11,8 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Popover } from '@material-ui/core';
 import { BlockPicker } from 'react-color';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { deleteCategory, updateCategory } from '../../../store/actions';
-import colors from '../../../services/colors';
+import colors from '../../services/colors';
 
 
 const styles = {
@@ -34,7 +31,7 @@ const styles = {
   },
 };
 
-class Category extends Component {
+class ManagerListItem extends Component {
   state = {
     anchorEl: null,
     color: null,
@@ -45,7 +42,7 @@ class Category extends Component {
   }
 
   handleDelete = () => {
-    this.props.deleteCategory(this.props.id);
+    this.props.deleteItem(this.props.id);
   }
 
   handleOpen = event =>
@@ -60,7 +57,7 @@ class Category extends Component {
 
   handleChangeComplete = (color) => {
     this.setState({ color: color.hex, anchorEl: null });
-    this.props.updateCategory({ id: this.props.id, name: this.props.name, color: color.hex });
+    this.props.update({ id: this.props.id, name: this.props.name, color: color.hex });
   }
 
   render() {
@@ -107,20 +104,20 @@ class Category extends Component {
   }
 }
 
-Category.propTypes = {
+ManagerListItem.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   // Eslint is disabled for the next line, because it cannot seem to see that
   // I *am* using the color prop to define state.
   color: PropTypes.string.isRequired, // eslint-disable-line
   classes: PropTypes.object.isRequired,
-  deleteCategory: PropTypes.func.isRequired,
-  updateCategory: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  update: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  deleteCategory: id => dispatch(deleteCategory(id)),
-  updateCategory: category => dispatch(updateCategory(category)),
-});
+// const mapDispatchToProps = dispatch => ({
+//   deleteClient: id => dispatch(deleteClient(id)),
+//   updateClient: client => dispatch(updateClient(client)),
+// });
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(Category));
+export default withStyles(styles)(ManagerListItem);
