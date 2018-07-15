@@ -7,6 +7,7 @@ const initialState = {
   users: [],
   project_set: [],
   task_set: [],
+  client_set: [],
   sprints: [],
   projects: [],
   tasks: [],
@@ -147,6 +148,25 @@ export default (state = initialState, action) => {
         return cat;
       });
       return { ...state, category_set };
+    }
+    case actionTypes.ADD_CLIENT: {
+      const client = action.data;
+      const client_set = [...state.client_set, client];
+      return {...state, client_set };
+    }
+    case actionTypes.DELETE_CLIENT: {
+      const id = action.data;
+      const client_set = state.client_set.filter(client => client.id !== id);
+      const project_set = state.project_set.map((project) => {
+        const client = project.client.id === id ? null : { ...project.client };
+        return { ...project, client };
+      });
+      return { ...state, client_set, project_set };
+    }
+    case actionTypes.UPDATE_CLIENT: {
+      const client = action.data;
+      const client_set = state.client_set.map(cli => (cli.id === client.id ? client : cli));
+      return { ...state, client_set };
     }
     case actionTypes.SERVER_ERROR: {
       const error = action.data;
