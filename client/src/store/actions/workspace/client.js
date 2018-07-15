@@ -15,7 +15,7 @@ export const addClient = (client) => {
   return (dispatch, getState) => {
     const { headers, workspace } = setupRequest(getState);
     return axios
-      .post(`/api/workspaces/${workspace}/clients`, client, { headers })
+      .post(`/api/workspaces/${workspace}/clients/`, client, { headers })
       .then(res =>
         dispatch(handleResponse(res, actionTypes.ADD_CLIENT, res.data)))
       .catch(err => dispatch(handleServerError(err)));
@@ -25,9 +25,16 @@ export const addClient = (client) => {
 export const deleteClient = id => (dispatch, getState) => {
   const { headers, workspace } = setupRequest(getState);
   return axios.delete(`/api/workspaces/${workspace}/clients/${id}/`, { headers })
-    .then(res =>
-      dispatch(handleResponse(res, actionTypes.DELETE_CLIENT, id)))
-    .catch(err => dispatch(handleServerError(err)));
+    .then((res) => {
+      console.log(res);
+      console.log("Handling server response...");
+      dispatch(handleResponse(res, actionTypes.DELETE_CLIENT, id));
+    })
+    .catch((err) => {
+      console.log(err);
+      console.log("Dispatching handleServerError...");
+      dispatch(handleServerError(err))
+    });
 };
 
 export const updateClient = client =>
@@ -44,4 +51,3 @@ export const checkIfClientExists = client =>
     const clients = getState().workspace.client_set;
     return clients.map(cat => cat.name).includes(client);
   };
-  

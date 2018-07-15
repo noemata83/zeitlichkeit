@@ -156,10 +156,13 @@ export default (state = initialState, action) => {
     }
     case actionTypes.DELETE_CLIENT: {
       const id = action.data;
-      const client_set = state.client_set.filter(client => client.id !== id);
+      const client_set = state.client_set.filter(client => client.id !== id );
       const project_set = state.project_set.map((project) => {
-        const client = project.client.id === id ? null : { ...project.client };
-        return { ...project, client };
+        if (project.client) {
+          const client = project.client.id === id ? null : { ...project.client };
+          return { ...project, client };
+        }
+        return project;
       });
       return { ...state, client_set, project_set };
     }

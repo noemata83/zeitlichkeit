@@ -4,3 +4,4 @@ export { loadProjects, addProject, deleteProject } from './workspace/project';
 export { loadSprints, addSprint, deleteSprint, addTaskandSprint } from './workspace/sprint';
 export { addTask, deleteTask, updateTask } from './workspace/task';
 export { addCategory, deleteCategory, checkIfCategoryExists, updateCategory } from './workspace/category';
+export { addClient, deleteClient, checkIfClientExists, updateClient } from './workspace/client';

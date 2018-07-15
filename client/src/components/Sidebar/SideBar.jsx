@@ -48,7 +48,7 @@ class SideBar extends Component {
     this.setState({ value });
   };
   render() {
-    const { classes, setMode, handleCatDialogOpen } = this.props;
+    const { classes, setMode, handleCatDialogOpen, handleCliDialogOpen } = this.props;
     const { value } = this.state;
 
     const drawer = (
@@ -85,6 +85,9 @@ class SideBar extends Component {
           <Divider />
           <ListItem button onClick={handleCatDialogOpen}>
             <ListItemText primary="Manage Categories" />
+          </ListItem>
+          <ListItem button onClick={handleCliDialogOpen}>
+            <ListItemText primary="Manage Clients" />
           </ListItem>
         </List>
       </div>
@@ -123,6 +126,7 @@ SideBar.propTypes = {
   mobileOpen: PropTypes.bool.isRequired,
   handleDrawerToggle: PropTypes.func.isRequired,
   handleCatDialogOpen: PropTypes.func.isRequired,
+  handleCliDialogOpen: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(SideBar);

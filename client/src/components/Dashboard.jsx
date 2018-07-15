@@ -15,6 +15,7 @@ import Team from './Team/Team';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
 import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
+import ClientManagerDialog from './UI/Dialogs/ClientManagerDialog';
 import JoinWorkSpaceDialog from './UI/Dialogs/joinWorkspace';
 // import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
 
@@ -31,6 +32,7 @@ class Dashboard extends Component {
     jwDialogOpen: false,
     catDialogOpen: false,
     gsDialogOpen: false,
+    cliDialogOpen: false,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -110,6 +112,10 @@ class Dashboard extends Component {
 
   handleCatDialogClose = () => this.setState({ catDialogOpen: false });
 
+  handleCliDialogOpen = () => this.setState({ cliDialogOpen: true });
+  
+  handleCliDialogClose = () => this.setState({ cliDialogOpen: false });
+
   renderWorkspace = (mode) => {
     switch (mode) {
       case MODES.SPRINT:
@@ -123,7 +129,8 @@ class Dashboard extends Component {
       // case MODES.CATEGORIES:
         // return <CategoryManager />;
       default:
-        return this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> : <CircularProgress />;
+        return this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> 
+          : <CircularProgress />;
     }
   };
 
@@ -147,6 +154,7 @@ class Dashboard extends Component {
             mobileOpen={this.state.mobileOpen}
             handleDrawerToggle={this.handleDrawerToggle}
             handleCatDialogOpen={this.handleCatDialogOpen}
+            handleCliDialogOpen={this.handleCliDialogOpen}
           />
           <div className={classes.Workspace}>{this.renderWorkspace(mode)}</div>
         </main>
@@ -170,15 +178,25 @@ class Dashboard extends Component {
           open={this.state.catDialogOpen}
           handleClose={this.handleCatDialogClose}
         />
+        <ClientManagerDialog
+          open={this.state.cliDialogOpen}
+          handleClose={this.handleCliDialogClose}
+        />
       </div>
     );
   }
 }
 
+Dashboard.defaultProps = {
+  user: null,
+};
+
 Dashboard.propTypes = {
   loadUser: PropTypes.func.isRequired,
   loadWorkspace: PropTypes.func.isRequired,
+  user: PropTypes.object,
   joinWorkspace: PropTypes.func.isRequired,
+  sprintDataExists: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state =>
