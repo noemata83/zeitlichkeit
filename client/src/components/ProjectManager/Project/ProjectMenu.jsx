@@ -29,12 +29,13 @@ class ProjectMenu extends Component {
   render() {
     const { anchorEl } = this.state;
     const {
-      id,
-      name,
+      project,
       deleteProject,
       addTaskToProject,
+      openEdit,
       classes,
     } = this.props;
+    const { id, name } = project;
     return (
       <div className={classes.button}>
         <IconButton
@@ -50,6 +51,9 @@ class ProjectMenu extends Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
+          <MenuItem onClick={() => { openEdit(project); this.handleClose(); }}>
+            Edit Project Details
+          </MenuItem>
           <MenuItem onClick={() => addTaskToProject(id, name)}>
             Add Task
           </MenuItem>
@@ -68,10 +72,10 @@ ProjectMenu.defaultProps = {
 };
 
 ProjectMenu.propTypes = {
-  id: PropTypes.number.isRequired,
+  project: PropTypes.object.isRequired,
   deleteProject: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
   addTaskToProject: PropTypes.func.isRequired,
+  openEdit: PropTypes.func.isRequired,
   classes: PropTypes.shape({
     button: PropTypes.string,
   }),

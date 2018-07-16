@@ -32,7 +32,20 @@ const styles = theme => ({
   popover: {
     margin: theme.spacing.unit * 2,
   },
+  Toolbar: {
+    flexWrap: 'wrap',
+  }
 });
+
+const displayCompensation = (project) => {
+  if (+project.rate !== 0) {
+    return `\$${project.rate} /hr`;
+  }
+  else if (+project.fee !== 0) {
+    return `\$${project.fee}`;
+  }
+  return 'No compensation';
+}
 
 const Project = (props) => {
   const {
@@ -45,19 +58,28 @@ const Project = (props) => {
     handleAddTask,
     inputValue,
     deleteProject,
+    openEdit,
   } = props;
   return (
     <div>
-      <Toolbar>
+      <Toolbar classes={{ root: classes.Toolbar }}>
         <Typography variant="title" className={classes.title}>
           {project.name}
         </Typography>
         <ProjectMenu
-          id={project.id}
-          name={project.name}
+          project={project}
           deleteProject={deleteProject}
           addTaskToProject={addTaskToProject}
+          openEdit={openEdit}
         />
+        <div style={{ display: 'flex', width: '100%' }}>
+          <Typography style={{ display: 'inline-block', color: project.client ? project.client.color : 'black' }} align="left">
+            {project.client ? project.client.name : 'No client'}
+          </Typography>
+          <Typography style={{ display: 'inline-block', marginLeft: 'auto' }} align="right">
+            {displayCompensation(project)}
+          </Typography>
+        </div>
       </Toolbar>
       <List>
         <TaskList tasks={tasks} />
@@ -93,6 +115,7 @@ Project.propTypes = {
   handleAddTask: PropTypes.func.isRequired,
   inputValue: PropTypes.string.isRequired,
   deleteProject: PropTypes.func.isRequired,
+  openEdit: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Project);

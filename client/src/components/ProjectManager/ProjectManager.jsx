@@ -26,6 +26,7 @@ import {
 } from '../../store/actions';
 
 import Project from './Project/Project';
+import EditProjectDetailsDialog from './Project/EditDetailsDialog';
 
 const styles = theme => ({
   main: {
@@ -50,6 +51,8 @@ class ProjectManager extends Component {
     anchorEl: null,
     categoryInput: '',
     tab: null,
+    editOpen: false,
+    projectToEdit: null,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -76,17 +79,13 @@ class ProjectManager extends Component {
     this.setState({ tab: value });
   }
 
-  handleClickOpen = () => {
-    this.setState({
-      open: true,
-    });
-  };
+  handleClickOpen = () => this.setState({ open: true });
 
-  handleClose = () => {
-    this.setState({
-      open: false,
-    });
-  };
+  handleClose = () => this.setState({ open: false });
+
+  handleEditOpen = project => this.setState({ editOpen: true, projectToEdit: project });
+
+  handleEditClose = () => this.setState({ editOpen: false });
 
   handleSubmit = () => {
     this.setState({
@@ -142,6 +141,7 @@ class ProjectManager extends Component {
             showInput={this.state.addTaskToProject === project.id}
             handleInput={this.handleInput}
             handleAddTask={this.handleAddTask}
+            openEdit={this.handleEditOpen}
             inputValue={this.state[`${project.name}__newTask`] || ''}
           />
       );
@@ -210,6 +210,11 @@ class ProjectManager extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <EditProjectDetailsDialog
+          open={this.state.editOpen}
+          handleClose={this.handleEditClose}
+          project={this.state.projectToEdit}
+        />
       </div>
     );
   }
