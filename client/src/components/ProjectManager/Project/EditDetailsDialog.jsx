@@ -14,12 +14,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 
+import { updateProject } from '../../../store/actions';
+
 class EditDetailsDialog extends Component {
   static propTypes = {
     project: PropTypes.object,
     open: PropTypes.bool.isRequired,
     handleClose: PropTypes.func.isRequired,
     clients: PropTypes.array.isRequired,
+    editProject: PropTypes.func.isRequired,
   };
   static defaultProps = {
     project: null,
@@ -45,8 +48,7 @@ class EditDetailsDialog extends Component {
       } else {
         newState.rateInput = +nextProps.project.rate;
       }
-      if (nextProps.project.client)
-        newState.client = nextProps.project.client.name;
+      if (nextProps.project.client) newState.client = nextProps.project.client.name;
     }
     return { ...newState, id: nextProps.project.id };
   }
@@ -60,11 +62,16 @@ class EditDetailsDialog extends Component {
     const project = {
       ...this.props.project,
       name: this.state.name,
-      client: this.state.client,
       rate: this.state.rate ? this.state.rateInput : 0,
       fee: !this.state.rate ? this.state.feeInput : 0,
     };
-    console.log(project);
+    if (this.state.client !== '') {
+      project.client = {
+        name: this.state.client,
+      }
+    }
+    this.props.editProject(project);
+    this.props.handleClose();
   }
 
   render() {
@@ -157,8 +164,8 @@ const mapStateToProps = state => ({
   clients: state.workspace.client_set,
 });
 
-// const mapDispatchToProps = dispatch => ({
-//   editProject: project => dispatch()
-// })
+const mapDispatchToProps = dispatch => ({
+  editProject: project => dispatch(updateProject(project)),
+});
 
-export default connect(mapStateToProps)(EditDetailsDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(EditDetailsDialog);

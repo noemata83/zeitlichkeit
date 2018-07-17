@@ -118,6 +118,18 @@ export default (state = initialState, action) => {
         project_set,
       };
     }
+    case actionTypes.UPDATE_PROJECT: {
+      const project = action.data;
+      const projectToUpdate = state.project_set.find(proj => proj.id === project.id);
+      const project_set = state.project_set.map(proj => ((proj.id === project.id) ? project : proj));
+      const task_set = state.task_set.map((task) => {
+        if (task.project === projectToUpdate.name) {
+          return { ...task, project: project.name };
+        }
+        return task;
+      });
+      return { ...state, project_set, task_set };
+    }
     case actionTypes.PROJECTS_LOADING: {
       return { ...state, project_loading: true };
     }
