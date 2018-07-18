@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -48,7 +48,8 @@ class EditDetailsDialog extends Component {
       } else {
         newState.rateInput = +nextProps.project.rate;
       }
-      if (nextProps.project.client) newState.client = nextProps.project.client.name;
+      if (nextProps.project.client)
+        newState.client = nextProps.project.client.name;
     }
     return { ...newState, id: nextProps.project.id };
   }
@@ -65,14 +66,47 @@ class EditDetailsDialog extends Component {
       rate: this.state.rate ? this.state.rateInput : 0,
       fee: !this.state.rate ? this.state.feeInput : 0,
     };
-    if (this.state.client !== '') {
+    if (this.state.client !== 'No client') {
       project.client = {
         name: this.state.client,
-      }
+      };
+    } else {
+      delete project.client;
     }
     this.props.editProject(project);
     this.props.handleClose();
-  }
+  };
+
+  renderCompensation = () =>
+    (this.state.rate ? (
+      <TextField
+        label="Hourly Rate"
+        value={this.state.rateInput}
+        onChange={this.handleInput}
+        inputProps={{
+          name: 'rateInput',
+        }}
+        type="number"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        margin="normal"
+      />
+    ) : (
+      <TextField
+        label="Fixed Fee"
+        value={this.state.feeInput}
+        onChange={this.handleInput}
+        inputProps={{
+          name: 'feeInput',
+        }}
+        type="number"
+        InputLabelProps={{
+          shrink: true,
+        }}
+        margin="normal"
+      />
+    ));
 
   render() {
     const { open, handleClose, clients } = this.props;
@@ -111,40 +145,19 @@ class EditDetailsDialog extends Component {
               </MenuItem>
             ))}
           </TextField>
-          <FormControlLabel
-            control={
-              <Switch checked={this.state.rate} onChange={this.toggleRate} />
-            }
-            label={this.state.rate ? 'Hourly' : 'Fixed Fee'}
-          />
-          {this.state.rate ? (
-            <TextField
-              label="Hourly Rate"
-              value={this.state.rateInput}
-              onChange={this.handleInput}
-              inputProps={{
-                name: 'rateInput',
-              }}
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              margin="normal"
-            />
-          ) : (
-            <TextField
-              label="Fixed Fee"
-              value={this.state.feeInput}
-              onChange={this.handleInput}
-              inputProps={{
-                name: 'feeInput',
-              }}
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              margin="normal"
-            />
+          {this.state.client !== 'No client' && (
+            <Fragment>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={this.state.rate}
+                    onChange={this.toggleRate}
+                  />
+                }
+                label={this.state.rate ? 'Hourly' : 'Fixed Fee'}
+              />
+              {this.renderCompensation()}
+            </Fragment>
           )}
         </DialogContent>
         <DialogActions>
@@ -168,4 +181,7 @@ const mapDispatchToProps = dispatch => ({
   editProject: project => dispatch(updateProject(project)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditDetailsDialog);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EditDetailsDialog);

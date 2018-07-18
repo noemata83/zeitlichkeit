@@ -128,7 +128,9 @@ class ProjectSerializer(WritableNestedModelSerializer):
         try:
             instance.client = validated_data['client']
         except KeyError:
-            pass
+            instance.client = None
+            instance.rate = 0
+            instance.fee = 0
         instance.save()
         return instance
 
