@@ -19,10 +19,7 @@ export const loadProjects = () =>
 export const addProject = project =>
   (dispatch, getState) => {
     const { headers, workspace } = setupRequest(getState);
-    const request = {
-      name: project,
-    };
-    return axios.post(`/api/workspaces/${workspace}/projects/`, request, { headers })
+    return axios.post(`/api/workspaces/${workspace}/projects/`, project, { headers })
       .then(res => dispatch(handleResponse(res, actionTypes.ADD_PROJECT, res.data)))
       .catch(err => dispatch(handleServerError(err)));
   };

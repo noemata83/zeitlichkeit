@@ -6,15 +6,9 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import {
   Button,
-  TextField,
   Paper,
   Tabs,
   Tab,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Typography,
 } from '@material-ui/core';
 import {
@@ -26,7 +20,7 @@ import {
 } from '../../store/actions';
 
 import Project from './Project/Project';
-import EditProjectDetailsDialog from './Project/EditDetailsDialog';
+import ProjectDetailsDialog from './Project/ProjectDetailsDialog';
 
 const styles = theme => ({
   main: {
@@ -47,6 +41,7 @@ class ProjectManager extends Component {
   state = {
     open: false,
     newProject: '',
+    mode: null,
     addTaskToProject: null,
     anchorEl: null,
     categoryInput: '',
@@ -79,13 +74,13 @@ class ProjectManager extends Component {
     this.setState({ tab: value });
   }
 
-  handleClickOpen = () => this.setState({ open: true });
+  handleClickOpen = () => this.setState({ editOpen: true, projectToEdit: undefined });
 
   handleClose = () => this.setState({ open: false });
 
   handleEditOpen = project => this.setState({ editOpen: true, projectToEdit: project });
 
-  handleEditClose = () => this.setState({ editOpen: false });
+  handleEditClose = () => this.setState({ editOpen: false, projectToEdit: undefined });
 
   handleSubmit = () => {
     this.setState({
@@ -162,7 +157,7 @@ class ProjectManager extends Component {
                 indicatorColor="secondary"
                 textColor="primary"
                 scrollable
-                scrollButtons="auto"
+                scrollButtons="off"
               >
                 {this.renderProjectTabs(projects)}
               </Tabs>
@@ -180,41 +175,11 @@ class ProjectManager extends Component {
         >
           <AddIcon />
         </Button>
-        {/* Refactor below into separate component */}
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Add a New Project</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Enter a name for the new project below.
-            </DialogContentText>
-            <TextField
-              autoFocus
-              name="newProject"
-              type="text"
-              label="Project Name"
-              value={this.state.newProject}
-              onChange={this.handleInput}
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={() => this.handleSubmit()} color="primary">
-              Add Project
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <EditProjectDetailsDialog
+        { this.state.editOpen && <ProjectDetailsDialog
           open={this.state.editOpen}
           handleClose={this.handleEditClose}
           project={this.state.projectToEdit}
-        />
+        /> }
       </div>
     );
   }

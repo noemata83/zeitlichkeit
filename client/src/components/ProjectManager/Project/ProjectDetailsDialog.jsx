@@ -14,9 +14,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Button from '@material-ui/core/Button';
 
-import { updateProject } from '../../../store/actions';
+import { addProject, updateProject } from '../../../store/actions';
 
-class EditDetailsDialog extends Component {
+class ProjectDetailsDialog extends Component {
   static propTypes = {
     project: PropTypes.object,
     open: PropTypes.bool.isRequired,
@@ -25,7 +25,7 @@ class EditDetailsDialog extends Component {
     editProject: PropTypes.func.isRequired,
   };
   static defaultProps = {
-    project: null,
+    project: undefined,
   };
 
   state = {
@@ -38,7 +38,7 @@ class EditDetailsDialog extends Component {
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (!nextProps.project) return { ...prevState };
+    if (!nextProps.project) return { ...prevState, id: null };
     const newState = {};
     if (prevState.id !== nextProps.project.id) {
       newState.name = nextProps.project.name;
@@ -48,8 +48,7 @@ class EditDetailsDialog extends Component {
       } else {
         newState.rateInput = +nextProps.project.rate;
       }
-      if (nextProps.project.client)
-        newState.client = nextProps.project.client.name;
+      if (nextProps.project.client) { newState.client = nextProps.project.client.name; }
     }
     return { ...newState, id: nextProps.project.id };
   }
@@ -58,6 +57,17 @@ class EditDetailsDialog extends Component {
     this.setState({ [event.target.name]: event.target.value });
 
   toggleRate = () => this.setState({ rate: !this.state.rate });
+
+  resetForm = () => {
+    this.setState({
+      rate: true,
+      rateInput: 0,
+      feeInput: 0,
+      client: 'No client',
+      name: '',
+      id: null,
+    }, this.props.handleClose);
+  }
 
   handleSubmit = () => {
     const project = {
@@ -73,8 +83,12 @@ class EditDetailsDialog extends Component {
     } else {
       delete project.client;
     }
-    this.props.editProject(project);
-    this.props.handleClose();
+    if (this.props.project) {
+      this.props.editProject(project);
+    } else { 
+      this.props.addProject(project);
+    }
+    this.resetForm();
   };
 
   renderCompensation = () =>
@@ -85,6 +99,7 @@ class EditDetailsDialog extends Component {
         onChange={this.handleInput}
         inputProps={{
           name: 'rateInput',
+          min: 0,
         }}
         type="number"
         InputLabelProps={{
@@ -99,6 +114,7 @@ class EditDetailsDialog extends Component {
         onChange={this.handleInput}
         inputProps={{
           name: 'feeInput',
+          min: 0,
         }}
         type="number"
         InputLabelProps={{
@@ -116,11 +132,8 @@ class EditDetailsDialog extends Component {
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Edit Project Details</DialogTitle>
+        <DialogTitle id="form-dialog-title">{ this.props.project ? 'Edit Project Details' : 'Add New Project' }</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Edit Details of the Project Below
-          </DialogContentText>
           <TextField
             type="text"
             label="Project Name"
@@ -146,8 +159,10 @@ class EditDetailsDialog extends Component {
             ))}
           </TextField>
           {this.state.client !== 'No client' && (
-            <Fragment>
+            <div>
+              {this.renderCompensation()}
               <FormControlLabel
+                style={{ marginLeft: '2rem' }}
                 control={
                   <Switch
                     checked={this.state.rate}
@@ -156,8 +171,8 @@ class EditDetailsDialog extends Component {
                 }
                 label={this.state.rate ? 'Hourly' : 'Fixed Fee'}
               />
-              {this.renderCompensation()}
-            </Fragment>
+
+            </div>
           )}
         </DialogContent>
         <DialogActions>
@@ -165,7 +180,7 @@ class EditDetailsDialog extends Component {
             Cancel
           </Button>
           <Button onClick={() => this.handleSubmit()} color="primary">
-            Edit Project
+            { this.props.project ? 'Update Project' : 'Add Project' }
           </Button>
         </DialogActions>
       </Dialog>
@@ -178,10 +193,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  addProject: project => dispatch(addProject(project)),
   editProject: project => dispatch(updateProject(project)),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(EditDetailsDialog);
+)(ProjectDetailsDialog);

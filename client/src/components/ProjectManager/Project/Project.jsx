@@ -34,18 +34,18 @@ const styles = theme => ({
   },
   Toolbar: {
     flexWrap: 'wrap',
-  }
+  },
 });
 
 const displayCompensation = (project) => {
   if (+project.rate !== 0) {
-    return `\$${project.rate} /hr`;
+    return `$${project.rate} /hr`;
   }
   else if (+project.fee !== 0) {
-    return `\$${project.fee}`;
+    return `$${project.fee}`;
   }
   return 'No compensation';
-}
+};
 
 const Project = (props) => {
   const {
