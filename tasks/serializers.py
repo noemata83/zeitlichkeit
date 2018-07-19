@@ -102,11 +102,11 @@ class ProjectSerializer(WritableNestedModelSerializer):
         try: 
             project.rate = validated_data['rate']
         except KeyError:
-            pass
+            project.rate = 0
         try: 
             project.fee = validated_data['fee']
         except KeyError:
-            pass
+            project.fee = 0
         try:
             project.client = validated_data['client']
         except KeyError:
