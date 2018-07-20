@@ -182,7 +182,13 @@ export default (state = initialState, action) => {
     case actionTypes.UPDATE_CLIENT: {
       const client = action.data;
       const client_set = state.client_set.map(cli => (cli.id === client.id ? client : cli));
-      return { ...state, client_set };
+      const project_set = state.project_set.map((project) => {
+        if (project.client && project.client.id === client.id) {
+          return { ...project, client };
+        }
+        return project;
+      });
+      return { ...state, client_set, project_set };
     }
     case actionTypes.SERVER_ERROR: {
       const error = action.data;

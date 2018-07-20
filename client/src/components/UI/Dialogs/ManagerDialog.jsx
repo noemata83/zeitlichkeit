@@ -84,7 +84,7 @@ class ManagerDialog extends Component {
         onClose={handleClose}
       >
         <DialogTitle>{dialogTitle}</DialogTitle>
-        <div style={{ width: '80%', padding: '2rem', margin: '0 auto' }}>
+        <div style={{ width: '80%', padding: '2rem', paddingTop: '0', margin: '0 auto' }}>
           <ManagerListControls
             inputName={inputName}
             inputLabel={inputLabel}
