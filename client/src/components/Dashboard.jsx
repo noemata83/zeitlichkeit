@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import classes from './Dashboard.css';
@@ -72,12 +72,6 @@ class Dashboard extends Component {
     }
   }
 
-  setMode = mode =>
-    this.setState({
-      mode,
-      mobileOpen: false,
-    });
-
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
@@ -129,29 +123,9 @@ class Dashboard extends Component {
 
   handleCliDialogClose = () => this.setState({ cliDialogOpen: false });
 
-  renderWorkspace = (mode) => {
-    switch (mode) {
-      case MODES.SPRINT:
-        return <SprintWorkspace isData={this.props.sprintDataExists} />;
-      case MODES.PROJECT:
-        return <ProjectManager />;
-      case MODES.REPORT:
-        return <Reports />;
-      case MODES.TEAM:
-        return <Team />;
-      // case MODES.CATEGORIES:
-      // return <CategoryManager />;
-      default:
-        return this.props.user ? (
-          <SprintWorkspace isData={this.props.sprintDataExists} />
-        ) : (
-          <CircularProgress />
-        );
-    }
-  };
-
   render() {
-    const { user, loading, mode } = this.state;
+    const { user, loading } = this.state;
+    const { match } = this.props;
     return !user && !loading ? (
       <Redirect to="/" />
     ) : (
@@ -172,12 +146,15 @@ class Dashboard extends Component {
             handleCatDialogOpen={this.handleCatDialogOpen}
             handleCliDialogOpen={this.handleCliDialogOpen}
           />
-          <div className={classes.Workspace}>{this.renderWorkspace(mode)}</div>
+          {/* <div className={classes.Workspace}>{this.renderWorkspace(mode)}</div> */}
+          <div className={classes.Workspace}>
+            <Route exact path={`${match.url}/`} component={() => (this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> : <CircularProgress />)} />
+            <Route path={`${match.url}/ledger`} component={() => (this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> : <CircularProgress />)} />
+            <Route path={`${match.url}/project`} component={ProjectManager} />
+            <Route path={`${match.url}/reports`} component={Reports} />
+            <Route path={`${match.url}/team`} component={Team} />
+          </div>
         </main>
-        {/* <GettingStartedDialog
-          open={this.state.gsDialogOpen}
-          handleClose={this.handleGSDialogClose}
-        /> */}
         <SwitchWorkspaceDialog
           open={this.state.swDialogOpen}
           handleClose={this.handleSWDialogClose}
@@ -214,10 +191,6 @@ class Dashboard extends Component {
           deleteItem={this.props.deleteClient}
           checkForDuplicate={this.props.checkIfClientExists}
         />
-        {/* <ClientManagerDialog
-          open={this.state.cliDialogOpen}
-          handleClose={this.handleCliDialogClose}
-        /> */}
       </div>
     );
   }

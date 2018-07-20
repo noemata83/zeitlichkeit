@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Drawer from '@material-ui/core/Drawer';
@@ -50,7 +51,6 @@ class SideBar extends Component {
   render() {
     const {
       classes,
-      setMode,
       handleCatDialogOpen,
       handleCliDialogOpen,
     } = this.props;
@@ -75,18 +75,18 @@ class SideBar extends Component {
           {value === 2 && <div>I will be a Pomodoro!</div>}
         </Card>
         <List component="nav">
-          <ListItem button onClick={() => setMode(MODES.SPRINT)}>
+          <Link to="/dashboard/ledger" style={{ textDecoration: 'none' }}><ListItem button>
             <ListItemText primary="Time Tracker" />
-          </ListItem>
-          <ListItem button onClick={() => setMode(MODES.PROJECT)}>
+          </ListItem></Link>
+          <Link to="/dashboard/project" style={{ textDecoration: 'none' }}><ListItem button>
             <ListItemText primary="Project Manager" />
-          </ListItem>
-          <ListItem button onClick={() => setMode(MODES.REPORT)}>
+          </ListItem></Link>
+          <Link to="/dashboard/reports" style={{ textDecoration: 'none' }}><ListItem button>
             <ListItemText primary="Reports" />
-          </ListItem>
-          <ListItem button onClick={() => setMode(MODES.TEAM)}>
+          </ListItem></Link>
+          <Link to="/dashboard/team" style={{ textDecoration: 'none' }}><ListItem button>
             <ListItemText primary="Team" />
-          </ListItem>
+          </ListItem></Link>
           <Divider />
           <ListItem button onClick={handleCatDialogOpen}>
             <ListItemText primary="Manage Categories" />
