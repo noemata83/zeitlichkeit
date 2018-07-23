@@ -127,7 +127,6 @@ class SideBar extends Component {
 
 SideBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  setMode: PropTypes.func.isRequired,
   mobileOpen: PropTypes.bool.isRequired,
   handleDrawerToggle: PropTypes.func.isRequired,
   handleCatDialogOpen: PropTypes.func.isRequired,

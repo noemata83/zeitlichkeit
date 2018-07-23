@@ -21,8 +21,14 @@ const styles = theme => ({
 
 const addDays = (date, days) => new Date().setDate(date.getDate() + days);
 
+const compareDates = (date1, date2) =>
+  date1.getDate() === date2.getDate() &&
+  date1.getMonth() === date2.getMonth() &&
+  date1.getYear() === date2.getYear();
+
 const filterByDay = (sprints, date) =>
-  sprints.filter(sprint => new Date(sprint.start_time).getDate() === date);
+  sprints.filter(sprint => compareDates(new Date(sprint.start_time), date));
+
 
 const getDurationInMilliseconds = sprint =>
   (new Date(sprint.end_time) - new Date(sprint.start_time));
@@ -76,7 +82,7 @@ class Reports extends Component {
     day,
     duration: ConvertToHours(getTotalDurationInMilliseconds(filterByDay(
       this.props.sprints,
-      new Date(day).getDate(),
+      new Date(day),
     ))),
   }));
 
