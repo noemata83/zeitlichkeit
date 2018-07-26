@@ -18,7 +18,6 @@ import {
   checkIfClientExists,
 } from '../store/actions/';
 
-import MODES from './displayModes';
 import Header from './UI/Header/Header';
 import SprintWorkspace from './SprintWorkspace/SprintWorkspace';
 import ProjectManager from './ProjectManager/ProjectManager';
