@@ -20,6 +20,7 @@ import {
 
 import Header from './UI/Header/Header';
 import SprintWorkspace from './SprintWorkspace/SprintWorkspace';
+import Dash from './Dash/dash';
 import ProjectManager from './ProjectManager/ProjectManager';
 import Reports from './Reports/Reports';
 import Team from './Team/Team';
@@ -152,7 +153,7 @@ class Dashboard extends Component {
           />
           {/* <div className={classes.Workspace}>{this.renderWorkspace(mode)}</div> */}
           <div className={classes.Workspace}>
-            <Route exact path={`${match.url}/`} component={() => (this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> : <CircularProgress />)} />
+            <Route exact path={`${match.url}/`} component={() => (this.props.user ? <Dash /> : <CircularProgress />)} />
             <Route path={`${match.url}/ledger`} component={() => (this.props.user ? <SprintWorkspace isData={this.props.sprintDataExists} /> : <CircularProgress />)} />
             <Route path={`${match.url}/project`} component={ProjectManager} />
             <Route path={`${match.url}/reports`} component={Reports} />

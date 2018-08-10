@@ -1,0 +1,49 @@
+.dash {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-row-gap: 2rem;
+  grid-column-gap: 2rem;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.dayStats {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  flex-grow: 1;
+}
+
+.sessionLog {
+  grid-column: 2;
+  grid-row: 4 / 7;
+  flex-grow: 1;
+}
+
+.todos {
+  grid-column: 1;
+  grid-row: 1 / 5;
+  flex-grow: 1;
+}
+
+.team {
+  grid-column: 1;
+  grid-row: 5 / 7;
+  flex-grow: 1;
+}
+
+.Card {
+  width: 100%;
+  height: 100%;
+}
+
+@media(max-width: 900px) {
+  .dash {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+}
