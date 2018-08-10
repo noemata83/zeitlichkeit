@@ -10,8 +10,6 @@ const initialState = {
   client_set: [],
   sprints: [],
   category_set: [],
-  // projects: [],
-  tasks: [],
   error: null,
   loading: true,
   sprint_loading: true,
@@ -121,7 +119,8 @@ export default (state = initialState, action) => {
     case actionTypes.UPDATE_PROJECT: {
       const project = action.data;
       const projectToUpdate = state.project_set.find(proj => proj.id === project.id);
-      const project_set = state.project_set.map(proj => ((proj.id === project.id) ? project : proj));
+      const project_set = state.project_set.map(proj =>
+        ((proj.id === project.id) ? project : proj));
       const task_set = state.task_set.map((task) => {
         if (task.project === projectToUpdate.name) {
           return { ...task, project: project.name };
@@ -198,3 +197,16 @@ export default (state = initialState, action) => {
       return state;
   }
 };
+
+export const getProjects = state => state.project_set;
+
+export const getSprints = state => state.sprints;
+
+export const getTasks = state => state.task_set;
+
+export const getCategories = state => state.category_set;
+
+export const getClients = state => state.client_set;
+
+export const getUsers = state => state.users;
+

@@ -8,6 +8,7 @@ import CategoryListControls from './CategoryList/CategoryListControls';
 import getRandomColor from '../../services/randomColor';
 
 import { checkIfCategoryExists, addCategory } from '../../store/actions';
+import { getCategories } from '../../store/reducers';
 
 class CategoryManager extends Component {
   state = {
@@ -105,7 +106,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = state => ({
-  categories: state.workspace.category_set,
+  categories: getCategories(state),
 });
 
 CategoryManager.propTypes = {

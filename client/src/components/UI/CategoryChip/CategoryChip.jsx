@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
+import { getCategories } from '../../../store/reducers';
 
 const styles = {
   Category: {
@@ -44,7 +45,7 @@ CategoryChip.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categories: state.workspace.category_set,
+  categories: getCategories(state),
 });
 
 

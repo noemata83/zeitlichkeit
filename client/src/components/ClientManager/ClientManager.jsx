@@ -8,6 +8,7 @@ import { addClient, checkIfClientExists } from '../../store/actions';
 import ClientListControls from './ClientList/ClientListControls';
 import ClientList from './ClientList/ClientList';
 import getRandomColor from '../../services/randomColor';
+import { getClients } from '../../store/reducers';
 
 
 class ClientManager extends Component {
@@ -88,7 +89,7 @@ class ClientManager extends Component {
 }
 
 const mapStateToProps = state => ({
-  clients: state.workspace.client_set,
+  clients: getClients(state),
 });
 
 const mapDispatchToProps = dispatch => ({

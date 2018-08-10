@@ -25,11 +25,16 @@ import Reports from './Reports/Reports';
 import Team from './Team/Team';
 import SideBar from './Sidebar/SideBar';
 import SwitchWorkspaceDialog from './UI/Dialogs/switchWorkspace';
-// import CategoryManagerDialog from './UI/Dialogs/CategoryManagerDialog';
-// import ClientManagerDialog from './UI/Dialogs/ClientManagerDialog';
 import ManagerDialog from './UI/Dialogs/ManagerDialog';
 import JoinWorkSpaceDialog from './UI/Dialogs/joinWorkspace';
-// import GettingStartedDialog from './UI/Dialogs/GettingStartedDialog';
+import {
+  getProjects,
+  getClients,
+  getCategories,
+  getSprints,
+  getCurrentUser,
+} from '../store/reducers/';
+
 
 class Dashboard extends Component {
   state = {
@@ -218,12 +223,12 @@ Dashboard.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  user: state.auth.user,
-  projects: state.workspace.project_set,
+  user: getCurrentUser(state),
+  projects: getProjects(state),
   loading: state.workspace.loading,
-  clients: state.workspace.client_set,
-  categories: state.workspace.category_set,
-  sprintDataExists: state.workspace.sprints.length > 0,
+  clients: getClients(state),
+  categories: getCategories(state),
+  sprintDataExists: getSprints(state).length > 0,
 });
 
 const mapDispatchToProps = dispatch => ({

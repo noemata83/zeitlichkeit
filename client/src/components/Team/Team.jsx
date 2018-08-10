@@ -14,6 +14,7 @@ import {
   DialogTitle } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import InviteToWorkspaceDialog from '../UI/Dialogs/inviteToWorkspace';
+import { getUsers } from '../../store/reducers';
 
 const styles = {
   title: {
@@ -113,7 +114,7 @@ Team.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  users: state.workspace.users,
+  users: getUsers(state),
   workspace: state.workspace.id,
   token: state.auth.token,
 });

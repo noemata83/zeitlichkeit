@@ -6,6 +6,7 @@ import { Paper, Typography, withStyles, FormControl, NativeSelect } from '@mater
 import BarChart from './BarChart/BarChart';
 import PieChart from './PieChart/PieChart';
 import moment from '../../services/moment';
+import { getSprints, getProjects, getTasks, getCategories } from '../../store/reducers';
 
 const styles = theme => ({
   root: theme.mixins.gutters({
@@ -199,10 +200,10 @@ class Reports extends Component {
 }
 
 const mapStateToProps = state => ({
-  sprints: state.workspace.sprints,
-  projects: state.workspace.project_set,
-  tasks: state.workspace.task_set,
-  categories: state.workspace.category_set,
+  sprints: getSprints(state),
+  projects: getProjects(state),
+  tasks: getTasks(state),
+  categories: getCategories(state),
 });
 
 

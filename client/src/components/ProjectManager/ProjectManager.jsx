@@ -22,6 +22,8 @@ import {
 import Project from './Project/Project';
 import ProjectDetailsDialog from './Project/ProjectDetailsDialog';
 
+import { getProjects } from '../../store/reducers/';
+
 const styles = theme => ({
   main: {
     padding: '2rem',
@@ -126,7 +128,7 @@ class ProjectManager extends Component {
     projects.map((project) => {
       const tasks = this.getProjectTasks(task_set, project.name);
       return (
-        this.state.tab === project.name &&
+        this.state.tab === project.name && (
           <Project
             key={project.id}
             tasks={tasks}
@@ -139,6 +141,7 @@ class ProjectManager extends Component {
             openEdit={this.handleEditOpen}
             inputValue={this.state[`${project.name}__newTask`] || ''}
           />
+        )
       );
     });
 
@@ -187,7 +190,7 @@ class ProjectManager extends Component {
 
 const mapStateToProps = state => ({
   tasks: state.workspace.task_set,
-  projects: state.workspace.project_set,
+  projects: getProjects(state),
 });
 
 const mapDispatchToProps = dispatch => ({
