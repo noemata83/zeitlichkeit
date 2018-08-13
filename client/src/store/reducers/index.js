@@ -12,8 +12,10 @@ export default combineReducers({
 export const getProjects = state => fromWorkspace.getProjects(state.workspace);
 
 export const getSprints = state => fromWorkspace.getSprints(state.workspace);
+export const getTodaysSprints = state => fromWorkspace.getTodaysSprints(state.workspace);
 
 export const getTasks = state => fromWorkspace.getTasks(state.workspace);
+export const getActiveTasks = state => fromWorkspace.getActiveTasks(state.workspace);
 
 export const getCategories = state => fromWorkspace.getCategories(state.workspace);
 

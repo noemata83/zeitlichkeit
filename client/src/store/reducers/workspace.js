@@ -201,8 +201,19 @@ export default (state = initialState, action) => {
 export const getProjects = state => state.project_set;
 
 export const getSprints = state => state.sprints;
+export const getTodaysSprints = state => state.sprints.filter((sprint) => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const day = today.getDate();
+  const midnight = new Date(year, month, day);
+  const start = new Date(sprint.start_time).getTime();
+  return ((start > midnight.getTime()) && (start < today.getTime()));
+});
 
 export const getTasks = state => state.task_set;
+
+export const getActiveTasks = state => state.task_set.filter(task => !task.completed);
 
 export const getCategories = state => state.category_set;
 

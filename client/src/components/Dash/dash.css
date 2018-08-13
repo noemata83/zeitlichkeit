@@ -8,7 +8,14 @@
   height: 100%;
 }
 
+.cardHeader {
+  padding-bottom: 0 !important;
+}
 
+.cardContent {
+  padding: 1rem !important;
+  padding-top: 0 !important;
+}
 
 .dayStats {
   grid-column: 2;

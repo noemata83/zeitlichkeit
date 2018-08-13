@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -76,11 +77,13 @@ const header = (props) => {
         >
           <MenuIcon />
         </IconButton>
+        <Link to="/dashboard">
         <IconButton>
           <img src={clockIcon} className={classes.Logo} alt="TemporaLite" />
         </IconButton>
+        </Link>
         <Typography variant="title" className={classes.title}>
-          Temporalite
+          <Link to="/dashboard">Temporalite</Link>
         </Typography>
         <IconButton
           aria-owns={open ? 'menu-appbar' : null}

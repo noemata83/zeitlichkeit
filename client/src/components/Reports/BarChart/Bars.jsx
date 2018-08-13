@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { scaleLinear } from 'd3-scale';
+import { stack as d3stack, stackOrderNone, stackOffsetNone } from 'd3-shape';
 import { interpolateLab } from 'd3-interpolate';
 
 export default class Bars extends Component {
@@ -22,9 +23,30 @@ export default class Bars extends Component {
       xValue,
       yValue,
       totalDuration,
+      doStack,
+      colors,
     } = this.props;
     const { xScale, yScale } = scales;
-    const bars = data.map((d) => {
+    let bars = [];
+    if (doStack) {
+      const stack = d3stack().keys([...Object.keys(data[0]).filter(key => key !== 'date')]).order(stackOrderNone).offset(stackOffsetNone);
+      const series = stack(data);
+      if (series !== undefined) {
+        bars = series.map((key, index) =>
+          key.map(d =>
+            (<rect
+              key={series[0].key}
+              y={yScale(d[0]) - (svgHeight - margins.bottom - yScale(d[1] - d[0]))}
+              x={xScale(data[0].date)}
+              height={svgHeight - margins.bottom - yScale(d[1] - d[0])}
+              width={xScale.bandwidth()}
+              fill={colors[index]}
+            />)
+        ));
+      }
+
+    } else {
+    bars = data.map((d) => {
       const yVal = totalDuration ? (((d[yValue] * 3600000) / totalDuration) * 100) : d[yValue];
       return (
         <rect
@@ -37,6 +59,7 @@ export default class Bars extends Component {
         />
       );
     });
+  }
 
     return <g>{bars}</g>;
   }
@@ -44,6 +67,8 @@ export default class Bars extends Component {
 
 Bars.defaultProps = {
   totalDuration: undefined,
+  stack: false,
+  colors: [],
 };
 
 Bars.propTypes = {
@@ -55,4 +80,6 @@ Bars.propTypes = {
   totalDuration: PropTypes.number,
   xValue: PropTypes.string.isRequired,
   yValue: PropTypes.string.isRequired,
+  doStack: PropTypes.bool,
+  colors: PropTypes.array,
 };
