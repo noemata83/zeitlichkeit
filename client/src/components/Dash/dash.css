@@ -9,12 +9,15 @@
 }
 
 .cardHeader {
-  padding-bottom: 0 !important;
+  padding-bottom: .5rem !important;
 }
 
 .cardContent {
   padding: 1rem !important;
   padding-top: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 .dayStats {

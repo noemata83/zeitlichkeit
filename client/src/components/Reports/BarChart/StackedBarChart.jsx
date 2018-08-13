@@ -33,11 +33,11 @@ export default class StackedBarChart extends Component {
 
 
     const maxValue = totalDuration ? 100 : Math.max([...data].map(d => d[yValue]));
-    
+
     // scaleBand type
     const xScale = this.xScale
       .padding(0.5)
-      .domain(data.map(d => d[xValue] ))
+      .domain(data.map(d => d[xValue]))
       .range([margins.left, svgWidth - margins.right]);
 
     // scaleLinear type

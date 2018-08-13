@@ -22,6 +22,8 @@ import {
 import TaskList from '../ProjectManager/Project/TaskList/taskList';
 import classes from './dash.css';
 import StackedBarChart from '../Reports/BarChart/StackedBarChart';
+import { filterByUser } from '../../services/data';
+
 
 const getDurationInMilliseconds = sprint =>
   new Date(sprint.end_time) - new Date(sprint.start_time);
@@ -44,18 +46,17 @@ const generateBreakdown = (projects, sprints, tasks) => {
   const group = projects
     .reduce((grouped, project) => {
       grouped[project.name] = ConvertToHours(getTotalDurationInMilliseconds(filterByProject(project.name, sprints, tasks)));
-      if (!grouped[project.name]) delete(grouped[project.name]);
+      if (!grouped[project.name]) delete grouped[project.name];
       return grouped;
     }, {});
-  group['date'] = new Date();
+  group.date = new Date();
   return group;
 };
 
 
 const dash = ({ user, users, sprints, tasks, projects }) => {
-
   const data = [];
-  data.push(generateBreakdown(projects,sprints,tasks));
+  data.push(generateBreakdown(projects, filterByUser(sprints, user.username),tasks));
   return (
     <div className={classes.dash}>
       <div className={classes.todos}>
@@ -82,8 +83,11 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
       </div>
       <div className={classes.dayStats}>
         <Card className={classes.Card}>
-          <CardHeader title="My Workday" />
-          <CardContent>
+          <CardHeader
+            title="My Workday"
+            classes={{ root: classes.cardHeader }}
+          />
+          <CardContent classes={{ root: classes.cardContent }}>
             <StackedBarChart
               svgWidth={250}
               svgHeight={250}
@@ -117,5 +121,17 @@ const mapStateToProps = state => ({
   tasks: getTasks(state),
   projects: getProjects(state),
 });
+
+dash.defaultProps = {
+  user: {},
+};
+
+dash.propTypes = {
+  user: PropTypes.object,
+  users: PropTypes.array.isRequired,
+  sprints: PropTypes.array.isRequired,
+  tasks: PropTypes.array.isRequired,
+  projects: PropTypes.array.isRequired,
+};
 
 export default connect(mapStateToProps)(dash);
