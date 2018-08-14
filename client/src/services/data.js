@@ -45,3 +45,12 @@ export const getTotalDuration = sprints =>
   );
 
 export const filterByUser = (sprints, user) => R.filter(sprint => sprint.owner === user, sprints);
+
+const compareDates = (date1, date2) =>
+  date1.getDate() === date2.getDate() &&
+  date1.getMonth() === date2.getMonth() &&
+  date1.getYear() === date2.getYear();
+
+export const filterByDay = (sprints, date) =>
+  sprints.filter(sprint => compareDates(new Date(sprint.start_time), date));
+

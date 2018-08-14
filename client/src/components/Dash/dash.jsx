@@ -96,6 +96,13 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
               xValue="date"
             />
           </CardContent>
+          <CardActions>
+            <Link to="/dashboard/reports">
+              <Button size="small" color="primary">
+                See More
+              </Button>
+            </Link>
+          </CardActions>
         </Card>
       </div>
       <div className={classes.team}>
