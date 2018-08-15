@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as R from 'ramda';
 
 import Day from './Day/Day';
+import { getSprints, getCurrentUsername } from '../../../store/reducers';
 
 const filterByUser = (sprints, user) => R.filter(sprint => sprint.owner === user, sprints);
 
@@ -31,7 +32,7 @@ const groupByDates = sprints =>
     return sprintList;
   }, {});
 
-class DayView extends Component {
+export class DayView extends Component {
   state = {
     sprints: [],
   };
@@ -56,13 +57,13 @@ class DayView extends Component {
   renderDayView = (sprints) => {
     const sortedDates = Object.keys(sprints).sort((a, b) => new Date(b) - new Date(a));
     return sortedDates.map(date => (
-      <Day key={date.toString()} date={date} sprints={sprints[date]} />
+      <Day key={date.toString()} date={date} compressed={this.props.compressed} sprints={sprints[date]} />
     ));
   };
 
   render() {
     return (
-      <div>
+      <div style={{overflowY: 'auto', width: '100%', maxHeight: '100%' }}>
         {this.renderDayView(this.state.sprints)}
       </div>
     );
@@ -70,18 +71,20 @@ class DayView extends Component {
 }
 
 const mapStateToProps = state => ({
-  sprints: state.workspace.sprints,
+  sprints: getSprints(state),
   loading: state.workspace.sprint_loading,
-  user: state.auth.user.username,
+  user: getCurrentUsername(state),
 });
 
 DayView.defaultProps = {
   loading: true,
+  compressed: false,
 };
 
 DayView.propTypes = {
   sprints: PropTypes.array.isRequired, // eslint-disable-line
-  loading: PropTypes.bool, // eslint-disable-line
+  loading: PropTypes.bool,
+  compressed: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(DayView);

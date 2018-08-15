@@ -48,3 +48,4 @@ export default (state = initialState, action) => {
 };
 
 export const getCurrentUser = state => state.user;
+export const getCurrentUsername = state => state.user.username;

@@ -24,7 +24,6 @@ const styles = {
     position: 'relative',
     flexBasis: '300px',
     backgroundColor: '#F2f2f2',
-    height: '92vh',
     maxWidth: '300px',
   },
   drawerPaperMobile: {

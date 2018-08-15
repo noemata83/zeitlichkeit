@@ -20,6 +20,7 @@ import {
   getProjects,
 } from '../../store/reducers';
 import TaskList from '../ProjectManager/Project/TaskList/taskList';
+import { DayView } from '../SprintWorkspace/DayView/DayView';
 import classes from './dash.css';
 import StackedBarChart from '../Reports/BarChart/StackedBarChart';
 import { filterByUser } from '../../services/data';
@@ -64,21 +65,21 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
           <CardHeader
             title="Active Tasks"
             classes={{ root: classes.cardHeader }}
+            action={
+              <Link to="/dashboard/project">
+                <Button size="small" color="primary">
+                  See More
+                </Button>
+              </Link>
+            }
           />
           <CardContent classes={{ root: classes.cardContent }}>
-            <div style={{ overflowY: 'scroll', maxHeight: '32rem' }}>
+            <div style={{ overflowY: 'auto', maxHeight: '100%' }}>
               <List>
                 <TaskList tasks={tasks} />
               </List>
             </div>
           </CardContent>
-          <CardActions>
-            <Link to="/dashboard/project">
-              <Button size="small" color="primary">
-                See More
-              </Button>
-            </Link>
-          </CardActions>
         </Card>
       </div>
       <div className={classes.dayStats}>
@@ -86,35 +87,58 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
           <CardHeader
             title="My Workday"
             classes={{ root: classes.cardHeader }}
+            action={
+              <Link to="/dashboard/reports">
+                <Button size="small" color="primary">
+                  See More
+                </Button>
+              </Link>
+            }
           />
           <CardContent classes={{ root: classes.cardContent }}>
             <StackedBarChart
-              svgWidth={250}
-              svgHeight={250}
+              svgWidth={300}
+              svgHeight={500}
               data={data}
               yValue="duration"
               xValue="date"
             />
           </CardContent>
-          <CardActions>
-            <Link to="/dashboard/reports">
-              <Button size="small" color="primary">
-                See More
-              </Button>
-            </Link>
-          </CardActions>
         </Card>
       </div>
       <div className={classes.team}>
         <Card className={classes.Card}>
-          <CardHeader title="Team" />
+          <CardHeader
+            title="Team"
+            classes={{ root: classes.cardHeader }}
+            action={
+              <Link to="/dashboard/team">
+                <Button size="small" color="primary">
+                  See More
+                </Button>
+              </Link>
+            }
+          />
         </Card>
       </div>
 
       <div className={classes.sessionLog}>
         <Card className={classes.Card}>
-          <CardHeader title="Recent Work Sessions" />
-          <CardContent />
+          <CardHeader
+            title="Today's Sessions"
+            classes={{ root: classes.cardHeader }}
+            action={
+              <Link to="/dashboard/ledger">
+                <Button size="small" color="primary">
+                  See More
+                </Button>
+              </Link>
+            }/>
+          <CardContent
+            classes={{ root: classes.cardContent }}
+          >
+            <DayView sprints={sprints} loading={false} user={user.username} compressed />
+          </CardContent>
         </Card>
       </div>
     </div>

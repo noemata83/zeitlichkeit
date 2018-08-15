@@ -24,3 +24,5 @@ export const getClients = state => fromWorkspace.getClients(state.workspace);
 export const getUsers = state => fromWorkspace.getUsers(state.workspace);
 
 export const getCurrentUser = state => fromAuth.getCurrentUser(state.auth);
+
+export const getCurrentUsername = state => fromAuth.getCurrentUsername(state.auth);
