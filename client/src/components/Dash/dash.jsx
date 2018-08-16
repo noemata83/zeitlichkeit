@@ -3,61 +3,43 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Card from '@material-ui/core/Card';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import {
   CardHeader,
   CardContent,
   List,
-  CardActions,
   Button,
+  Icon,
+  Typography,
+  ListItem,
+  ListItemText,
 } from '@material-ui/core';
 import {
   getUsers,
-  getSprints,
-  getActiveTasks,
   getTodaysSprints,
   getCurrentUser,
-  getTasks,
   getProjects,
+  getActiveTasks,
 } from '../../store/reducers';
+import {
+  generateProjectBreakdown,
+  filterByUser,
+} from '../../services/data';
 import TaskList from '../ProjectManager/Project/TaskList/taskList';
 import { DayView } from '../SprintWorkspace/DayView/DayView';
 import classes from './dash.css';
 import StackedBarChart from '../Reports/BarChart/StackedBarChart';
-import { filterByUser } from '../../services/data';
 
 
-const getDurationInMilliseconds = sprint =>
-  new Date(sprint.end_time) - new Date(sprint.start_time);
-
-const getTotalDurationInMilliseconds = sprints =>
-  sprints.reduce(
-    (duration, sprint) => duration + getDurationInMilliseconds(sprint),
-    0,
-  );
-
-const ConvertToHours = seconds => seconds / 3600000;
-
-const filterByProject = (project, sprints, tasks) =>
-  sprints.filter((sprint) => {
-    const thetask = tasks.filter(task => task.name === sprint.task)[0];
-    return thetask.project === project;
-  });
-
-const generateBreakdown = (projects, sprints, tasks) => {
-  const group = projects
-    .reduce((grouped, project) => {
-      grouped[project.name] = ConvertToHours(getTotalDurationInMilliseconds(filterByProject(project.name, sprints, tasks)));
-      if (!grouped[project.name]) delete grouped[project.name];
-      return grouped;
-    }, {});
-  group.date = new Date();
-  return group;
-};
-
-
-const dash = ({ user, users, sprints, tasks, projects }) => {
+const dash = ({
+  user,
+  users,
+  sprints,
+  tasks,
+  projects,
+}) => {
   const data = [];
-  data.push(generateBreakdown(projects, filterByUser(sprints, user.username),tasks));
+  data.push(generateProjectBreakdown(projects, filterByUser(sprints, user.username), tasks));
   return (
     <div className={classes.dash}>
       <div className={classes.todos}>
@@ -76,7 +58,11 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
           <CardContent classes={{ root: classes.cardContent }}>
             <div style={{ overflowY: 'auto', maxHeight: '100%' }}>
               <List>
-                <TaskList tasks={tasks} />
+                {tasks.length > 0 ? <TaskList tasks={tasks} /> :
+                <ListItem>
+                  <ListItemText primary="No active tasks to display!" />
+                </ListItem>
+              }
               </List>
             </div>
           </CardContent>
@@ -90,7 +76,7 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
             action={
               <Link to="/dashboard/reports">
                 <Button size="small" color="primary">
-                  See More
+                   See More
                 </Button>
               </Link>
             }
@@ -102,6 +88,7 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
               data={data}
               yValue="duration"
               xValue="date"
+              compressed
             />
           </CardContent>
         </Card>
@@ -119,6 +106,33 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
               </Link>
             }
           />
+          <CardContent
+            classes={{ root: classes.cardContent }}
+            style={{
+              width: '100%',
+              height: '100%',
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div className={classes.teamMenu}>
+              {users.map(usr => (
+                <div key={usr.username} className={classes.teamMember}>
+                  <Icon
+                    aria-haspopup="false"
+                    color="primary"
+                    classes={{ root: classes.UserIcon }}
+                  >
+                    <AccountCircle classes={{ root: classes.AccountCircle }} />
+                  </Icon>
+                  <Typography>
+                    {usr.username}
+                  </Typography>
+                </div>
+              ))}
+            </div>
+          </CardContent>
         </Card>
       </div>
 
@@ -133,7 +147,8 @@ const dash = ({ user, users, sprints, tasks, projects }) => {
                   See More
                 </Button>
               </Link>
-            }/>
+            }
+          />
           <CardContent
             classes={{ root: classes.cardContent }}
           >
@@ -149,7 +164,7 @@ const mapStateToProps = state => ({
   user: getCurrentUser(state),
   users: getUsers(state),
   sprints: getTodaysSprints(state),
-  tasks: getTasks(state),
+  tasks: getActiveTasks(state),
   projects: getProjects(state),
 });
 

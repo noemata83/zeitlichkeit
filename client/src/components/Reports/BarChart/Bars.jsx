@@ -29,37 +29,45 @@ export default class Bars extends Component {
     const { xScale, yScale } = scales;
     let bars = [];
     if (doStack) {
-      const stack = d3stack().keys([...Object.keys(data[0]).filter(key => key !== 'date')]).order(stackOrderNone).offset(stackOffsetNone);
+      const stack = d3stack()
+        .keys([...Object.keys(data[0]).filter(key => key !== 'date')])
+        .order(stackOrderNone)
+        .offset(stackOffsetNone);
       const series = stack(data);
       if (series !== undefined) {
         bars = series.map((key, index) =>
-          key.map(d =>
-            (<rect
+          key.map(d => (
+            <rect
               key={series[0].key}
-              y={yScale(d[0]) - (svgHeight - margins.bottom - yScale(d[1] - d[0]))}
+              y={
+                yScale(d[0]) -
+                (svgHeight - margins.bottom - yScale(d[1] - d[0]))
+              }
               x={xScale(data[0].date)}
               height={svgHeight - margins.bottom - yScale(d[1] - d[0])}
               width={xScale.bandwidth()}
               fill={colors[index]}
-            />)
-        ));
+            />
+          )),
+        );
       }
-
     } else {
-    bars = data.map((d) => {
-      const yVal = totalDuration ? (((d[yValue] * 3600000) / totalDuration) * 100) : d[yValue];
-      return (
-        <rect
-          key={d[xValue]}
-          y={yScale(yVal)}
-          x={xScale(d[xValue])}
-          height={svgHeight - margins.bottom - scales.yScale(yVal)}
-          width={xScale.bandwidth()}
-          fill={d.color || this.colorScale(d[yValue])}
-        />
-      );
-    });
-  }
+      bars = data.map((d) => {
+        const yVal = totalDuration
+          ? ((d[yValue] * 3600000) / totalDuration) * 100
+          : d[yValue];
+        return (
+          <rect
+            key={d[xValue]}
+            y={yScale(yVal)}
+            x={xScale(d[xValue])}
+            height={svgHeight - margins.bottom - scales.yScale(yVal)}
+            width={xScale.bandwidth()}
+            fill={d.color || this.colorScale(d[yValue])}
+          />
+        );
+      });
+    }
 
     return <g>{bars}</g>;
   }
@@ -67,7 +75,7 @@ export default class Bars extends Component {
 
 Bars.defaultProps = {
   totalDuration: undefined,
-  stack: false,
+  doStack: false,
   colors: [],
 };
 

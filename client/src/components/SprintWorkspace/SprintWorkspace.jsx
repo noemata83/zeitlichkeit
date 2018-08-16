@@ -36,7 +36,7 @@ class SprintWorkspace extends Component {
         <DayView changeMode={this.modeChangeHandler} />
       );
     if (this.state.loading) {
-      return <CircularProgress color="secondary" className={classes.progress} />
+      return <CircularProgress color="secondary" className={classes.progress} />;
     }
     return isData ? (
       <div style={{ padding: '2rem 2rem 0 2rem' }}>
@@ -54,12 +54,13 @@ class SprintWorkspace extends Component {
         {view}
       </div>
     ) :
-    (<Welcome />);
+      (<Welcome />);
   }
 }
 
 SprintWorkspace.propTypes = {
   classes: PropTypes.object.isRequired,
+  isData: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(SprintWorkspace);

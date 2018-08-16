@@ -74,18 +74,26 @@ class SideBar extends Component {
           {value === 2 && <div>I will be a Pomodoro!</div>}
         </Card>
         <List component="nav">
-          <Link to="/dashboard/ledger" style={{ textDecoration: 'none' }}><ListItem button onClick={handleDrawerToggle}>
-            <ListItemText primary="Time Tracker" />
-          </ListItem></Link>
-          <Link to="/dashboard/project" style={{ textDecoration: 'none' }}><ListItem button onClick={handleDrawerToggle}>
-            <ListItemText primary="Project Manager" />
-          </ListItem></Link>
-          <Link to="/dashboard/reports" style={{ textDecoration: 'none' }}><ListItem button onClick={handleDrawerToggle}>
-            <ListItemText primary="Reports" />
-          </ListItem></Link>
-          <Link to="/dashboard/team" style={{ textDecoration: 'none' }}><ListItem button onClick={handleDrawerToggle}>
-            <ListItemText primary="Team" />
-          </ListItem></Link>
+          <Link to="/dashboard/ledger" style={{ textDecoration: 'none' }}>
+            <ListItem button onClick={handleDrawerToggle}>
+              <ListItemText primary="Time Tracker" />
+            </ListItem>
+          </Link>
+          <Link to="/dashboard/project" style={{ textDecoration: 'none' }}>
+            <ListItem button onClick={handleDrawerToggle}>
+              <ListItemText primary="Project Manager" />
+            </ListItem>
+          </Link>
+          <Link to="/dashboard/reports" style={{ textDecoration: 'none' }}>
+            <ListItem button onClick={handleDrawerToggle}>
+              <ListItemText primary="Reports" />
+            </ListItem>
+          </Link>
+          <Link to="/dashboard/team" style={{ textDecoration: 'none' }}>
+            <ListItem button onClick={handleDrawerToggle}>
+              <ListItemText primary="logTeam" />
+            </ListItem>
+          </Link>
           <Divider />
           <ListItem button onClick={handleCatDialogOpen}>
             <ListItemText primary="Manage Categories" />

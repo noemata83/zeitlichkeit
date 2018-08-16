@@ -23,6 +23,7 @@ export default class StackedBarChart extends Component {
       xValue,
       yValue,
       totalDuration,
+      compressed,
     } = this.props;
     const margins = {
       top: 10,
@@ -31,8 +32,11 @@ export default class StackedBarChart extends Component {
       left: 60,
     };
 
-
-    const maxValue = totalDuration ? 100 : Math.max([...data].map(d => d[yValue]));
+    // Let's consider refactoring the next line; it is a wee bit absurd.
+    // The goal is to ascertain the max value for each set of stacked bars by summing
+    // the value for each key, excluding the date itself. This badly needs work.
+    const maxValue = totalDuration ? 100 :
+      Math.ceil(Math.max(data.map(d => Object.keys(d).reduce((sum, key) => ((key === 'date') ? sum : sum + d[key]), 0))));
 
     // scaleBand type
     const xScale = this.xScale
@@ -52,6 +56,7 @@ export default class StackedBarChart extends Component {
           margins={margins}
           svgHeight={svgHeight}
           svgWidth={svgWidth}
+          compressed={compressed}
         />
         <Bars
           scales={{ xScale, yScale }}
@@ -72,6 +77,7 @@ export default class StackedBarChart extends Component {
 
 StackedBarChart.defaultProps = {
   totalDuration: undefined,
+  compressed: false,
 };
 
 StackedBarChart.propTypes = {
@@ -81,4 +87,5 @@ StackedBarChart.propTypes = {
   yValue: PropTypes.string.isRequired,
   data: PropTypes.array.isRequired,
   totalDuration: PropTypes.number,
+  compressed: PropTypes.bool,
 };

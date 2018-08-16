@@ -78,9 +78,9 @@ const header = (props) => {
           <MenuIcon />
         </IconButton>
         <Link to="/dashboard">
-        <IconButton>
-          <img src={clockIcon} className={classes.Logo} alt="TemporaLite" />
-        </IconButton>
+          <IconButton>
+            <img src={clockIcon} className={classes.Logo} alt="Temporalite" />
+          </IconButton>
         </Link>
         <Typography variant="title" className={classes.title}>
           <Link to="/dashboard">Temporalite</Link>

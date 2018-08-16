@@ -22,7 +22,8 @@ export const filterByProject = (project, sprints, tasks) =>
 export const generateProjectBreakdown = (projects, sprints, tasks) => {
   const group = projects
     .reduce((grouped, project) => {
-      grouped[project.name] = ConvertToHours(getTotalDurationInMilliseconds(filterByProject(project.name, sprints, tasks)));
+      grouped[project.name] = ConvertToHours(
+        getTotalDurationInMilliseconds(filterByProject(project.name, sprints, tasks)));
       if (!grouped[project.name]) delete grouped[project.name];
       return grouped;
     }, {});

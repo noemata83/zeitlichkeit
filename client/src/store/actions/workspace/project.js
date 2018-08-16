@@ -30,7 +30,7 @@ export const updateProject = project =>
     return axios.put(`/api/workspaces/${workspace}/projects/${project.id}/`, project, { headers })
       .then(res => dispatch(handleResponse(res, actionTypes.UPDATE_PROJECT, res.data)))
       .catch(err => dispatch(handleServerError(err)));
-  }
+  };
 
 export const deleteProject = (id, name) =>
   (dispatch, getState) => {

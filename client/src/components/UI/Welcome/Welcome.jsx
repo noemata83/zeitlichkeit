@@ -9,8 +9,8 @@ const styles = () => ({
   Copy: {
     fontSize: '2rem',
     lineHeight: '1.7',
-  }
-})
+  },
+});
 
 const welcome = (props) => {
   const { classes } = props;
@@ -18,8 +18,8 @@ const welcome = (props) => {
     <div className={classes.Welcome}>
       <h1>Welcome to Temporalite!</h1>
       <p className={classes.Copy}>
-        To get started, simply time, log, or pace your work using the time entry widgets to the left,
-        or create a new Project with the Project Manager.
+        To get started, simply time, log, or pace your work using the time entry
+        widgets to the left, or create a new Project with the Project Manager.
       </p>
     </div>
   );
@@ -27,6 +27,6 @@ const welcome = (props) => {
 
 welcome.propTypes = {
   classes: PropTypes.object.isRequired,
-}
+};
 
 export default withStyles(styles)(welcome);

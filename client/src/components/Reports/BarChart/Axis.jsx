@@ -22,7 +22,7 @@ export default class Axis extends Component {
       .tickPadding([10]);
     // .ticks([7])
 
-    d3select(this.axisElement).call(axis);
+    if (!this.props.compressed) d3select(this.axisElement).call(axis);
   }
 
   render() {
@@ -42,5 +42,5 @@ Axis.propTypes = {
   orient: PropTypes.string.isRequired,
   translate: PropTypes.string.isRequired,
   scale: PropTypes.func.isRequired,
-  tickSize: PropTypes.number.isRequired,
+  tickSize: PropTypes.number,
 };

@@ -7,12 +7,14 @@ const Axes = ({
   margins,
   svgWidth,
   svgHeight,
+  compressed,
 }) => {
   const xProps = {
     orient: 'Bottom',
     scale: scales.xScale,
     translate: `translate(0, ${svgHeight - margins.bottom})`,
-    tickSize: svgHeight - margins.top - margins.bottom,
+    tickSize: !compressed ? svgHeight - margins.top - margins.bottom : null,
+    compressed,
   };
 
   const yProps = {
@@ -30,11 +32,16 @@ const Axes = ({
   );
 };
 
+Axes.defaultProps = {
+  compressed: false,
+};
+
 Axes.propTypes = {
   scales: PropTypes.object.isRequired,
   margins: PropTypes.object.isRequired,
   svgWidth: PropTypes.number.isRequired,
   svgHeight: PropTypes.number.isRequired,
+  compressed: PropTypes.bool,
 };
 
 export default Axes;
