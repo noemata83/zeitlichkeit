@@ -13,7 +13,6 @@ const generateLabels = (data, x, y) =>
 const legend = (props) => {
   const {
     svgWidth,
-    svgHeight,
     rightMargin,
     data,
   } = props;
@@ -41,7 +40,6 @@ const legend = (props) => {
 
 legend.propTypes = {
   svgWidth: PropTypes.number.isRequired,
-  svgHeight: PropTypes.number.isRequired,
   rightMargin: PropTypes.number.isRequired,
   data: PropTypes.array.isRequired,
 };

@@ -83,7 +83,7 @@ export default class StackedBarChart extends Component {
           svgHeight={svgHeight}
           colors={this.colors}
         />
-        { (this.generateLegendData(data).length > 0) && <Legend svgWidth={svgWidth} svgHeight={svgHeight} rightMargin={margins.right} data={this.generateLegendData(data)} /> }
+        { (this.generateLegendData(data).length > 0) && <Legend svgWidth={svgWidth} rightMargin={margins.right} data={this.generateLegendData(data)} /> }
       </svg>
     );
   }
