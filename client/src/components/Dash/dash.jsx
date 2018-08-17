@@ -83,7 +83,13 @@ const dash = ({
           />
           <CardContent classes={{ root: classes.cardContent }}>
             <StackedBarChart
-              svgWidth={300}
+              margins={{
+                top: 10,
+                right: 200,
+                bottom: 30,
+                left: 20,
+              }}
+              svgWidth={500}
               svgHeight={500}
               data={data}
               yValue="duration"

@@ -14,14 +14,13 @@ const legend = (props) => {
   const {
     svgWidth,
     svgHeight,
-    radius,
+    rightMargin,
     data,
   } = props;
-  const x = (svgWidth / 2) - radius;
-  const width = radius * 2;
-  const y = svgHeight - 180;
+  const x = (svgWidth - rightMargin) + 10;
+  const width = (rightMargin - 10);
+  const y = 20;
   const height = (data.length * 20) + 20;
-  console.log(data);
   return (
     <g>
       <rect
@@ -43,7 +42,7 @@ const legend = (props) => {
 legend.propTypes = {
   svgWidth: PropTypes.number.isRequired,
   svgHeight: PropTypes.number.isRequired,
-  radius: PropTypes.number.isRequired,
+  rightMargin: PropTypes.number.isRequired,
   data: PropTypes.array.isRequired,
 };
 

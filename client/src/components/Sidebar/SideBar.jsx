@@ -91,7 +91,7 @@ class SideBar extends Component {
           </Link>
           <Link to="/dashboard/team" style={{ textDecoration: 'none' }}>
             <ListItem button onClick={handleDrawerToggle}>
-              <ListItemText primary="logTeam" />
+              <ListItemText primary="Team" />
             </ListItem>
           </Link>
           <Divider />

@@ -6,6 +6,7 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 
 import Axes from './Axes';
 import Bars from './Bars';
+import Legend from './Legend/Legend';
 
 export default class StackedBarChart extends Component {
   constructor(props) {
@@ -15,8 +16,25 @@ export default class StackedBarChart extends Component {
     this.colors = schemeCategory10;
   }
 
+  generateLegendData = (data) => {
+    let currentIndex = 0;
+    return data.reduce((legendData, datum) => {
+      Object.keys(datum).forEach((key) => {
+        if ((key !== 'date') && !legendData.find(item => item.name === key)) {
+          legendData.push({
+            name: key,
+            color: this.colors[currentIndex],
+          });
+          currentIndex += 1;
+        }
+      });
+      return legendData;
+    }, []);
+  }
+
   render() {
     const {
+      margins,
       svgWidth,
       svgHeight,
       data,
@@ -25,12 +43,7 @@ export default class StackedBarChart extends Component {
       totalDuration,
       compressed,
     } = this.props;
-    const margins = {
-      top: 10,
-      right: 20,
-      bottom: 30,
-      left: 60,
-    };
+
 
     // Let's consider refactoring the next line; it is a wee bit absurd.
     // The goal is to ascertain the max value for each set of stacked bars by summing
@@ -70,6 +83,7 @@ export default class StackedBarChart extends Component {
           svgHeight={svgHeight}
           colors={this.colors}
         />
+        { (this.generateLegendData(data).length > 0) && <Legend svgWidth={svgWidth} svgHeight={svgHeight} rightMargin={margins.right} data={this.generateLegendData(data)} /> }
       </svg>
     );
   }
@@ -81,6 +95,7 @@ StackedBarChart.defaultProps = {
 };
 
 StackedBarChart.propTypes = {
+  margins: PropTypes.object.isRequired,
   svgWidth: PropTypes.number.isRequired,
   svgHeight: PropTypes.number.isRequired,
   xValue: PropTypes.string.isRequired,

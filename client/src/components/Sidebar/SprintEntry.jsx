@@ -127,7 +127,6 @@ class SprintEntry extends Component {
   };
 
   handleAddSprint = (sprint_data, task, project) => {
-    console.log('handleAddSprint was called');
     const isNew = this.checkIfTaskExists(task, project);
 
     if (isNew) {
