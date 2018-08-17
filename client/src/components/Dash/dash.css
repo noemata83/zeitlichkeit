@@ -20,28 +20,36 @@
   align-content: center;
 }
 
+.chartContainer {
+  width: 100%;
+  height: 100%;
+}
 .dayStats {
   grid-column: 2;
   grid-row: 1 / 5;
   flex-grow: 1;
+  order: 1;
 }
 
 .sessionLog {
   grid-column: 2;
   grid-row: 5 / 7;
   flex-grow: 1;
+  order: 3;
 }
 
 .todos {
   grid-column: 1;
   grid-row: 1 / 5;
   flex-grow: 1;
+  order: 2;
 }
 
 .team {
   grid-column: 1;
   grid-row: 5 / 7;
   flex-grow: 1;
+  order: 4;
 }
 
 .teamMenu {
@@ -84,5 +92,10 @@
     flex-direction: column;
     height: 100%;
   }
+}
 
+@media(max-width: 600px) {
+  .chartContainer {
+    overflow-x: scroll;
+  }
 }
