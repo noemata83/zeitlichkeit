@@ -1,4 +1,4 @@
-import { filterByUser, filterByCategory } from './data';
+import { filterByUser, filterByCategory, filterByProject, filterByDay } from './data';
 
 const sprints = [
   {
@@ -99,12 +99,25 @@ const tasks = [
     billable: false,
   },
 ];
+describe('data service filters appropriately', () => {
+  test('filters sprints by user', () => {
+    expect(filterByUser(sprints, 'wallace').length).toBe(2);
+    expect(filterByUser(sprints, 'wallace')[0].task).toBe('Fix the widget');
+  });
 
-test('filters sprints by user', () => {
-  expect(filterByUser(sprints, 'wallace').length).toBe(2);
-  expect(filterByUser(sprints, 'wallace')[0].task).toBe('Fix the widget');
-});
+  test('filters sprints by category', () => {
+    expect(filterByCategory('Anti-pesto', sprints, tasks).length).toBe(1);
+  });
 
-test('filters sprints by category', () => {
-  expect(filterByCategory('Anti-pesto', sprints, tasks).length).toBe(1);
+  test('filters sprints by project', () => {
+    expect(filterByProject('Deal with pesky rabbit bother', sprints, tasks).length).toEqual(1);
+  });
+
+  test('filters sprints by date', () => {
+    const testDate = new Date();
+    testDate.setFullYear(2018);
+    testDate.setMonth(6); // January = 0 !
+    testDate.setDate(3);
+    expect(filterByDay(sprints, testDate).length).toEqual(2);
+  });
 });
