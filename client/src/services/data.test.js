@@ -1,5 +1,18 @@
-import { filterByUser, filterByCategory, filterByProject, filterByDay } from './data';
+/* This file contains a series of very basic unit tests for ensuring 
+|*   the integrity of the Temporalite data pipeline */
 
+import {
+  filterByUser,
+  filterByCategory,
+  filterByProject,
+  filterByDay,
+  filterByDateRange,
+  generateProjectStack,
+  generateWeeklyProjectStack,
+  generateWeek,
+} from './data';
+
+// Dummy data
 const sprints = [
   {
     id: 0,
@@ -39,7 +52,7 @@ const sprints = [
 ];
 
 const projects = [
-  { 
+  {
     name: 'Deal with pesky rabbit bother',
     workspace: 1,
     id: 32,
@@ -99,25 +112,60 @@ const tasks = [
     billable: false,
   },
 ];
+
 describe('data service filters appropriately', () => {
   test('filters sprints by user', () => {
-    expect(filterByUser(sprints, 'wallace').length).toBe(2);
-    expect(filterByUser(sprints, 'wallace')[0].task).toBe('Fix the widget');
+    expect(filterByUser(sprints, 'wallace')).toHaveLength(2);
+    expect(filterByUser(sprints, 'wallace')[0]).toHaveProperty(
+      'task',
+      'Fix the widget',
+    );
   });
 
   test('filters sprints by category', () => {
-    expect(filterByCategory('Anti-pesto', sprints, tasks).length).toBe(1);
+    expect(filterByCategory('Anti-pesto', sprints, tasks)).toHaveLength(1);
   });
 
   test('filters sprints by project', () => {
-    expect(filterByProject('Deal with pesky rabbit bother', sprints, tasks).length).toEqual(1);
+    expect(
+      filterByProject('Deal with pesky rabbit bother', sprints, tasks),
+    ).toHaveLength(1);
   });
 
   test('filters sprints by date', () => {
-    const testDate = new Date();
-    testDate.setFullYear(2018);
-    testDate.setMonth(6); // January = 0 !
-    testDate.setDate(3);
-    expect(filterByDay(sprints, testDate).length).toEqual(2);
+    const testDate = new Date(2018, 6, 3, 0, 0, 0);
+    expect(filterByDay(sprints, testDate)).toHaveLength(2);
+  });
+
+  test('filters sprints by date range', () => {
+    const startDate = new Date(2018, 6, 3, 0, 0, 0);
+    const endDate = new Date(2018, 6, 4, 0, 0, 0);
+    expect(filterByDateRange(sprints, startDate, endDate)).toHaveLength(2);
+  });
+});
+
+describe('calendar functions are working', () => {
+  test('generateWeek generates a week of successive dates', () => {
+    const week = generateWeek(new Date(2018, 6, 3, 0, 0, 0, 0));
+    expect(week[6]).toEqual(new Date(2018, 6, 3, 0, 0, 0, 0).toDateString());
+    expect(week[5]).toEqual(new Date(2018, 6, 2, 0, 0, 0, 0).toDateString());
+    expect(week[4]).toEqual(new Date(2018, 6, 1, 0, 0, 0, 0).toDateString());
+  });
+})
+
+
+describe('data service generates appropriately shaped stack chart data', () => {
+  test('generateProjectStack creates a day object of appropriate shape', () => {
+    const projectStack = generateProjectStack(projects, sprints, tasks);
+    expect(projectStack).toHaveProperty('Make a fortune');
+  });
+
+  test('data service generates appropriately shaped stack chart data for a week', () => {
+    const week = generateWeek(new Date(2018, 6, 3, 0, 0, 0, 0));
+    const weekData = generateWeeklyProjectStack(projects, sprints, tasks, week);
+    expect(weekData).toHaveLength(7);
+    expect(weekData[6]).toHaveProperty('Deal with pesky rabbit bother', 6);
+    expect(weekData[6]).toHaveProperty('Make a fortune', 2.25);
+    expect(weekData[6]).not.toHaveProperty('Retrieve cheese from the moon');
   });
 });

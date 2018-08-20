@@ -21,7 +21,6 @@ const legend = (props) => {
   const width = radius * 2;
   const y = svgHeight - 180;
   const height = (data.length * 20) + 20;
-  console.log(data);
   return (
     <g>
       <rect

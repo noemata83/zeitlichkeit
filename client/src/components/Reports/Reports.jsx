@@ -5,8 +5,8 @@ import { Paper, Typography, withStyles, FormControl, NativeSelect } from '@mater
 
 import BarChart from './BarChart/BarChart';
 import PieChart from './PieChart/PieChart';
-import moment from '../../services/moment';
 import { getSprints, getProjects, getTasks, getCategories } from '../../store/reducers';
+import { getTotalDuration, getTotalDurationByDay, getTotalDurationByProject, getTotalDurationByCategory } from '../../services/data';
 
 const styles = theme => ({
   root: theme.mixins.gutters({
@@ -21,48 +21,6 @@ const styles = theme => ({
 });
 
 const addDays = (date, days) => new Date().setDate(date.getDate() + days);
-
-const compareDates = (date1, date2) =>
-  date1.getDate() === date2.getDate() &&
-  date1.getMonth() === date2.getMonth() &&
-  date1.getYear() === date2.getYear();
-
-const filterByDay = (sprints, date) =>
-  sprints.filter(sprint => compareDates(new Date(sprint.start_time), date));
-
-
-const getDurationInMilliseconds = sprint =>
-  (new Date(sprint.end_time) - new Date(sprint.start_time));
-
-const getTotalDurationInMilliseconds = sprints =>
-  sprints.reduce(
-    (duration, sprint) =>
-      duration + getDurationInMilliseconds(sprint),
-    0,
-  );
-
-
-const ConvertToHours = seconds => seconds / 3600000;
-
-const filterByProject = (project, sprints, tasks) => sprints.filter((sprint) => {
-  const thetask = tasks.filter(task => task.name === sprint.task)[0];
-  return thetask.project === project;
-});
-
-const filterByCategory = (cat, sprints, tasks) => {
-  const filteredsprints = sprints.filter((sprint) => {
-    const thetask = tasks.filter(task => task.name === sprint.task)[0];
-    return thetask.categories.includes(cat);
-  });
-  return filteredsprints;
-};
-
-const getTotalDuration = sprints =>
-  sprints.reduce(
-    (total, sprint) => moment.duration(total).add(getDurationInMilliseconds(sprint)),
-    moment.duration(0),
-  );
-
 class Reports extends Component {
   state = {
     breakdown: 'PROJECT',
@@ -81,30 +39,30 @@ class Reports extends Component {
 
   generateWeekData = week => week.map(day => ({
     day,
-    duration: ConvertToHours(getTotalDurationInMilliseconds(filterByDay(
+    duration: getTotalDurationByDay(
       this.props.sprints,
       new Date(day),
-    ))),
+    ),
   }));
 
   generateProjectData = () =>
     this.props.projects.map(project => ({
       name: project.name,
-      duration: ConvertToHours(getTotalDurationInMilliseconds(filterByProject(
+      duration: getTotalDurationByProject(
         project.name,
         this.props.sprints,
         this.props.tasks,
-      ))),
+      ),
     })).filter(project => project.duration !== 0);
 
   generateCategoryData = () =>
     this.props.categories.map(cat => ({
       name: cat.name,
-      duration: ConvertToHours(getTotalDurationInMilliseconds(filterByCategory(
+      duration: getTotalDurationByCategory(
         cat.name,
         this.props.sprints,
         this.props.tasks,
-      ))),
+      ),
       color: cat.color,
     })).filter(cat => cat.duration !== 0);
 
@@ -154,8 +112,6 @@ class Reports extends Component {
   render() {
     const { classes } = this.props;
     const weekData = this.generateWeekData(this.generateWeek(new Date()));
-    // const projectData = this.generateProjectData();
-    // const totalDuration = getTotalDuration(this.props.sprints).format('hh:mm:ss');
     return (
       <div>
         <Paper className={classes.root}>

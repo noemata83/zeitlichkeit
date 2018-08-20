@@ -22,7 +22,7 @@ import {
   getActiveTasks,
 } from '../../store/reducers';
 import {
-  generateProjectBreakdown,
+  generateProjectStack,
   filterByUser,
 } from '../../services/data';
 import TaskList from '../ProjectManager/Project/TaskList/taskList';
@@ -39,7 +39,8 @@ const dash = ({
   projects,
 }) => {
   const data = [];
-  data.push(generateProjectBreakdown(projects, filterByUser(sprints, user.username), tasks));
+  data.push(generateProjectStack(projects, filterByUser(sprints, user.username), tasks));
+  console.log(data);
   return (
     <div className={classes.dash}>
       <div className={classes.todos}>

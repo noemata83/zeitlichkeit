@@ -11,6 +11,25 @@ const compareDates = (date1, date2) =>
 export const filterByDay = (sprints, date) =>
   sprints.filter(sprint => compareDates(new Date(sprint.start_time), date));
 
+export const filterByDateRange = (sprints, startDate, endDate) =>
+  sprints.filter(
+    sprint =>
+      new Date(sprint.start_time) > startDate &&
+      new Date(sprint.start_time) < endDate,
+  );
+
+const addDays = (date, days) => {
+  const newDate = new Date(date);
+  const dateOffset = days * (24 * 60 * 60 * 1000);
+  newDate.setTime(newDate.getTime() + dateOffset);
+  return newDate;
+}
+
+export const generateWeek = (date) => {
+  const week = [6, 5, 4, 3, 2, 1, 0];
+  return week.map(day => new Date(addDays(date, -day)).toDateString());
+};
+
 /* Duration Functions */
 
 const getDurationInMilliseconds = sprint =>
@@ -34,13 +53,13 @@ const convertToHours = seconds => seconds / 3600000;
 /* Filter functions */
 
 export const filterByProject = (project, sprints, tasks) =>
-  sprints.filter((sprint) => {
+  sprints.filter(sprint => {
     const thetask = tasks.filter(task => task.name === sprint.task)[0];
     return thetask.project === project;
   });
 
 export const filterByCategory = (cat, sprints, tasks) => {
-  const filteredsprints = sprints.filter((sprint) => {
+  const filteredsprints = sprints.filter(sprint => {
     const thetask = tasks.filter(task => task.name === sprint.task)[0];
     return thetask.categories.includes(cat);
   });
@@ -70,18 +89,30 @@ export const getTotalDurationByCategory = R.pipe(
   convertToHours,
 );
 
+/* Chart Data Generators */
 
-
-export const generateProjectBreakdown = (projects, sprints, tasks) => {
+export const generateProjectStack = (projects, sprints, tasks, date = new Date()) => {
   const group = projects.reduce((grouped, project) => {
-    grouped[project.name] = convertToHours( // eslint-disable-line no-param-reassign
-      getTotalDurationInMilliseconds(
-        filterByProject(project.name, sprints, tasks),
-      ),
+    // eslint-disable-next-line no-param-reassign
+    grouped[project.name] = getTotalDurationByProject(
+      project.name,
+      sprints,
+      tasks,
     );
-    if (!grouped[project.name]) delete grouped[project.name]; // eslint-disable-line no-param-reassign
+    if (!grouped[project.name]) {
+      delete grouped[project.name]; // eslint-disable-line no-param-reassign
+    }
     return grouped;
   }, {});
-  group.date = new Date();
+  group.date = date;
   return group;
+};
+
+export const generateWeeklyProjectStack = (projects, sprints, tasks, week) => {
+  return week.map(day => generateProjectStack(
+    projects,
+    filterByDay(sprints, new Date(day)),
+    tasks,
+    new Date(day),
+  ));
 };
