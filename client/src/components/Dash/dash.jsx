@@ -40,7 +40,6 @@ const dash = ({
 }) => {
   const data = [];
   data.push(generateProjectStack(projects, filterByUser(sprints, user.username), tasks));
-  console.log(data);
   return (
     <div className={classes.dash}>
       <div className={classes.todos}>

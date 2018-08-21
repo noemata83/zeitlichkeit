@@ -91,6 +91,13 @@ export const getTotalDurationByCategory = R.pipe(
 
 /* Chart Data Generators */
 
+export const getStackKeys = data =>
+  data.reduce((acc, datum) => {
+    return Array.from(
+      new Set([...acc, ...Object.keys(datum).filter(key => key !== 'date')]),
+    );
+  }, []);
+
 export const generateProjectStack = (projects, sprints, tasks, date = new Date()) => {
   const group = projects.reduce((grouped, project) => {
     // eslint-disable-next-line no-param-reassign

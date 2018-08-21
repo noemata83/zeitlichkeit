@@ -7,6 +7,24 @@ import { schemeCategory10 } from 'd3-scale-chromatic';
 import Axes from './Axes';
 import Bars from './Bars';
 import Legend from './Legend/Legend';
+import { getStackKeys } from '../../../services/data';
+
+const findMaxValue = (data) => {
+  const sums = data.map(datum =>
+    Object.keys(datum).reduce((sum, key) =>
+      ((key !== 'date') ? sum + datum[key] : sum), 0));
+  return Math.ceil(Math.max(...sums));
+};
+
+const fillNA = (data, keys) =>
+  data.map((datum) => {
+    keys.forEach((key) => {
+      if (!datum[key]) {
+        datum[key] = 0;
+      }
+    });
+    return datum;
+  });
 
 export default class StackedBarChart extends Component {
   constructor(props) {
@@ -44,13 +62,12 @@ export default class StackedBarChart extends Component {
       compressed,
     } = this.props;
 
-
+    const keys = getStackKeys(data);
+    const cleanedData = fillNA(data, keys);
     // Let's consider refactoring the next line; it is a wee bit absurd.
     // The goal is to ascertain the max value for each set of stacked bars by summing
     // the value for each key, excluding the date itself. This badly needs work.
-    const maxValue = totalDuration ? 100 :
-      Math.ceil(Math.max(data.map(d => Object.keys(d).reduce((sum, key) => ((key === 'date') ? sum : sum + d[key]), 0))));
-
+    const maxValue = totalDuration ? 100 : findMaxValue(data);
     // scaleBand type
     const xScale = this.xScale
       .padding(0.5)
@@ -61,7 +78,6 @@ export default class StackedBarChart extends Component {
     const yScale = this.yScale
       .domain([0, Math.max(8, maxValue)])
       .range([svgHeight - margins.bottom, margins.top]);
-
     return (
       <svg width={svgWidth} height={svgHeight}>
         <Axes
@@ -74,7 +90,7 @@ export default class StackedBarChart extends Component {
         <Bars
           scales={{ xScale, yScale }}
           margins={margins}
-          data={data}
+          data={cleanedData}
           maxValue={maxValue}
           xValue={xValue}
           yValue={yValue}
@@ -83,7 +99,12 @@ export default class StackedBarChart extends Component {
           svgHeight={svgHeight}
           colors={this.colors}
         />
-        { (this.generateLegendData(data).length > 0) && <Legend svgWidth={svgWidth} rightMargin={margins.right} data={this.generateLegendData(data)} /> }
+        { (this.generateLegendData(data).length > 0) &&
+          <Legend
+            svgWidth={svgWidth}
+            rightMargin={margins.right}
+            data={this.generateLegendData(data)}
+          /> }
       </svg>
     );
   }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { scaleLinear } from 'd3-scale';
 import { stack as d3stack, stackOrderNone, stackOffsetNone } from 'd3-shape';
 import { interpolateLab } from 'd3-interpolate';
+import { getStackKeys } from '../../../services/data';
 
 export default class Bars extends Component {
   constructor(props) {
@@ -30,26 +31,25 @@ export default class Bars extends Component {
     let bars = [];
     if (doStack) {
       const stack = d3stack()
-        .keys([...Object.keys(data[0]).filter(key => key !== 'date')])
+        .keys(getStackKeys(data))
         .order(stackOrderNone)
         .offset(stackOffsetNone);
       const series = stack(data);
       if (series !== undefined) {
         bars = series.map((key, index) =>
-          key.map(d => (
+          key.map((d, i) => (
             <rect
-              key={series[0].key}
+              key={`${series[index].key} - ${data[i].date}`}
               y={
                 yScale(d[0]) -
                 (svgHeight - margins.bottom - yScale(d[1] - d[0]))
               }
-              x={xScale(data[0].date)}
+              x={xScale(data[i].date)}
               height={svgHeight - margins.bottom - yScale(d[1] - d[0])}
               width={xScale.bandwidth()}
               fill={colors[index]}
             />
-          )),
-        );
+          )));
       }
     } else {
       bars = data.map((d) => {

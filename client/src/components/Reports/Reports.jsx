@@ -4,9 +4,10 @@ import PropTypes from 'prop-types';
 import { Paper, Typography, withStyles, FormControl, NativeSelect } from '@material-ui/core';
 
 import BarChart from './BarChart/BarChart';
+import StackedBarChart from './BarChart/StackedBarChart';
 import PieChart from './PieChart/PieChart';
 import { getSprints, getProjects, getTasks, getCategories } from '../../store/reducers';
-import { getTotalDuration, getTotalDurationByDay, getTotalDurationByProject, getTotalDurationByCategory } from '../../services/data';
+import { getTotalDuration, getTotalDurationByDay, getTotalDurationByProject, getTotalDurationByCategory, generateWeek, generateWeeklyProjectStack } from '../../services/data';
 
 const styles = theme => ({
   root: theme.mixins.gutters({
@@ -110,8 +111,10 @@ class Reports extends Component {
     }
   }
   render() {
-    const { classes } = this.props;
-    const weekData = this.generateWeekData(this.generateWeek(new Date()));
+    const { classes, projects, tasks, sprints } = this.props;
+    const weekData = this.generateWeekData(generateWeek(new Date().toDateString()));
+    const week = generateWeek(new Date());
+    // const weekStack = generateWeeklyProjectStack(projects, sprints, tasks, week);
     return (
       <div>
         <Paper className={classes.root}>
@@ -126,6 +129,19 @@ class Reports extends Component {
               svgHeight={500}
               svgWidth={800}
             />
+            {/* <StackedBarChart
+              data={weekStack}
+              svgHeight={500}
+              svgWidth={800}
+              yValue="duration"
+              xValue="date"
+              margins={{
+                right: 150,
+                top: 20,
+                bottom: 20,
+                left: 20,
+              }}
+            /> */}
           </div>
         </Paper>
         <Paper className={classes.root}>
