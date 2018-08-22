@@ -10,6 +10,7 @@ import {
   generateProjectStack,
   generateWeeklyProjectStack,
   generateWeek,
+  getWeekOrigin,
 } from './data';
 
 // Dummy data
@@ -151,7 +152,14 @@ describe('calendar functions are working', () => {
     expect(week[5]).toEqual(new Date(2018, 6, 2, 0, 0, 0, 0).toDateString());
     expect(week[4]).toEqual(new Date(2018, 6, 1, 0, 0, 0, 0).toDateString());
   });
-})
+
+  test('getWeekOrigin finds the date of the next Sunday', () => {
+    const date = new Date(2018, 7, 22, 0, 0, 0, 0);
+    const nextSunday = getWeekOrigin(date);
+    expect(nextSunday.getDay()).toEqual(0);
+    expect(nextSunday.getDate()).toEqual(26);
+  });
+});
 
 
 describe('data service generates appropriately shaped stack chart data', () => {

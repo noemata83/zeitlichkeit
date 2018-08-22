@@ -7,7 +7,7 @@ import BarChart from './BarChart/BarChart';
 import StackedBarChart from './BarChart/StackedBarChart';
 import PieChart from './PieChart/PieChart';
 import { getSprints, getProjects, getTasks, getCategories } from '../../store/reducers';
-import { getTotalDuration, getTotalDurationByDay, getTotalDurationByProject, getTotalDurationByCategory, generateWeek, generateWeeklyProjectStack } from '../../services/data';
+import { getTotalDuration, getTotalDurationByDay, getTotalDurationByProject, getTotalDurationByCategory, generateWeek, generateWeeklyProjectStack, generateWorkWeek } from '../../services/data';
 
 const styles = theme => ({
   root: theme.mixins.gutters({
@@ -112,8 +112,8 @@ class Reports extends Component {
   }
   render() {
     const { classes, projects, tasks, sprints } = this.props;
-    const weekData = this.generateWeekData(generateWeek(new Date().toDateString()));
-    const week = generateWeek(new Date());
+    const week = generateWorkWeek(new Date());
+    const weekData = this.generateWeekData(week);
     // const weekStack = generateWeeklyProjectStack(projects, sprints, tasks, week);
     return (
       <div>

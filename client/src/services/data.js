@@ -23,12 +23,35 @@ const addDays = (date, days) => {
   const dateOffset = days * (24 * 60 * 60 * 1000);
   newDate.setTime(newDate.getTime() + dateOffset);
   return newDate;
-}
+};
 
-export const generateWeek = (date) => {
-  const week = [6, 5, 4, 3, 2, 1, 0];
+export const getWeekOrigin = (date, workWeekOnly) => {
+  // This function finds and returns a date object corresponding to next Sunday.
+  // In a future implementation, this function will also take a second parameter,
+  // workWeekOnly, which is a boolean. When true, it will find the next Friday.
+  const currentDay = date.getDay();
+  // if today is a Sunday, currentDay will be zero. In that case, return the date
+  // parameter unmodified, since it is the next Sunday.
+  if (currentDay === 0) {
+    return date;
+  }
+  if (workWeekOnly) {
+    const daysToFriday = 5 - currentDay;
+    return addDays(date, daysToFriday);
+  }
+  // if today is *not* a Sunday, add the number of days difference between today
+  // and the next Sunday.
+  const daysToSunday = 7 - currentDay;
+  return addDays(date, daysToSunday);
+};
+
+export const generateWeek = (date, workWeekOnly) => {
+  const week = workWeekOnly ? [4, 3, 2, 1, 0] : [6, 5, 4, 3, 2, 1, 0];
   return week.map(day => new Date(addDays(date, -day)).toDateString());
 };
+
+export const generateWorkWeek = (date, workWeekOnly) => 
+  generateWeek(getWeekOrigin(date, workWeekOnly), workWeekOnly);
 
 /* Duration Functions */
 
