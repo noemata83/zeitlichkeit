@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -20,6 +20,7 @@ import {
   getCurrentUser,
   getProjects,
   getActiveTasks,
+  getWorkspaceName,
 } from '../../store/reducers';
 import {
   generateProjectStack,
@@ -37,10 +38,13 @@ const dash = ({
   sprints,
   tasks,
   projects,
+  workspace,
 }) => {
   const data = [];
   data.push(generateProjectStack(projects, filterByUser(sprints, user.username), tasks));
   return (
+  <Fragment>
+    <h1 style={{padding: '1rem 1rem' }}>{workspace} At a Glance</h1>
     <div className={classes.dash}>
       <div className={classes.todos}>
         <Card className={classes.Card}>
@@ -165,10 +169,12 @@ const dash = ({
         </Card>
       </div>
     </div>
-  );
+  </Fragment>
+);
 };
 
 const mapStateToProps = state => ({
+  workspace: getWorkspaceName(state),
   user: getCurrentUser(state),
   users: getUsers(state),
   sprints: getTodaysSprints(state),
@@ -181,6 +187,7 @@ dash.defaultProps = {
 };
 
 dash.propTypes = {
+  workspace: PropTypes.string.isRequired,
   user: PropTypes.object,
   users: PropTypes.array.isRequired,
   sprints: PropTypes.array.isRequired,

@@ -9,6 +9,7 @@ export default combineReducers({
   workspace,
 });
 
+export const getWorkspaceName = state => fromWorkspace.getWorkspaceName(state.workspace);
 export const getProjects = state => fromWorkspace.getProjects(state.workspace);
 
 export const getSprints = state => fromWorkspace.getSprints(state.workspace);

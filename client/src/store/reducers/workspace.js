@@ -211,6 +211,8 @@ export const getTodaysSprints = state => state.sprints.filter((sprint) => {
   return ((start > midnight.getTime()) && (start < today.getTime()));
 });
 
+export const getWorkspaceName = state => state.name;
+
 export const getTasks = state => state.task_set;
 
 export const getActiveTasks = state => state.task_set.filter(task => !task.completed);

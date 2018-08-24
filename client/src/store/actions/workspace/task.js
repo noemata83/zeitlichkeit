@@ -22,9 +22,9 @@ const extractTaskRecord = data => ({
 const convertToTaskRecord = data => ({
   name: data.name,
   id: data.id,
-  project: {
+  project: data.project ? {
     name: data.project,
-  },
+  } : null,
   categories: data.categories.map(category => ({ name: category })),
   completed: data.completed,
 });
