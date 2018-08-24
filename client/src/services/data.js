@@ -54,8 +54,13 @@ const convertToHours = seconds => seconds / 3600000;
 
 export const filterByProject = (project, sprints, tasks) =>
   sprints.filter(sprint => {
+    console.log(tasks);
     const thetask = tasks.filter(task => task.name === sprint.task)[0];
-    return thetask.project === project;
+    if (thetask) {
+      return thetask.project === project;
+    } else {
+      return false;
+    }
   });
 
 export const filterByCategory = (cat, sprints, tasks) => {
@@ -99,15 +104,16 @@ export const getStackKeys = data =>
   }, []);
 
 export const generateProjectStack = (projects, sprints, tasks, date = new Date()) => {
-  const group = projects.reduce((grouped, project) => {
+  const group = [...projects, null].reduce((grouped, project) => {
     // eslint-disable-next-line no-param-reassign
-    grouped[project.name] = getTotalDurationByProject(
-      project.name,
+    const projectName = project ? project.name : null;
+    grouped[projectName] = getTotalDurationByProject(
+      projectName,
       sprints,
       tasks,
     );
-    if (!grouped[project.name]) {
-      delete grouped[project.name]; // eslint-disable-line no-param-reassign
+    if (!grouped[projectName]) {
+      delete grouped[projectName]; // eslint-disable-line no-param-reassign
     }
     return grouped;
   }, {});

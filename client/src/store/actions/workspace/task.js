@@ -14,7 +14,7 @@ import {
 const extractTaskRecord = data => ({
   name: data.name,
   id: data.id,
-  project: data.project.name,
+  project: data.project.name || null,
   categories: data.categories.map(category => category.name),
   completed: data.completed,
 });

@@ -21,6 +21,7 @@ import {
   getProjects,
   getActiveTasks,
   getWorkspaceName,
+  getTasks,
 } from '../../store/reducers';
 import {
   generateProjectStack,
@@ -36,6 +37,7 @@ const dash = ({
   user,
   users,
   sprints,
+  activeTasks,
   tasks,
   projects,
   workspace,
@@ -62,7 +64,7 @@ const dash = ({
           <CardContent classes={{ root: classes.cardContent }}>
             <div style={{ overflowY: 'auto', maxHeight: '100%' }}>
               <List>
-                {tasks.length > 0 ? <TaskList tasks={tasks} /> :
+                {tasks.length > 0 ? <TaskList tasks={activeTasks} /> :
                 <ListItem>
                   <ListItemText primary="No active tasks to display!" />
                 </ListItem>
@@ -178,7 +180,8 @@ const mapStateToProps = state => ({
   user: getCurrentUser(state),
   users: getUsers(state),
   sprints: getTodaysSprints(state),
-  tasks: getActiveTasks(state),
+  tasks: getTasks(state),
+  activeTasks: getActiveTasks(state),
   projects: getProjects(state),
 });
 

@@ -197,7 +197,7 @@ class TaskListSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(WritableNestedModelSerializer):
     """ Serializer for tasks"""
-    project = ProjectSerializer(required=False)
+    project = ProjectSerializer(required=False, allow_null=True)
     categories = CategorySerializer(many=True, required=False)
     sprint_set = LimitedSprintSerializer(many=True, required=False)
     workspace = WorkspaceLimitedSerializer(required=False)
@@ -221,7 +221,8 @@ class TaskSerializer(WritableNestedModelSerializer):
             pass
         data['workspace'] = Workspace.objects.get(id=self.context['workspace'])
         try:
-            data['project'] = Project.objects.get(name=data['project']['name'])
+            if data['project'] != None:
+                data['project'] = Project.objects.get(name=data['project']['name'])
         except KeyError:
             pass
         except ObjectDoesNotExist:
