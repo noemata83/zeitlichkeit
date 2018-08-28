@@ -10,7 +10,7 @@ db.sqlite3
 media
 .vscode/
 client/node_modules
-assets/
+/assets/
 client/webpack-stats.dev.json
 webpack-stats.json
 temporalite/
