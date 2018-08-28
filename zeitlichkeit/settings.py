@@ -39,6 +39,18 @@ DATABASES = {
         'PORT': 5432
     }
 }
+# Not sure if the below is above board...
+if 'TRAVIS' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'test_db',
+            'USER': 'postgres',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': 5432
+        }
+    }
 
 
 # Application definition
@@ -176,7 +188,11 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,
-        }
+        },
+        'django_test': {
+                'handlers': ['file', 'console'],
+                'level': 'DEBUG',
+            },
     }
 }
 

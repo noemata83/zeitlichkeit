@@ -54,7 +54,6 @@ const convertToHours = seconds => seconds / 3600000;
 
 export const filterByProject = (project, sprints, tasks) =>
   sprints.filter(sprint => {
-    console.log(tasks);
     const thetask = tasks.filter(task => task.name === sprint.task)[0];
     if (thetask) {
       return thetask.project === project;
