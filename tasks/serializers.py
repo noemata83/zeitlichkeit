@@ -85,7 +85,7 @@ class ProjectSerializer(WritableNestedModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('name', 'workspace', 'id', 'fee', 'rate', 'client')
+        fields = ('name', 'workspace', 'id', 'fee', 'rate', 'client', 'archived')
 
     def validate(self, data):
         logger.debug(data)
@@ -117,6 +117,7 @@ class ProjectSerializer(WritableNestedModelSerializer):
     def update(self, instance, validated_data):
         instance.name = validated_data['name']
         instance.workspace = validated_data['workspace']
+        instance.archived = validated_data['archived']
         try:
             instance.fee = validated_data['fee']
         except KeyError:
