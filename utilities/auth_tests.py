@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
+from tasks.models import Workspace
 import logging
 
 logger = logging.getLogger('django_test')
@@ -10,6 +11,12 @@ class AuthorizedTests(APITestCase):
 
   def create_user(self):
     User.objects.create_user('test', 'testing@test.com', 'testing')
+
+  def post_user(self):
+    return self.client.post('/api/register', { 'username': 'test', 'password': 'testing' }, format='json')
+  
+  def get_workspace_id(self, name):
+    return Workspace.objects.get(name=name).id
 
   def get_users(self):
     users = User.objects.count()

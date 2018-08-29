@@ -1,9 +1,5 @@
 from django.urls import reverse
 from rest_framework import status
-from django.contrib.auth.models import User
-from knox.models import AuthToken
-from rest_framework.test import APITestCase
-from django.test import TestCase
 from .models import Workspace
 from utilities.auth_tests import AuthorizedTests
 import logging
@@ -14,7 +10,7 @@ logger = logging.getLogger('django_test')
 
 logging.disable(logging.DEBUG)
 
-class WorkspaceTests(AuthorizedTests):
+class WorkspaceCRUDTests(AuthorizedTests):
   # @testcase_log_console(logger)
 
   def test_workspace_CRUD(self):
@@ -62,3 +58,13 @@ class WorkspaceTests(AuthorizedTests):
     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
     self.assertEqual(Workspace.objects.count(), 0)
     
+
+# Test that a workspace is created in the user's name on signup
+class WorkspaceFlowTest(AuthorizedTests):
+
+  def test_workspace_flow(self):
+    response = self.post_user()
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(Workspace.objects.count(), 1)
+    workspace_list = list(Workspace.objects.all())
+    self.assertEqual(workspace_list[0].name, "test's Workspace")
