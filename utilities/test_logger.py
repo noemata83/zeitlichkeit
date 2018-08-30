@@ -4,6 +4,7 @@ from contextlib import contextmanager
 
 # I don't seem to need this.
 
+
 @contextmanager
 def streamhandler_to_console(lggr):
     # Use 'up to date' value of sys.stdout for StreamHandler,
@@ -12,6 +13,7 @@ def streamhandler_to_console(lggr):
     lggr.addHandler(stream_handler)
     yield
     lggr.removeHandler(stream_handler)
+
 
 def testcase_log_console(lggr):
     def testcase_decorator(func):
