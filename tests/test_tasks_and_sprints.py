@@ -16,6 +16,13 @@ class TaskAndSprintTests(AuthorizedTests):
         'completed': False
     }
 
+    sprint_data = {
+        'owner': 'test',
+        'task': 'New Task',
+        'start_time': '2018-07-23T13:25:22.798Z',
+        'end_time': '2018-07-23T13:25:38.049Z'
+    }
+
     def setup(self):
         """ 
             Runs some boilerplate pre-test setup
@@ -84,26 +91,24 @@ class TaskAndSprintTests(AuthorizedTests):
             by making a post request to /api/workspaces/:id/sprints/
         """
         task = self.setup().data['name']
-        data = {
-            'owner': 'test',
-            'task': task,
-            'start_time': '2018-07-23T13:25:22.798Z',
-            'end_time': '2018-07-23T13:25:38.049Z'
-        }
         workspace = self.get_workspace_id()
         url = f'/api/workspaces/{workspace}/sprints/'
-        return self.client.post(url, data, format='json')
+        return self.client.post(url, self.sprint_data, format='json')
 
     def test_create_sprint(self):
         """
             Tests that a post request to /api/workspaces/:id/sprints/ using
             valid data successfully creates a sprint record in the database
-            and returns that record in the response
+            and returns that record in the response. Also test that the Task
+            record
         """
         response = self.create_sprint()
+        task = Task.objects.get(name='New Task')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Sprint.objects.count(), 1)
         self.assertEqual(response.data['task'], 'New Task')
+        self.assertEqual(task.sprint_set.count(), 1)
+        
 
     def test_delete_sprint(self):
         """
@@ -111,9 +116,11 @@ class TaskAndSprintTests(AuthorizedTests):
             successfully removes the specified sprint record from the database
         """
         sprint = self.create_sprint().data['id']
+        task = Task.objects.get(name='New Task')
         workspace = self.get_workspace_id()
         url = f'/api/workspaces/{workspace}/sprints/{sprint}/'
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Sprint.objects.count(), 0)
+        self.assertEqual(task.sprint_set.count(), 0)
 
