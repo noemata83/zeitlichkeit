@@ -11,7 +11,7 @@ django-rest-framework==0.1.0
 django-rest-knox==3.1.4
 django-silk==2.0.0
 django-webpack-loader==0.6.0
-djangorestframework==3.8.2
+djangorestframework==3.11.2
 drf-writable-nested==0.4.2
 gprof2dot==2016.10.13
 httpie==0.9.9
